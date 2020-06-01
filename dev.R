@@ -3,9 +3,9 @@ library(plotly)
 
 sapply(list.files("./R", full.names = T), source)
 
-data("sample_files")
+data("sample_files", )
 
-df <- sample_files[[4]]$data
+df <- sample_files[[5]]$data
 
 df <- df %>% #filter(fahrt_seq == 116) %>%
   mutate(
@@ -61,6 +61,9 @@ col_palette <- viridis::plasma(length(aus_kat))
 
 discrete_col <- discrete_coloring(categories=aus_kat, col_palette=col_palette)
 
+# ======================
+# option 1
+# create poc plot
 # create poc plot
 fig <-
   plot_ly() %>%
@@ -108,3 +111,168 @@ fig <-
 
 fig
 
+
+# ======================
+# option 2
+fig <- plot_ly()
+
+for (i in seq.int(length.out = length(aus_kat))) {
+
+  a_k <- df %>%
+    mutate(
+      a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
+      a_k_l =
+        ifelse(
+          !is.na(Besetzung),
+          paste(
+            '<b>Drive</b>:', fahrt_seq ,
+            '<br><b>Stop</b>:', Haltestellenlangname,
+            '<br><b>Nr Passengers</b>:', Besetzung
+          ),
+          paste(
+            '<b>Drive</b>:', fahrt_seq ,
+            '<br><b>Stop</b>:', Haltestellenlangname,
+            '<br><b>Nr Passengers</b>:N/A'
+          )
+        )
+    )
+  # a_k <- df %>%
+  #   filter(
+  #     Ausl_Kat == aus_kat[i]
+  #   )
+
+  colorscale <- array(
+    c(0, 1, rep(col_palette[i], 2)), dim= c(2,2)
+  )
+
+  if (NROW(a_k) > 0){
+    fig <- fig %>%
+      add_trace(
+        type = "heatmap",
+        name = paste("A. K.", aus_kat[i]),
+        data = a_k,
+        x = ~fahrt_seq,
+        y = ~Haltestellenlangname,
+        z = ~a_k,
+        text = ~a_k_l,
+        hovertemplate = '%{text}',
+          # paste(
+          #   '<b>Drive</b>: %{x}',
+          #   '<br><b>Stop</b>: %{y}',
+          #   '<br><b>Nr Passengers</b>: %{z}',
+          #   '<br>%{text}'
+          # ),
+        colorscale=colorscale,
+        showlegend=T,
+        showscale=F,
+        legendgroup = paste("A. K.", aus_kat[i])
+      )
+  }
+}
+
+fig <- fig %>%
+  layout(
+    showlegend=T,
+    xaxis = list(
+      title="",
+      tickmode='linear',
+      range = c(0,30),
+      categoryorder="array",
+      categoryarray=unique(df$fahrt_seq[order(df$fahrt_seq)]),
+      side = "top",
+      tickangle = 90,
+      rangeslider = list(visible=TRUE)
+    ),
+    yaxis = list(
+      title="",
+      fixedrange = TRUE,
+      categoryorder="array",
+      categoryarray=unique(df$Haltestellenlangname[order(-df$halt_seq, df$Haltestellenlangname)])
+    )
+  )
+
+fig
+
+
+
+test_data <- generate_test_data()
+
+a_df <- test_data %>%
+  filter(
+    Passengers > 25
+  )
+
+b_df <- test_data %>%
+  filter(
+    Passengers <= 25
+  )
+
+
+fig <-
+  plot_ly() %>%
+  add_trace(
+    type = "heatmap",
+    name = "a",
+    data = a_df,
+    x = ~Drive_names,
+    y = ~Stop_names,
+    z = ~Passengers,
+    text = ~Some_label,
+    hovertemplate = paste('<b>Drive</b>: %{x}',
+                          '<br><b>Stop</b>: %{y}',
+                          '<br><b>Nr Passengers</b>: %{z}',
+                          '<br>%{text}'),
+    showlegend=T,
+    showscale=F,
+    legendgroup = "a"
+  ) %>%
+  add_trace(
+    type = "heatmap",
+    name = "b",
+    data = b_df,
+    x = ~Drive_names,
+    y = ~Stop_names,
+    z = ~Passengers,
+    text = ~Some_label,
+    hovertemplate = paste('<b>Drive</b>: %{x}',
+                          '<br><b>Stop</b>: %{y}',
+                          '<br><b>Nr Passengers</b>: %{z}',
+                          '<br>%{text}'),
+    showlegend=T,
+    showscale=F,
+    legendgroup = "b"
+  ) %>%
+  # add_trace(
+  #   type="scatter",
+  #   mode="markers",
+  #   x=c(NA),
+  #   y=c(NA),
+  #   marker=list(
+  #     size = 10,
+  #     color= "green"
+  #   ),
+  #   legendgroup="a",
+  #   showlegend=T,
+  #   name="a"
+  # ) %>%
+  # add_trace(
+  #   type="scatter",
+  #   mode="markers",
+  #   x=c(NA),
+  #   y=c(NA),
+  #   marker=list(
+  #     size = 10,
+  #     color= "red"
+  #   ),
+  #   legendgroup="b",
+  #   showlegend=T,
+  #   name="b"
+  # ) %>%
+  layout(
+    showlegend=T,
+    xaxis = list(
+      rangeslider = list(visible=TRUE)
+    )
+  )
+
+fig
