@@ -351,3 +351,251 @@ fig <-
   )
 
 fig
+
+
+
+
+
+
+# ========
+# Option 4
+
+a_k_1 <- df %>%
+  filter(
+    Ausl_Kat == 1
+  ) %>%
+  mutate(
+    a_k = ifelse(Ausl_Kat == 1, Ausl_Kat, NA),
+    a_k_l =
+      ifelse(
+        !is.na(Besetzung),
+        paste(
+          '<b>Drive</b>:', fahrt_seq ,
+          '<br><b>Stop</b>:', Haltestellenlangname,
+          '<br><b>Nr Passengers</b>:', Besetzung,
+          '<extra>"A. K."', Ausl_Kat, '</extra>'
+        ),
+        paste(
+          '<b>Drive</b>:', fahrt_seq ,
+          '<br><b>Stop</b>:', Haltestellenlangname,
+          '<br><b>Nr Passengers</b>:N/A',
+          '<extra>"A. K."', Ausl_Kat, '</extra>'
+        )
+      )
+  )
+
+
+a_k_2 <- df %>%
+  filter(
+    Ausl_Kat == 2
+  ) %>%
+  mutate(
+    a_k = ifelse(Ausl_Kat == 2, Ausl_Kat, NA),
+    a_k_l =
+      ifelse(
+        !is.na(Besetzung),
+        paste(
+          '<b>Drive</b>:', fahrt_seq ,
+          '<br><b>Stop</b>:', Haltestellenlangname,
+          '<br><b>Nr Passengers</b>:', Besetzung,
+          '<extra>"A. K."', Ausl_Kat, '</extra>'
+        ),
+        paste(
+          '<b>Drive</b>:', fahrt_seq ,
+          '<br><b>Stop</b>:', Haltestellenlangname,
+          '<br><b>Nr Passengers</b>:N/A',
+          '<extra>"A. K."', Ausl_Kat, '</extra>'
+        )
+      )
+  )
+colorscale_1 <- array(
+  data=c(0, 1, rep(col_palette[i], 2)),
+  dim= c(2,2)
+)
+colorscale_2 <- array(
+  data=c(0, 1, rep(col_palette[i], 2)),
+  dim= c(2,2)
+)
+
+
+fig <- 
+  plot_ly() %>%
+  add_trace(
+    type = "heatmap",
+    name = paste("A. K.", 1),
+    data = a_k_1,
+    x = ~as.character(fahrt_seq),
+    y = ~Haltestellenlangname,
+    z = ~a_k,
+    text = ~Ausl_Kat,
+    hovertemplate = '%{text}',
+    # paste(
+    #   '<b>Drive</b>: %{x}',
+    #   '<br><b>Stop</b>: %{y}',
+    #   '<br><b>Nr Passengers</b>: %{z}',
+    #   '<br>%{text}'
+    # ),
+    colorscale=colorscale_1,
+    showlegend=T,
+    showscale=F,
+    legendgroup = paste("A. K.", aus_kat[i])
+  ) %>%
+  add_trace(
+    type = "heatmap",
+    name = paste("A. K.", 2),
+    data = a_k_2,
+    x = ~as.character(fahrt_seq),
+    y = ~Haltestellenlangname,
+    z = ~a_k,
+    text = ~Ausl_Kat,
+    hovertemplate = '%{text}',
+    # paste(
+    #   '<b>Drive</b>: %{x}',
+    #   '<br><b>Stop</b>: %{y}',
+    #   '<br><b>Nr Passengers</b>: %{z}',
+    #   '<br>%{text}'
+    # ),
+    colorscale=colorscale_2,
+    showlegend=T,
+    showscale=F,
+    legendgroup = paste("A. K.", aus_kat[i])
+  )
+
+fig
+
+
+df <- sample_files[[1]]$data
+df <- df %>% 
+  mutate(
+    FZ_AB = ymd_hms(paste("2020-06-03", FZ_AB))
+  ) %>% 
+  group_by(
+    fahrt_seq
+  ) %>% 
+  mutate(
+    abfahrt = min(FZ_AB)
+  ) %>% 
+  ungroup()
+
+fig <- plot_ly(
+)
+
+for (i in seq.int(length.out = length(aus_kat))) {
+  
+  a_k <- df %>%
+    mutate(
+      a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
+      a_k_l =
+        ifelse(
+          !is.na(Besetzung),
+          paste(
+            '<b>Drive</b>:', FZ_AB,
+            '<br><b>Stop</b>:', Haltestellenlangname,
+            '<br><b>Nr Passengers</b>:', Besetzung,
+            '<extra>A. K.', Ausl_Kat, '</extra>'
+          ),
+          paste(
+            '<b>Drive</b>:', FZ_AB,
+            '<br><b>Stop</b>:', Haltestellenlangname,
+            '<br><b>Nr Passengers</b>:N/A',
+            '<extra>A. K.', Ausl_Kat, '</extra>'
+          )
+        )
+    )
+  # a_k <- df %>%
+  #   filter(
+  #     Ausl_Kat == aus_kat[i]
+  #   ) %>%
+  #   mutate(
+  #     a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
+  #     a_k_l =
+  #       ifelse(
+  #         !is.na(Besetzung),
+  #         paste(
+  #           '<b>Drive</b>:', fahrt_seq ,
+  #           '<br><b>Stop</b>:', Haltestellenlangname,
+  #           '<br><b>Nr Passengers</b>:', Besetzung,
+  #           '<extra>"A. K."', Ausl_Kat, '</extra>'
+  #         ),
+  #         paste(
+  #           '<b>Drive</b>:', fahrt_seq ,
+  #           '<br><b>Stop</b>:', Haltestellenlangname,
+  #           '<br><b>Nr Passengers</b>:N/A',
+  #           '<extra>"A. K."', Ausl_Kat, '</extra>'
+  #         )
+  #       )
+  #   ) %>%
+  #   arrange(Haltestellenlangname, fahrt_seq)
+  
+  colorscale <- array(
+    data=c(0, 1, rep(col_palette[i], 2)),
+    dim= c(2,2)
+  )
+  
+  if (NROW(a_k) > 0){
+    print(aus_kat[i])
+    fig <- fig %>%
+      add_trace(
+        type = "heatmap",
+        name = paste("A. K.", aus_kat[i]),
+        data = a_k,
+        x = ~abfahrt,
+        y = ~Haltestellenlangname,
+        z = ~a_k,
+        text = ~a_k_l,
+        hovertemplate = '%{text}',
+        # paste(
+        #   '<b>Drive</b>: %{x}',
+        #   '<br><b>Stop</b>: %{y}',
+        #   '<br><b>Nr Passengers</b>: %{z}',
+        #   '<br>%{text}'
+        # ),
+        colorscale=colorscale,
+        showlegend=T,
+        showscale=F,
+        legendgroup = paste("A. K.", aus_kat[i])
+      )
+    # %>%
+    #   add_annotations(
+    #     x = a_k$fahrt_seq[which(!is.na(a_k$Besetzung))],
+    #     y = a_k$Haltestellenlangname[which(!is.na(a_k$Besetzung))],
+    #     text = round(a_k$Besetzung[which(!is.na(a_k$Besetzung))], 0),
+    #     showarrow = FALSE,
+    #     ax = 20,
+    #     ay = -20
+    #   )
+  }
+}
+
+fig %>%
+  layout(
+    showlegend=T,
+    xaxis = list(
+      title="",
+      # tickmode='linear',
+      # range = c(0,30),
+      # categoryorder="array",
+      # categoryarray=unique(df$fahrt_seq[order(as.numeric(df$fahrt_seq))]),
+      side = "top",
+      tickangle = 90,
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = "8",
+            label = "6 - 8",
+            step = "hour",
+            stepmode = "backward"
+          )
+        )
+      ),
+      rangeslider = list(visible=TRUE)
+    ),
+    yaxis = list(
+      title="",
+      fixedrange = TRUE,
+      categoryorder="array",
+      categoryarray=unique(df$Haltestellenlangname[order(-df$halt_seq, df$Haltestellenlangname)])
+    )
+  )
+
+partial_bundle(fig)
