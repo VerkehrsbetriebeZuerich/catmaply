@@ -3,9 +3,9 @@ library(plotly)
 
 sapply(list.files("./R", full.names = T), source)
 
-data("sample_files", )
+data("sample_files")
 
-df <- sample_files[[5]]$data
+df <- sample_files[[2]]$data
 
 df <- df %>% #filter(fahrt_seq == 116) %>%
   mutate(
@@ -59,7 +59,10 @@ discrete_coloring <- function(categories, col_palette) {
 aus_kat <- unique(na.omit(df$Ausl_Kat))
 col_palette <- viridis::plasma(length(aus_kat))
 
-discrete_col <- discrete_coloring(categories=aus_kat, col_palette=col_palette)
+discrete_col <- discrete_coloring(
+  categories=aus_kat,
+  col_palette=col_palette
+)
 
 # ======================
 # option 1
@@ -112,10 +115,70 @@ fig <-
 fig
 
 
+
 # ======================
 # option 2
-fig <- plot_ly()
+i <- 1
 
+
+fig <- plot_ly()
+a_k <- df %>%
+  filter(
+    Ausl_Kat == aus_kat[i]
+  )
+
+a_k <- a_k %>%
+  mutate(
+    rand = round(rnorm(NROW(a_k)), 2),
+    Haltestellenlangname = as.character(a_k$Haltestellenlangname)
+  ) %>%
+  as_tibble()
+
+colorscale <- array(
+  c(0, 1, rep(col_palette[i], 2)), dim= c(2,2)
+)
+
+fig <- fig %>%
+  add_trace(
+    type = "heatmap",
+    name = paste("A. K.", aus_kat[i]),
+    data = a_k,
+    x = ~fahrt_seq,
+    y = ~Haltestellenlangname,
+    z = ~rand
+    # text = ~Haltestellenlangname,
+    # hovertemplate = '%{text}'
+    # # paste(
+    #   '<b>Drive</b>: %{x}',
+    #   '<br><b>Stop</b>: %{y}',
+    #   '<br><b>Nr Passengers</b>: %{z}',
+    #   '<br>%{text}'
+    # ),
+    # colorscale=colorscale,
+    # showlegend=T,
+    # showscale=F,
+    # legendgroup = paste("A. K.", aus_kat[i])
+  ) %>%
+  add_annotations(x = a_k$fahrt_seq,
+                  y = a_k$Haltestellenlangname,
+                  text = a_k$rand,
+                  showarrow = FALSE,
+                  ax = 20,
+                  ay = -20)
+
+fig
+#
+# fig <- fig %>%
+#   layout(
+#     showlegend=T,
+#     xaxis = list(
+#       rangeslider = list(visible=TRUE)
+#     )
+#   )
+#
+# fig
+
+fig <- plot_ly()
 for (i in seq.int(length.out = length(aus_kat))) {
 
   a_k <- df %>%
@@ -127,12 +190,14 @@ for (i in seq.int(length.out = length(aus_kat))) {
           paste(
             '<b>Drive</b>:', fahrt_seq ,
             '<br><b>Stop</b>:', Haltestellenlangname,
-            '<br><b>Nr Passengers</b>:', Besetzung
+            '<br><b>Nr Passengers</b>:', Besetzung,
+            '<extra>"A. K."', Ausl_Kat, '</extra>'
           ),
           paste(
             '<b>Drive</b>:', fahrt_seq ,
             '<br><b>Stop</b>:', Haltestellenlangname,
-            '<br><b>Nr Passengers</b>:N/A'
+            '<br><b>Nr Passengers</b>:N/A',
+            '<extra>"A. K."', Ausl_Kat, '</extra>'
           )
         )
     )
@@ -166,9 +231,19 @@ for (i in seq.int(length.out = length(aus_kat))) {
         showlegend=T,
         showscale=F,
         legendgroup = paste("A. K.", aus_kat[i])
+      ) %>%
+      add_annotations(
+        x = a_k$fahrt_seq,
+        y = a_k$Haltestellenlangname,
+        text = a_k$a_k,
+        showarrow = FALSE,
+        ax = 20,
+        ay = -20
       )
   }
 }
+
+
 
 fig <- fig %>%
   layout(
@@ -199,12 +274,12 @@ test_data <- generate_test_data()
 
 a_df <- test_data %>%
   filter(
-    Passengers > 25
+    Drive_id > 10 & Stop_id > 20
   )
 
 b_df <- test_data %>%
   filter(
-    Passengers <= 25
+    Drive_id <= 25 & Stop_id <= 20
   )
 
 
