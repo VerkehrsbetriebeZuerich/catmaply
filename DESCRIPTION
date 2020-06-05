@@ -1,14 +1,15 @@
 Package: bt
-Type: Package
-Title: What the Package Does (Title Case)
+Type: bt (tbd)
+Title: Heatmap for categorical data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Aron Weller <aron.weller@trivadis.com> [aut], Yves Mauron <yves.mauron@trivadis.com> [cre, aut]
+Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
+License: MIT
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat
-RoxygenNote: 7.0.1
+Imports: 
+    testthat,
+    plotly,
+    tidyverse,
+    lubridate
+RoxygenNote: 7.1.0
