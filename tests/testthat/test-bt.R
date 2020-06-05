@@ -4,17 +4,25 @@ context("bt - plotly plots")
 
 data("sample_files")
 
-df <- sample_files[[1]]$data
+df <- sample_files[[2]]$data
 
-fig <- bt(df)
-expect_true(is(fig, "plotly"))
+test_that("test bt", {
+  fig <- bt(df)
+  expect_true(is(fig, "plotly"))
+})
 
-fig <- bt_trace(df)
-expect_true(is(fig, "plotly"))
+test_that("test bt_trace", {
+  fig <- bt_trace(df)
+  expect_true(is(fig, "plotly"))
+})
 
-fig <- bt_trace_time(df)
-expect_true(is(fig, "plotly"))
+test_that("test bt_trace_time", {
+  fig <- bt_trace_time(df)
+  expect_true(is(fig, "plotly"))
+})
 
-df <- generate_test_data(5, 10)
-fig <- bt_demo(df)
-expect_true(is(fig, "plotly"))
+test_that("test bt_demo", {
+  df <- generate_test_data(5, 10)
+  fig <- bt_demo(df)
+  expect_true(is(fig, "plotly"))
+})

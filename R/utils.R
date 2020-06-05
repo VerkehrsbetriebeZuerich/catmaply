@@ -4,14 +4,17 @@ library(plotly)
 
 #' Generate Test Data
 #'
-#' @param nr_stops
+#' @param nr_stops number of stops
+#' @param nr_drives number of drives
 #'
 #' @return tibble
+#'
 #' @export
 generate_test_data <- function(
   nr_stops=35,
   nr_drives=100
 ){
+  require(tidyverse)
   # ---------------------------
   # generate data
   drive_ids <- sort(rep(seq(1, nr_drives), nr_stops))

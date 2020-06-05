@@ -7,7 +7,9 @@
 generate_test_data(nr_stops = 35, nr_drives = 100)
 }
 \arguments{
-\item{nr_stops}{}
+\item{nr_stops}{number of stops}
+
+\item{nr_drives}{number of drives}
 }
 \value{
 tibble

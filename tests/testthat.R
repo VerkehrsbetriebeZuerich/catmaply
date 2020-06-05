@@ -1,4 +1,4 @@
-library(testthat)
-library(bt)
-
-test_check("bt")
+Sys.setenv("R_TESTS" = "")
+if (require(testthat)) {
+  test_check("bt")
+}

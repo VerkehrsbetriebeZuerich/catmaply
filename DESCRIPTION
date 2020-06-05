@@ -1,15 +1,25 @@
 Package: bt
-Type: bt (tbd)
 Title: Heatmap for categorical data
 Version: 0.1.0
-Author: Aron Weller <aron.weller@trivadis.com> [aut], Yves Mauron <yves.mauron@trivadis.com> [cre, aut]
+Authors@R: c(
+      person("Yves", "Mauron", email="yves.mauron@trivadis.com", role=c("aut", "cre", "cph")),
+      person("Aron", "Weller", role='aut')
+    )
 Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
 License: MIT
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.5.0)
 Imports: 
-    testthat,
     plotly,
     tidyverse,
+    dplyr,
     lubridate
+Suggests:
+    testthat,
+    viridis,
+    knitr
+VignetteBuilder:
+    knitr
 RoxygenNote: 7.1.0

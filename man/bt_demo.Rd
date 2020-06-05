@@ -7,7 +7,7 @@
 bt_demo(input_data)
 }
 \arguments{
-\item{input_data}{}
+\item{input_data}{input_data from generate_demo_data}
 }
 \value{
 plotly object

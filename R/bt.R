@@ -3,7 +3,7 @@
 #'
 #' @description to be removed
 #'
-#' @param input_data
+#' @param input_data input_data from generate_demo_data
 #'
 #' @return plotly object
 #' @export
@@ -152,7 +152,7 @@ bt_trace_time <- function(df) {
 
   df <- df %>%
     mutate(
-      FZ_AB = ymd_hms(paste("2020-06-03", FZ_AB))
+      FZ_AB = lubridate::ymd_hms(paste("2020-06-03", FZ_AB))
     ) %>%
     group_by(
       fahrt_seq
