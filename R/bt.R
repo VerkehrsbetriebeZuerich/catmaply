@@ -10,8 +10,11 @@
 bt_demo <- function(
   input_data
 ) {
-  df <- df %>%
+  df <- input_data %>%
     arrange(Drive_id, Stop_id)
+
+  nr_drives <- length(unique(df$Drive_id))
+  nr_stops <- length(unique(df$Stop_id))
 
   # ---------------------------
   # create poc plot
@@ -149,6 +152,9 @@ bt <- function(df, annotated=F) {
 #' @return plotly object
 #' @export
 bt_trace_time <- function(df) {
+
+  aus_kat <- unique(na.omit(df$Ausl_Kat))
+  col_palette <- viridis::plasma(length(aus_kat))
 
   df <- df %>%
     mutate(
@@ -297,6 +303,9 @@ bt_trace_time <- function(df) {
 #' @return plotly object
 #' @export
 bt_trace <- function(df) {
+
+  aus_kat <- unique(na.omit(df$Ausl_Kat))
+  col_palette <- viridis::plasma(length(aus_kat))
 
   fig <- plot_ly()
 
