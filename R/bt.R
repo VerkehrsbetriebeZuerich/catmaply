@@ -10,9 +10,8 @@
 #' @importFrom magrittr "%>%"
 #'
 #' @export
-bt_demo <- function(
-  input_data
-) {
+bt_demo <- function(input_data) {
+
   df <- input_data %>%
     dplyr::arrange(!!rlang::sym("Drive_id"), !!rlang::sym('Stop_id'))
 
@@ -57,9 +56,8 @@ bt_demo <- function(
       #,annotations =
     )
 
-  return(fig)
+  return(plotly::partial_bundle(fig))
 }
-
 
 
 #' Bt with discrete colorbar
@@ -303,30 +301,88 @@ bt_trace_time <- function(df) {
 
 
 
-#' Bt with traces
-#'
-#' @description To be merged with bt_traces_time
-#'
-#' @param df input data
-#'
-#' @return plotly object
-#'
-#' @importFrom magrittr "%>%"
-#'
-#' @export
-bt_trace <- function(df) {
 
-  aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
-  col_palette <- viridis::plasma(length(aus_kat))
+#' bt_trace
+#'
+#' @param df df
+#' @param x x
+#' @param x_order x_order
+#' @param y y
+#' @param y_order y_order
+#' @param vals vals
+#' @param color_palette color_palette
+#' @param categorical_plot categorical_plot
+#' @param x_side x_side
+#' @param y_side y_side
+#'
+#' @return
+#' @export
+bt_trace <- function(
+  df,
+  x,
+  x_order,
+  y,
+  y_order,
+  vals,
+  color_palette=viridis::plasma,
+  categorical_plot=T,
+  x_side="top",
+  y_side="left"
+  ) {
+
+  # check columnnames
+  cols <- colnames(df)
+
+  if (
+    !any(is.element(x, cols)) ||
+    !any(is.element(x_order, cols)) ||
+    !any(is.element(y, cols)) ||
+    !any(is.element(y_order, cols)) ||
+    !any(is.element(vals, cols))
+    )
+    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'vals) must be valid column names in df.")
+
+  # parameter check / error handling named params
+  if (!categorical_plot)
+    stop("This function only allows categorical heatmaps for the moment.")
+
+  if (!any(is.element(c("left", "right"), y_side)))
+    stop("Parameter 'y_side' only allows the following values: c('left', 'right')")
+
+  if (!any(is.element(c("top", "bottom"), x_side)))
+    stop("Parameter 'x_side' only allows the following values: c('top', 'bottom')")
+
+  # check categories and color palette
+  if (categorical_plot) {
+    cat_col <- unique(stats::na.omit(df[[vals]]))
+
+    # get color palette
+    if (is.function(color_palette)) {
+      col_pal <- color_palette(length(cat_col))
+    } else if (is.vector(color_palette) && !is.list(color_palette)) {
+      col_pal <- color_palette
+    } else {
+      stop("Parameter 'color_palette' can either be a function producing a color_palette vector or already a vector.")
+    }
+
+    if (!identical(length(col_pal), length(cat_col))) {
+      stop("For each category needs to be exactly one category.")
+    }
+  } # to be implemented
+
+  # aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
+  # col_palette <- viridis::plasma(length(aus_kat))
 
   fig <- plotly::plot_ly()
 
-  for (i in seq.int(length.out = length(aus_kat))) {
+  for (i in seq.int(length.out = length(cat_col))) {
 
-    a_k <- df %>%
+    temp <- df %>%
       dplyr::mutate(
-        a_k = ifelse(!!rlang::sym('Ausl_Kat') == aus_kat[i], !!rlang::sym('Ausl_Kat'), NA),
-        a_k_l =
+        x = !!rlang::sym(x),
+        y = !!rlang::sym(y),
+        vals = ifelse(!!rlang::sym(vals) == cat_col[i], !!rlang::sym(vals), NA),
+        label =
           ifelse(
             !is.na(!!rlang::sym('Besetzung')),
             paste(
@@ -343,69 +399,43 @@ bt_trace <- function(df) {
             )
           )
       )
-    # a_k <- df %>%
-    #   filter(
-    #     Ausl_Kat == aus_kat[i]
-    #   ) %>%
-    #   mutate(
-    #     a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
-    #     a_k_l =
-    #       ifelse(
-    #         !is.na(Besetzung),
-    #         paste(
-    #           '<b>Drive</b>:', fahrt_seq ,
-    #           '<br><b>Stop</b>:', Haltestellenlangname,
-    #           '<br><b>Nr Passengers</b>:', Besetzung,
-    #           '<extra>"A. K."', Ausl_Kat, '</extra>'
-    #         ),
-    #         paste(
-    #           '<b>Drive</b>:', fahrt_seq ,
-    #           '<br><b>Stop</b>:', Haltestellenlangname,
-    #           '<br><b>Nr Passengers</b>:N/A',
-    #           '<extra>"A. K."', Ausl_Kat, '</extra>'
-    #         )
-    #       )
-    #   ) %>%
-    #   arrange(Haltestellenlangname, fahrt_seq)
 
     colorscale <- array(
       data=c(0, 1, rep(col_palette[i], 2)),
       dim= c(2,2)
     )
 
-    if (NROW(a_k) > 0){
+    fig <- fig %>%
+      plotly::add_trace(
+        type = "heatmap",
+        name = paste("A. K.", cat_col[i]),
+        data = temp,
+        x = ~x,
+        y = ~y,
+        z = ~vals,
+        text = ~label,
+        hovertemplate = '%{text}',
+        # paste(
+        #   '<b>Drive</b>: %{x}',
+        #   '<br><b>Stop</b>: %{y}',
+        #   '<br><b>Nr Passengers</b>: %{z}',
+        #   '<br>%{text}'
+        # ),
+        colorscale=colorscale,
+        showlegend=T,
+        showscale=F,
+        legendgroup = paste("A. K.", cat_col[i])
+      )
+    # %>%
+    #   add_annotations(
+    #     x = a_k$fahrt_seq[which(!is.na(a_k$Besetzung))],
+    #     y = a_k$Haltestellenlangname[which(!is.na(a_k$Besetzung))],
+    #     text = round(a_k$Besetzung[which(!is.na(a_k$Besetzung))], 0),
+    #     showarrow = FALSE,
+    #     ax = 20,
+    #     ay = -20
+    #   )
 
-      fig <- fig %>%
-        plotly::add_trace(
-          type = "heatmap",
-          name = paste("A. K.", aus_kat[i]),
-          data = a_k,
-          x = ~fahrt_seq,
-          y = ~Haltestellenlangname,
-          z = ~a_k,
-          text = ~a_k_l,
-          hovertemplate = '%{text}',
-          # paste(
-          #   '<b>Drive</b>: %{x}',
-          #   '<br><b>Stop</b>: %{y}',
-          #   '<br><b>Nr Passengers</b>: %{z}',
-          #   '<br>%{text}'
-          # ),
-          colorscale=colorscale,
-          showlegend=T,
-          showscale=F,
-          legendgroup = paste("A. K.", aus_kat[i])
-        )
-      # %>%
-      #   add_annotations(
-      #     x = a_k$fahrt_seq[which(!is.na(a_k$Besetzung))],
-      #     y = a_k$Haltestellenlangname[which(!is.na(a_k$Besetzung))],
-      #     text = round(a_k$Besetzung[which(!is.na(a_k$Besetzung))], 0),
-      #     showarrow = FALSE,
-      #     ax = 20,
-      #     ay = -20
-      #   )
-    }
   }
 
   fig <- fig %>%
@@ -415,10 +445,10 @@ bt_trace <- function(df) {
         title="",
         tickmode='linear',
         range = c(0,30),
-        categoryorder="array",
-        categoryarray=unique(df$fahrt_seq[order(as.numeric(df$fahrt_seq))]),
-        side = "top",
         tickangle = 90,
+        categoryorder="array",
+        categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
+        side = x_side,
         # rangeselector = list(
         #   buttons = list(
         #     list(
@@ -433,9 +463,10 @@ bt_trace <- function(df) {
       ),
       yaxis = list(
         title="",
+        side="left",
         fixedrange = TRUE,
         categoryorder="array",
-        categoryarray=unique(df$Haltestellenlangname[order(-df$halt_seq, df$Haltestellenlangname)])
+        categoryarray=unique(df[[y]][order(df[[y_order]])])
       )
     )
 

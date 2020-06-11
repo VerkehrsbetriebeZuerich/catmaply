@@ -2,16 +2,45 @@
 % Please edit documentation in R/bt.R
 \name{bt_trace}
 \alias{bt_trace}
-\title{Bt with traces}
+\title{bt_trace}
 \usage{
-bt_trace(df)
+bt_trace(
+  df,
+  x,
+  x_order,
+  y,
+  y_order,
+  vals,
+  color_palette = viridis::plasma,
+  categorical_plot = T,
+  x_side = "top",
+  y_side = "left"
+)
 }
 \arguments{
-\item{df}{input data}
+\item{df}{df}
+
+\item{x}{x}
+
+\item{x_order}{x_order}
+
+\item{y}{y}
+
+\item{y_order}{y_order}
+
+\item{vals}{vals}
+
+\item{color_palette}{color_palette}
+
+\item{categorical_plot}{categorical_plot}
+
+\item{x_side}{x_side}
+
+\item{y_side}{y_side}
 }
 \value{
-plotly object
+
 }
 \description{
-To be merged with bt_traces_time
+bt_trace
 }
