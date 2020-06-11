@@ -6,12 +6,15 @@
 #' @param input_data input_data from generate_demo_data
 #'
 #' @return plotly object
+#'
+#' @importFrom magrittr "%>%"
+#'
 #' @export
 bt_demo <- function(
   input_data
 ) {
   df <- input_data %>%
-    arrange(Drive_id, Stop_id)
+    dplyr::arrange(!!rlang::sym("Drive_id"), !!rlang::sym('Stop_id'))
 
   nr_drives <- length(unique(df$Drive_id))
   nr_stops <- length(unique(df$Stop_id))
@@ -19,8 +22,8 @@ bt_demo <- function(
   # ---------------------------
   # create poc plot
   fig <-
-    plot_ly() %>%
-    add_trace(
+    plotly::plot_ly() %>%
+    plotly::add_trace(
       type = "heatmap",
       name = "",
       data = df,
@@ -34,7 +37,7 @@ bt_demo <- function(
                             '<br>%{text}'),
       showlegend=FALSE
     ) %>%
-    layout(
+    plotly::layout(
       #    dragmode="pan",
       xaxis = list(
         title="",
@@ -65,10 +68,13 @@ bt_demo <- function(
 #' @param annotated True if you want to add annotations to the plot (Default: False)
 #'
 #' @return plotly object
+#'
+#' @importFrom magrittr "%>%"
+#'
 #' @export
 bt <- function(df, annotated=F) {
 
-  aus_kat <- unique(na.omit(df$Ausl_Kat))
+  aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   col_palette <- viridis::plasma(length(aus_kat))
 
   discrete_col <- discrete_coloring(
@@ -81,8 +87,8 @@ bt <- function(df, annotated=F) {
   # create poc plot
   # create poc plot
   fig <-
-    plot_ly() %>%
-    add_trace(
+    plotly::plot_ly() %>%
+    plotly::add_trace(
       type = "heatmap",
       name = "",
       data = df,
@@ -106,7 +112,7 @@ bt <- function(df, annotated=F) {
 
   if (annotated){
     fig <- fig %>%
-      add_annotations(
+      plotly::add_annotations(
         x = df$fahrt_seq,
         y = df$Haltestellenlangname,
         text = as.character(df$Ausl_Kat),
@@ -118,7 +124,7 @@ bt <- function(df, annotated=F) {
 
   fig <-
     fig %>%
-    layout(
+    plotly::layout(
       #    dragmode="pan",
       xaxis = list(
         title="",
@@ -139,7 +145,7 @@ bt <- function(df, annotated=F) {
       #,annotations =
     )
 
-  return(partial_bundle(fig))
+  return(plotly::partial_bundle(fig))
 }
 
 
@@ -150,45 +156,48 @@ bt <- function(df, annotated=F) {
 #' @param df input data
 #'
 #' @return plotly object
+#'
+#' @importFrom magrittr "%>%"
+#'
 #' @export
 bt_trace_time <- function(df) {
 
-  aus_kat <- unique(na.omit(df$Ausl_Kat))
+  aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   col_palette <- viridis::plasma(length(aus_kat))
 
   df <- df %>%
-    mutate(
-      FZ_AB = lubridate::ymd_hms(paste("2020-06-03", FZ_AB))
+    dplyr::mutate(
+      FZ_AB = lubridate::ymd_hms(paste("2020-06-03", !!rlang::sym('FZ_AB')))
     ) %>%
-    group_by(
-      fahrt_seq
+    dplyr::group_by(
+      !!rlang::sym('fahrt_seq')
     ) %>%
-    mutate(
-      abfahrt = min(FZ_AB)
+    dplyr::mutate(
+      abfahrt = min(!!rlang::sym('FZ_AB'))
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
-  fig <- plot_ly()
+  fig <- plotly::plot_ly()
 
   for (i in seq.int(length.out = length(aus_kat))) {
 
     a_k <- df %>%
-      mutate(
-        a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
+      dplyr::mutate(
+        a_k = ifelse(!!rlang::sym('Ausl_Kat') == aus_kat[i], !!rlang::sym('Ausl_Kat'), NA),
         a_k_l =
           ifelse(
-            !is.na(Besetzung),
+            !is.na(!!rlang::sym('Besetzung')),
             paste(
-              '<b>Drive</b>:', FZ_AB,
-              '<br><b>Stop</b>:', Haltestellenlangname,
-              '<br><b>Nr Passengers</b>:', Besetzung,
-              '<extra>A. K.', Ausl_Kat, '</extra>'
+              '<b>Drive</b>:', 'FZ_AB',
+              '<br><b>Stop</b>:', 'Haltestellenlangname',
+              '<br><b>Nr Passengers</b>:', 'Besetzung',
+              '<extra>A. K.', 'Ausl_Kat', '</extra>'
             ),
             paste(
-              '<b>Drive</b>:', FZ_AB,
-              '<br><b>Stop</b>:', Haltestellenlangname,
+              '<b>Drive</b>:', 'FZ_AB',
+              '<br><b>Stop</b>:', 'Haltestellenlangname',
               '<br><b>Nr Passengers</b>:N/A',
-              '<extra>A. K.', Ausl_Kat, '</extra>'
+              '<extra>A. K.', 'Ausl_Kat', '</extra>'
             )
           )
       )
@@ -225,7 +234,7 @@ bt_trace_time <- function(df) {
     if (NROW(a_k) > 0){
 
       fig <- fig %>%
-        add_trace(
+        plotly::add_trace(
           type = "heatmap",
           name = paste("A. K.", aus_kat[i]),
           data = a_k,
@@ -258,7 +267,7 @@ bt_trace_time <- function(df) {
   }
 
   fig <- fig %>%
-    layout(
+    plotly::layout(
       showlegend=T,
       xaxis = list(
         title="",
@@ -288,7 +297,7 @@ bt_trace_time <- function(df) {
       )
     )
 
-  return(partial_bundle(fig))
+  return(plotly::partial_bundle(fig))
 
 }
 
@@ -301,33 +310,36 @@ bt_trace_time <- function(df) {
 #' @param df input data
 #'
 #' @return plotly object
+#'
+#' @importFrom magrittr "%>%"
+#'
 #' @export
 bt_trace <- function(df) {
 
-  aus_kat <- unique(na.omit(df$Ausl_Kat))
+  aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   col_palette <- viridis::plasma(length(aus_kat))
 
-  fig <- plot_ly()
+  fig <- plotly::plot_ly()
 
   for (i in seq.int(length.out = length(aus_kat))) {
 
     a_k <- df %>%
-      mutate(
-        a_k = ifelse(Ausl_Kat == aus_kat[i], Ausl_Kat, NA),
+      dplyr::mutate(
+        a_k = ifelse(!!rlang::sym('Ausl_Kat') == aus_kat[i], !!rlang::sym('Ausl_Kat'), NA),
         a_k_l =
           ifelse(
-            !is.na(Besetzung),
+            !is.na(!!rlang::sym('Besetzung')),
             paste(
-              '<b>Drive</b>:', FZ_AB,
-              '<br><b>Stop</b>:', Haltestellenlangname,
-              '<br><b>Nr Passengers</b>:', Besetzung,
-              '<extra>A. K.', Ausl_Kat, '</extra>'
+              '<b>Drive</b>:', 'FZ_AB',
+              '<br><b>Stop</b>:', 'Haltestellenlangname',
+              '<br><b>Nr Passengers</b>:', 'Besetzung',
+              '<extra>A. K.', 'Ausl_Kat', '</extra>'
             ),
             paste(
-              '<b>Drive</b>:', FZ_AB,
-              '<br><b>Stop</b>:', Haltestellenlangname,
+              '<b>Drive</b>:', 'FZ_AB',
+              '<br><b>Stop</b>:', 'Haltestellenlangname',
               '<br><b>Nr Passengers</b>:N/A',
-              '<extra>A. K.', Ausl_Kat, '</extra>'
+              '<extra>A. K.', 'Ausl_Kat', '</extra>'
             )
           )
       )
@@ -364,7 +376,7 @@ bt_trace <- function(df) {
     if (NROW(a_k) > 0){
 
       fig <- fig %>%
-        add_trace(
+        plotly::add_trace(
           type = "heatmap",
           name = paste("A. K.", aus_kat[i]),
           data = a_k,
@@ -397,7 +409,7 @@ bt_trace <- function(df) {
   }
 
   fig <- fig %>%
-    layout(
+    plotly::layout(
       showlegend=T,
       xaxis = list(
         title="",
@@ -427,6 +439,6 @@ bt_trace <- function(df) {
       )
     )
 
-  return(partial_bundle(fig))
+  return(plotly::partial_bundle(fig))
 
 }

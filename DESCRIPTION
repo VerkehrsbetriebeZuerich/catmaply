@@ -6,7 +6,7 @@ Authors@R: c(
       person("Aron", "Weller", role='aut')
     )
 Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
@@ -15,7 +15,10 @@ Imports:
     plotly,
     tidyverse,
     dplyr,
-    lubridate
+    lubridate,
+    magrittr,
+    rlang,
+    Rcpp
 Suggests:
     testthat,
     viridis,

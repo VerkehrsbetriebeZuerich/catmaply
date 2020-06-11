@@ -14,7 +14,6 @@ generate_test_data <- function(
   nr_stops=35,
   nr_drives=100
 ){
-  require(tidyverse)
   # ---------------------------
   # generate data
   drive_ids <- sort(rep(seq(1, nr_drives), nr_stops))
@@ -27,7 +26,7 @@ generate_test_data <- function(
 
   # ---------------------------
   # create input dataframe
-  df <- tibble(
+  df <- dplyr::tibble(
     "Stop_id" = stop_ids,
     "Stop_names" = stop_names,
     "Drive_id" = drive_ids,
@@ -47,6 +46,9 @@ generate_test_data <- function(
 #' @param col_palette the color palette
 #'
 #' @return list(colorscale, tickvals, ticktext)
+#'
+#' @importFrom utils tail
+#'
 #' @export
 discrete_coloring <- function(categories, col_palette) {
   # TODO: create ticktext dynamically
@@ -72,7 +74,7 @@ discrete_coloring <- function(categories, col_palette) {
   # works only with even spacing until now
   ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
   # calc percentage of ticks * range (max - min) + min
-  tick_vals <- (ticks[ticks %% 2 != 0] / max(ticks)) * (max(bvals) - min(tail(bvals, -1))) + min(tail(bvals, -1))
+  tick_vals <- (ticks[ticks %% 2 != 0] / max(ticks)) * (max(bvals) - min(utils::tail(bvals, -1))) + min(utils::tail(bvals, -1))
   tick_text <- paste("Kat.", tail(bvals, -1))
 
   return(

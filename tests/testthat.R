@@ -1,4 +1,4 @@
-#Sys.setenv("R_TESTS" = "")
+Sys.setenv("R_TESTS" = "")
 if (require(testthat)) {
   test_check("bt")
 }
