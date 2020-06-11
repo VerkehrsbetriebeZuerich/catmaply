@@ -23,3 +23,5 @@ Suggests:
 VignetteBuilder:
     knitr
 RoxygenNote: 7.1.0
+URL: https://github.com/yvesmauron/bt
+BugReports: https://github.com/yvesmauron/bt/issues

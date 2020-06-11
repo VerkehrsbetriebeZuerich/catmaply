@@ -42,4 +42,5 @@ vignettes/*.pdf
 docs/
 
 /vignettes/project_notes.Rmd
+img/
 .Rproj.user
