@@ -1,6 +1,6 @@
 # bt
 
-[![R build status](https://github.com/yvesmauron/bt/workflows/R-CMD-check/badge.svg)](https://github.com/yvesmauron/bt/actions) [![](https://img.shields.io/badge/lifecycle-development-blue.svg)](https://www.tidyverse.org/lifecycle/#development)
+[![R build status](https://github.com/yvesmauron/bt/workflows/R-CMD-check/badge.svg)](https://github.com/yvesmauron/bt/actions) [![codecov](https://codecov.io/gh/yvesmauron/bt/branch/master/graph/badge.svg)](https://codecov.io/gh/yvesmauron/bt) [![](https://img.shields.io/badge/lifecycle-development-blue.svg)](https://www.tidyverse.org/lifecycle/#development)
 
 
 ## TODOs
