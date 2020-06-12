@@ -17,8 +17,7 @@ Imports:
     dplyr,
     lubridate,
     magrittr,
-    rlang,
-    Rcpp
+    rlang
 Suggests:
     testthat,
     viridis,
