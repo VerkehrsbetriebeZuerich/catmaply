@@ -2,45 +2,63 @@
 % Please edit documentation in R/catmaply.R
 \name{catmaply}
 \alias{catmaply}
-\title{catmaply}
+\title{Heatmap for categorical data using plotly}
 \usage{
 catmaply(
   df,
   x,
   x_order,
+  x_side = "top",
+  x_tickangle = 90,
   y,
   y_order,
+  y_side = "left",
+  y_tickangle = 0,
   vals,
   color_palette = viridis::plasma,
   categorical_plot = T,
-  x_side = "top",
-  y_side = "left"
+  font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
+  font_size = 12,
+  font_color = "#444"
 )
 }
 \arguments{
-\item{df}{df}
+\item{df}{data.frame or tibble holding the data.}
 
-\item{x}{x}
+\item{x}{column name holding the axis values for x.}
 
-\item{x_order}{x_order}
+\item{x_order}{column name holding the ordering axis values for x.}
 
-\item{y}{y}
+\item{x_side}{on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").}
 
-\item{y_order}{y_order}
+\item{x_tickangle}{the angle of the axis label on the x axis. options: range -180 until 180; (default:90).}
 
-\item{vals}{vals}
+\item{y}{column name holding the axis values for y.}
 
-\item{color_palette}{color_palette}
+\item{y_order}{column name holding the ordering axis values for y.}
 
-\item{categorical_plot}{categorical_plot}
+\item{y_side}{on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").}
 
-\item{x_side}{x_side}
+\item{y_tickangle}{the angle of the axis label on the x axis. options: range -180 until 180; (default:0).}
 
-\item{y_side}{y_side}
+\item{vals}{column name holding the values for the fields.}
+
+\item{color_palette}{a color palette vector a function that is able to create one; (default: viridis::plasma).}
+
+\item{categorical_plot}{if the resulting heatmap holds categorical field values; (default: TRUE).}
+
+\item{font_family}{the typeface that will be applied by the web browser.
+The web browser will only be able to apply a font if it is available on the system which it operates.
+Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+(default: c("Open Sans", "verdana", "arial", "sans-serif")).}
+
+\item{font_size}{font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).}
+
+\item{font_color}{font color to be used for plot; (default: "#444")}
 }
 \value{
-catmaply
+catmaply object
 }
 \description{
-catmaply
+Heatmap for categorical data using plotly
 }

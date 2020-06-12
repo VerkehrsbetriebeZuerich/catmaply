@@ -22,26 +22,83 @@ test_that("test catmaply_trace", {
 })
 
 test_that("test error_handling", {
-  expect_error(catmaply(
-    df,
-    x='bla',
-    x_order = 'fahrt_seq',
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    vals = "Ausl_Kat"
+  # non-existant column name
+  expect_error(
+    catmaply(
+      df,
+      x='bla',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat"
+    )
   )
+  # wrong color palette data type
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat",
+      color_palette = list(1, 2, 3)
+    )
   )
 
-  expect_error(catmaply(
-    df,
-    x='fahrt_seq',
-    x_order = 'fahrt_seq',
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    vals = "Ausl_Kat",
-    color_palette = list(1, 2, 3)
+  # too little values
+  # wrong color palette
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat",
+      color_palette = c("#444", "#444", "#444")
+    )
   )
+
+  # wrong side for x axis
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      x_side = 'left',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat"
+    )
   )
+
+  # wrong side for y axis
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      x_side = 'the other one',
+      vals = "Ausl_Kat"
+    )
+  )
+
+  # check tick angle range
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      x_tickangle = -9000,
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat"
+    )
+  )
+
 })
 
 test_that("test catmaply_trace_time", {
