@@ -101,6 +101,43 @@ test_that("test error_handling", {
 
 })
 
+# check colorbar
+test_that("test catmaply colorbar", {
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      x_tickangle = -10,
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Besetzung",
+      categorical_colorbar = T,
+      categorical_col = 'Ausl_Kat',
+      color_palette = viridis::inferno(6)
+    )
+  )
+
+  expect_true(
+    is(
+      catmaply(
+        df,
+        x='fahrt_seq',
+        x_order = 'fahrt_seq',
+        x_tickangle = -10,
+        y = "Haltestellenlangname",
+        y_order = "halt_seq",
+        vals = "Besetzung",
+        categorical_colorbar = T,
+        categorical_col = 'Ausl_Kat',
+        color_palette = viridis::inferno
+      ),
+      "plotly"
+    )
+  )
+})
+
 test_that("test catmaply_trace_time", {
   fig <- catmaply_trace_time(df)
   expect_true(is(fig, "plotly"))

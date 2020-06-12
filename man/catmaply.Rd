@@ -16,7 +16,8 @@ catmaply(
   y_tickangle = 0,
   vals,
   color_palette = viridis::plasma,
-  categorical_plot = T,
+  categorical_colorbar = F,
+  categorical_col = NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color = "#444"
@@ -45,7 +46,9 @@ catmaply(
 
 \item{color_palette}{a color palette vector a function that is able to create one; (default: viridis::plasma).}
 
-\item{categorical_plot}{if the resulting heatmap holds categorical field values; (default: TRUE).}
+\item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
+
+\item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).}
 
 \item{font_family}{the typeface that will be applied by the web browser.
 The web browser will only be able to apply a font if it is available on the system which it operates.
