@@ -1,5 +1,5 @@
 
-#' Bt Demo Data
+#' catmaply Demo Data
 #'
 #' @description to be removed
 #'
@@ -10,7 +10,7 @@
 #' @importFrom magrittr "%>%"
 #'
 #' @export
-bt_demo <- function(input_data) {
+catmaply_demo <- function(input_data) {
 
   df <- input_data %>%
     dplyr::arrange(!!rlang::sym("Drive_id"), !!rlang::sym('Stop_id'))
@@ -60,7 +60,7 @@ bt_demo <- function(input_data) {
 }
 
 
-#' Bt with discrete colorbar
+#' catmaply with discrete colorbar
 #'
 #' @param df input data
 #' @param annotated True if you want to add annotations to the plot (Default: False)
@@ -70,7 +70,7 @@ bt_demo <- function(input_data) {
 #' @importFrom magrittr "%>%"
 #'
 #' @export
-bt <- function(df, annotated=F) {
+catmaply <- function(df, annotated=F) {
 
   aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   col_palette <- viridis::plasma(length(aus_kat))
@@ -147,9 +147,9 @@ bt <- function(df, annotated=F) {
 }
 
 
-#' Bt with traces and time
+#' catmaply with traces and time
 #'
-#' @description To be merged with bt_traces
+#' @description To be merged with catmaply_traces
 #'
 #' @param df input data
 #'
@@ -158,7 +158,7 @@ bt <- function(df, annotated=F) {
 #' @importFrom magrittr "%>%"
 #'
 #' @export
-bt_trace_time <- function(df) {
+catmaply_trace_time <- function(df) {
 
   aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   col_palette <- viridis::plasma(length(aus_kat))
@@ -302,7 +302,7 @@ bt_trace_time <- function(df) {
 
 
 
-#' bt_trace
+#' catmaply_trace
 #'
 #' @param df df
 #' @param x x
@@ -317,7 +317,7 @@ bt_trace_time <- function(df) {
 #'
 #' @return
 #' @export
-bt_trace <- function(
+catmaply_trace <- function(
   df,
   x,
   x_order,

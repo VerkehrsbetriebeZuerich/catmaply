@@ -1,5 +1,5 @@
-Package: bt
-Title: Heatmap for categorical data
+Package: catmaply
+Title: Heatmap for categorical data using plotly
 Version: 0.1.0
 Authors@R: c(
       person("Yves", "Mauron", email="yves.mauron@trivadis.com", role=c("aut", "cre", "cph")),
@@ -26,5 +26,5 @@ Suggests:
 VignetteBuilder:
     knitr
 RoxygenNote: 7.1.0
-URL: https://github.com/yvesmauron/bt
-BugReports: https://github.com/yvesmauron/bt/issues
+URL: https://github.com/yvesmauron/catmaply
+BugReports: https://github.com/yvesmauron/catmaply/issues
