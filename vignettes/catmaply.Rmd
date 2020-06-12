@@ -1,14 +1,18 @@
 ---
-title: "Categorical Heatmaps"
-author: "Yves Mauron"
+title: "catmaply - categorical heatmaps with plotly"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+author: "Yves Mauron"
+output:
+ html_document:
+  fig_width: 12
+  fig_height: 9
+  self_contained: yes
+  toc: true
 ---
-
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{Introduction to heatmaply}
+-->
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,

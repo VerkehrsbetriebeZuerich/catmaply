@@ -5,6 +5,9 @@ Authors@R: c(
       person("Yves", "Mauron", email="yves.mauron@trivadis.com", role=c("aut", "cre", "cph")),
       person("Aron", "Weller", role='aut')
     )
+Author: Yves Mauron [aut, cre],
+  Aron Weller [aut]
+Maintainer: Yves Mauron <yves.mauron@trivadis.com>
 Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
 License: MIT + file LICENSE
 Encoding: UTF-8
