@@ -2,9 +2,7 @@
 # Testing plotting (rudimentary)
 context("catmaply - plotly plots")
 
-data("sample_files")
-
-df <- sample_files[[2]]$data
+df <- vbz[[2]]$data
 
 test_that("test catmaply", {
   fig <- catmaply_single(df)
