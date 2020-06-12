@@ -97,7 +97,7 @@ catmaply<- function(
       )
 
     colorscale <- array(
-      data=c(0, 1, rep(col_palette[i], 2)),
+      data=c(0, 1, rep(col_pal[i], 2)),
       dim= c(2,2)
     )
 
