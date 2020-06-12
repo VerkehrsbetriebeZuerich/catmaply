@@ -7,12 +7,12 @@ data("sample_files")
 df <- sample_files[[2]]$data
 
 test_that("test catmaply", {
-  fig <- catmaply(df)
+  fig <- catmaply_single(df)
   expect_true(is(fig, "plotly"))
 })
 
 test_that("test catmaply_trace", {
-  fig <- catmaply_trace(
+  fig <- catmaply(
     df,
     x='fahrt_seq',
     x_order = 'fahrt_seq',
@@ -24,7 +24,7 @@ test_that("test catmaply_trace", {
 })
 
 test_that("test error_handling", {
-  expect_error(catmaply_trace(
+  expect_error(catmaply(
     df,
     x='bla',
     x_order = 'fahrt_seq',
@@ -34,7 +34,7 @@ test_that("test error_handling", {
   )
   )
 
-  expect_error(catmaply_trace(
+  expect_error(catmaply(
     df,
     x='fahrt_seq',
     x_order = 'fahrt_seq',
