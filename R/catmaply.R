@@ -11,7 +11,8 @@
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
 #' @param vals column name holding the values for the fields.
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
-#' @param categorical_plot if the resulting heatmap holds categorical field values; (default: TRUE).
+#' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
+#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
 #' @param font_family the typeface that will be applied by the web browser.
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
@@ -33,7 +34,8 @@ catmaply<- function(
   y_tickangle=0,
   vals,
   color_palette=viridis::plasma,
-  categorical_plot=T,
+  categorical_colorbar=F,
+  categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color = "#444"
@@ -52,8 +54,13 @@ catmaply<- function(
     stop("Parameters c('x', 'x_order', 'y', 'y_order', 'vals) must be valid column names in df.")
 
   # parameter check / error handling named params
-  if (!categorical_plot)
-    stop("This function only allows categorical heatmaps for the moment.")
+  if (!is.logical(categorical_colorbar))
+    stop("Parameter 'categorical_colorbar' must be logical")
+
+  if (!categorical_colorbar)
+    categorical_col <- vals
+  else if (!any(is.element(categorical_col, cols)))
+    stop("When using continuous vals that are grouped by column 'categorical_col', then categorical_col must be a valid column name in df.")
 
   if (!any(is.element(c("left", "right"), y_side)))
     stop("Parameter 'y_side' only allows the following values: c('left', 'right')")
@@ -67,23 +74,22 @@ catmaply<- function(
   if (font_size < 1)
     stop("Parameter 'font_size' needs to be bigger than or equal to one.")
 
+
   # check categories and color palette
-  if (categorical_plot) {
-    cat_col <- unique(stats::na.omit(df[[vals]]))
+  cat_col <- unique(stats::na.omit(df[[categorical_col]]))
 
-    # get color palette
-    if (is.function(color_palette)) {
-      col_pal <- color_palette(length(cat_col))
-    } else if (is.vector(color_palette) && !is.list(color_palette)) {
-      col_pal <- color_palette
-    } else {
-      stop("Parameter 'color_palette' can either be a function producing a color_palette vector or already a vector.")
-    }
+  # get color palette
+  if (is.function(color_palette)) {
+    col_pal <- color_palette(length(cat_col) * ifelse(categorical_colorbar, 2, 1))
+  } else if (is.vector(color_palette) && !is.list(color_palette)) {
+    col_pal <- color_palette
+  } else {
+    stop("Parameter 'color_palette' can either be a function producing a color_palette vector or a color paletet vector itself.")
+  }
 
-    if (!identical(length(col_pal), length(cat_col))) {
-      stop("For each category needs to be exactly one category.")
-    }
-  } # to be implemented
+  if (length(col_pal) != (length(cat_col) * ifelse(categorical_colorbar, 2, 1))) {
+    stop("For each category needs to be exactly one category.")
+  }
 
   # aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
   # col_palette <- viridis::plasma(length(aus_kat))
@@ -96,7 +102,7 @@ catmaply<- function(
       dplyr::mutate(
         x = !!rlang::sym(x),
         y = !!rlang::sym(y),
-        vals = ifelse(!!rlang::sym(vals) == cat_col[i], !!rlang::sym(vals), NA),
+        vals = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(vals), NA),
         label =
           ifelse(
             !is.na(!!rlang::sym('Besetzung')),
@@ -115,10 +121,18 @@ catmaply<- function(
           )
       )
 
-    colorscale <- array(
-      data=c(0, 1, rep(col_pal[i], 2)),
-      dim= c(2,2)
-    )
+    if (categorical_colorbar) {
+      index <- ((i - 1) * 2) + 1
+      colorscale <- array(
+        data=c(0, 1, col_pal[index], col_pal[index + 1]),
+        dim= c(2,2)
+      )
+    } else {
+      colorscale <- array(
+        data=c(0, 1, rep(col_pal[i], 2)),
+        dim= c(2,2)
+      )
+    }
 
     fig <- fig %>%
       plotly::add_trace(
@@ -169,3 +183,4 @@ catmaply<- function(
   return(plotly::partial_bundle(fig))
 
 }
+
