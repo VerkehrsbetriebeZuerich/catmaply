@@ -1,29 +1,42 @@
-#' catmaply
+#' Heatmap for categorical data using plotly
 #'
-#' @param df df
-#' @param x x
-#' @param x_order x_order
-#' @param y y
-#' @param y_order y_order
-#' @param vals vals
-#' @param color_palette color_palette
-#' @param categorical_plot categorical_plot
-#' @param x_side x_side
-#' @param y_side y_side
+#' @param df data.frame or tibble holding the data.
+#' @param x column name holding the axis values for x.
+#' @param x_order column name holding the ordering axis values for x.
+#' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
+#' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
+#' @param y column name holding the axis values for y.
+#' @param y_order column name holding the ordering axis values for y.
+#' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
+#' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
+#' @param vals column name holding the values for the fields.
+#' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
+#' @param categorical_plot if the resulting heatmap holds categorical field values; (default: TRUE).
+#' @param font_family the typeface that will be applied by the web browser.
+#' The web browser will only be able to apply a font if it is available on the system which it operates.
+#' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+#' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
+#' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
+#' @param font_color font color to be used for plot; (default: "#444")
 #'
-#' @return catmaply
+#' @return catmaply object
 #' @export
 catmaply<- function(
   df,
   x,
   x_order,
+  x_side="top",
+  x_tickangle=90,
   y,
   y_order,
+  y_side="left",
+  y_tickangle=0,
   vals,
   color_palette=viridis::plasma,
   categorical_plot=T,
-  x_side="top",
-  y_side="left"
+  font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
+  font_size = 12,
+  font_color = "#444"
 ) {
 
   # check columnnames
@@ -47,6 +60,12 @@ catmaply<- function(
 
   if (!any(is.element(c("top", "bottom"), x_side)))
     stop("Parameter 'x_side' only allows the following values: c('top', 'bottom')")
+
+  if (abs(x_tickangle) > 180 || abs(y_tickangle) > 180)
+    stop("Parameter 'x_tickangle' and 'y_tickangle' show be in range -180 to 180.")
+
+  if (font_size < 1)
+    stop("Parameter 'font_size' needs to be bigger than or equal to one.")
 
   # check categories and color palette
   if (categorical_plot) {
@@ -111,26 +130,11 @@ catmaply<- function(
         z = ~vals,
         text = ~label,
         hovertemplate = '%{text}',
-        # paste(
-        #   '<b>Drive</b>: %{x}',
-        #   '<br><b>Stop</b>: %{y}',
-        #   '<br><b>Nr Passengers</b>: %{z}',
-        #   '<br>%{text}'
-        # ),
         colorscale=colorscale,
         showlegend=T,
         showscale=F,
         legendgroup = paste("A. K.", cat_col[i])
       )
-    # %>%
-    #   add_annotations(
-    #     x = a_k$fahrt_seq[which(!is.na(a_k$Besetzung))],
-    #     y = a_k$Haltestellenlangname[which(!is.na(a_k$Besetzung))],
-    #     text = round(a_k$Besetzung[which(!is.na(a_k$Besetzung))], 0),
-    #     showarrow = FALSE,
-    #     ax = 20,
-    #     ay = -20
-    #   )
 
   }
 
@@ -141,28 +145,24 @@ catmaply<- function(
         title="",
         tickmode='linear',
         range = c(0,30),
-        tickangle = 90,
+        tickangle = x_tickangle,
         categoryorder="array",
         categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
         side = x_side,
-        # rangeselector = list(
-        #   buttons = list(
-        #     list(
-        #       count = "8",
-        #       label = "6 - 8",
-        #       step = "hour",
-        #       stepmode = "backward"
-        #     )
-        #   )
-        # ),
         rangeslider = list(visible=TRUE)
       ),
       yaxis = list(
         title="",
-        side="left",
+        side=y_side,
+        tickangle=y_tickangle,
         fixedrange = TRUE,
         categoryorder="array",
         categoryarray=unique(df[[y]][order(df[[y_order]])])
+      ),
+      font = list(
+        family = font_family,
+        size = font_size,
+        color = font_color
       )
     )
 
