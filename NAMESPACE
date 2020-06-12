@@ -2,7 +2,7 @@
 
 export(catmaply)
 export(catmaply_demo)
-export(catmaply_trace)
+export(catmaply_single)
 export(catmaply_trace_time)
 export(discrete_coloring)
 export(generate_test_data)
