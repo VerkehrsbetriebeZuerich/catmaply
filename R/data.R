@@ -1,4 +1,4 @@
-#' Sample files for time schedules
+#' Sample files provided by VBZ
 #'
 #' Sample data
 #'
@@ -9,4 +9,4 @@
 #'   ...
 #' }
 #' @source vbz
-'sample_files'
+'vbz'
