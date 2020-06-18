@@ -2,14 +2,27 @@
 title: "catmaply - categorical heatmaps with plotly"
 date: "`r Sys.Date()`"
 author: "Yves Mauron"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 10
+    fig_height: 9
+    self_contained: yes
+    toc: true
+
+vignette: >
+  %\VignetteIndexEntry{catmaply - categorical heatmaps with plotly}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<!--
 output:
  html_document:
-  fig_width: 12
+  fig_width: 10
   fig_height: 9
   self_contained: yes
   toc: true
 ---
-<!--
+
 %\VignetteEngine{knitr::rmarkdown}
 %\VignetteIndexEntry{Introduction to heatmaply}
 -->
@@ -25,6 +38,146 @@ library(tidyverse)
 library(plotly)
 library(lubridate)
 ```
-## Current State
 
-Hereafter, a short documentation of the 
+## Project Overview
+
+### Impletemented until today is the following:
+
+Axis  (Issue #6):
+
+- Possibility to select x and y axis columns; ordering should be dynamic by any other column.
+- Possibility to set size, color and orientation of text in function call
+- Possibility to set axis position/side in function call
+
+Fields  (Issue #8):
+
+- Possibility to set columns for fields in function call, ordered by x and y.
+- Possibility to set categorical style (background color) with color palette.
+- Possibility to set colorbar per category (color ranges per category).
+- Empty fields are shown as white.
+
+To be implemented:
+
+### Legend functionality (Issue #9):
+
+- Possibility to show or hide legend in function call
+- Show / Hide fields based on click on legend (already implemented via traces)
+- Define legend names based on any column in input data.frame
+
+### Label formatting (Issue #10):
+
+- Possibility to define if labels should be displayed or not in function call
+- Possibility to use data frame column with labels formatted in standard html (template) format to use for labels.
+
+### Open Points:
+
+- Annotations - possible but performance problems until now; further testing required
+- User Testing
+- Improved documentation
+
+## Installation
+
+To install the latest ("cutting-edge") GitHub version run:
+
+```{r}
+# make sure that you have the corrent R Tools installed.
+# as you might need to build some packages from source
+
+# if do not have RTools installed, you can install it with:
+# install.packages('installr'); install.Rtools() # not tested on windows
+# or download it from here:
+# https://cran.r-project.org/bin/windows/Rtools/
+# in any case, make sure that you select the correct version, 
+# otherwise the installation will fail.
+
+# Then you'll need devtools
+# if (!require('devtools'))
+  # install.packages('devtools')
+
+# Finally install the package
+# devtools::install_github('yvesmauron/catmaply')
+```
+
+Thereafter you can start using the package as usual:
+
+```{r}
+library(catmaply)
+```
+
+## Basic Plotting
+
+Get demo data provided by package.
+
+```{r}
+data("vbz")
+df <- vbz[[3]]$data
+```
+
+The data shows has the following structures:
+
+- 'fahrt_seq' shows the order of the drives
+- 'Haltenstellenlangname' shows the names of the stops, that need to be ordered by halt_seq
+- 'Ausl_Kat' shows that category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
+- 'Besetzung' is the number of people per a certain m2.
+
+So let's do a visualisation with this kind of information
+
+```{r}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    vals = "Ausl_Kat"
+  )
+```
+
+How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+
+To show a colorbar per category, we have to but a continuous number in the fields and categorize them with a categorical column, so in our example:
+
+- Besetzung are in the fileds
+- Ausl_Kat is the categorization over these fields.
+
+To change the color palette you can either use submit a color palette vector or a function that is able to return one.
+
+> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+
+```{r}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    vals = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma
+  )
+```
+
+Now, lets mess around with axis formatting; lets change
+
+- font_color to the "purplish" color in used in the logo (#6D65AB)
+- change the size to 10
+- change the tick_angle for the x axis to 15
+
+
+```{r}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    x_tickangle = 15,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    vals = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma,
+    font_color = '#6D65AB',
+    font_size = 10
+  )
+```
