@@ -3,18 +3,19 @@ title: "catmaply - categorical heatmaps with plotly"
 date: "`r Sys.Date()`"
 author: "Yves Mauron"
 output: 
-  rmarkdown::html_vignette:
+  html_document:
     fig_width: 10
     fig_height: 9
     self_contained: yes
     toc: true
-
+---
+<!--
 vignette: >
   %\VignetteIndexEntry{catmaply - categorical heatmaps with plotly}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-<!--
+
+
 output:
  html_document:
   fig_width: 10
