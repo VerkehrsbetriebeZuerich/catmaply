@@ -28,17 +28,21 @@ Please note that this project is released with a [Contributor Code of Conduct](h
 To install the latest ("cutting-edge") GitHub version run:
 
 ```R
+# make sure that you have the corrent R Tools installed.
+# as you might need to build some packages from source
 
-# good packages to install for this to work smoothly:
+# if do not have RTools installed, you can install it with:
+# install.packages('installr'); install.Rtools() # not tested on windows
+# or download it from here:
+# https://cran.r-project.org/bin/windows/Rtools/
+# in any case, make sure that you select the correct version, 
+# otherwise the installation will fail.
 
-
-# You'll need devtools
-if (!require(pkg)) install.packages(pkg);
+# Then you'll need devtools
+if (!require('devtools'))
   install.packages('devtools')
 
-# make sure you have Rtools installed first! if not, then run:
-#install.packages('installr'); install.Rtools()
-
+# Finally install the package
 devtools::install_github('yvesmauron/catmaply')
 ```
 
