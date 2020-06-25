@@ -2,11 +2,11 @@
 #'
 #' @param df data.frame or tibble holding the data.
 #' @param x column name holding the axis values for x.
-#' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x.
+#' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
 #' @param y column name holding the axis values for y.
-#' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y.
+#' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
 #' @param vals column name holding the values for the fields.
@@ -20,6 +20,7 @@
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: T).
+#' @param legend_col column to be used for legend naming; (default: vals/color_palette)
 #'
 #' @return catmaply object
 #' @export
@@ -40,31 +41,39 @@ catmaply<- function(
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color = "#444",
-  legend=T
+  legend=T,
+  legend_col
 ) {
 
-  # check columnnames
-  cols <- colnames(df)
+  # check if categorical_colorbar is logical
+  if (!is.logical(categorical_colorbar))
+    stop("Parameter 'categorical_colorbar' must be logical")
 
-  # columnnames without quotes
+  # substitute column references, so that they can be passed without quotes
   x <- as.character(substitute(x))
   x_order <- ifelse(missing(x_order), x, as.character(substitute(x_order)))
   y <- as.character(substitute(y))
   y_order <- ifelse(missing(y_order), y, as.character(substitute(y_order)))
   vals <- as.character(substitute(vals))
+  categorical_col <- ifelse(!categorical_colorbar, vals, as.character(substitute(categorical_col)))
+  legend_col <- ifelse(missing(legend_col), categorical_col, as.character(substitute(legend_col)))
+
+
+  # check columnnames
+  cols <- colnames(df)
 
   if (
     !any(is.element(x, cols)) ||
     !any(is.element(x_order, cols)) ||
     !any(is.element(y, cols)) ||
     !any(is.element(y_order, cols)) ||
-    !any(is.element(vals, cols))
+    !any(is.element(vals, cols)) ||
+    !any(is.element(categorical_col, cols)) ||
+    !any(is.element(legend_col, cols))
   )
-    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'vals) must be valid column names in df.")
+    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'vals', 'categorical_col', 'legend_col') must be valid column names in df.")
 
   # parameter check / error handling named params
-  if (!is.logical(categorical_colorbar))
-    stop("Parameter 'categorical_colorbar' must be logical")
 
   if (!categorical_colorbar)
     categorical_col <- vals
@@ -88,8 +97,14 @@ catmaply<- function(
 
   # check categories and color palette
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
-  # order correctly to resolve issue #12
+  cat_leg_comb <- unique(stats::na.omit(df[, c(categorical_col, legend_col)]))
+
+  if (length(cat_col) != NROW(cat_leg_comb))
+    stop("You need to define excactly one legend entry per category.")
+
+  # order cat column correctly to resolve issue #12
   cat_col <- cat_col[order(cat_col)]
+  leg_col <- cat_leg_comb[[legend_col]][order(cat_col)]
 
   # get color palette
   if (is.function(color_palette)) {
@@ -101,11 +116,8 @@ catmaply<- function(
   }
 
   if (length(col_pal) != (length(cat_col) * ifelse(categorical_colorbar, 2, 1))) {
-    stop("For each category needs to be exactly one category.")
+    stop("For each category needs to be exactly one color, if you use a colorbar, then two colors are needed for one category.")
   }
-
-  # aus_kat <- unique(stats::na.omit(df$Ausl_Kat))
-  # col_palette <- viridis::plasma(length(aus_kat))
 
   fig <- plotly::plot_ly()
 
@@ -150,7 +162,7 @@ catmaply<- function(
     fig <- fig %>%
       plotly::add_trace(
         type = "heatmap",
-        name = paste("A. K.", cat_col[i]),
+        name = leg_col[i],
         data = temp,
         x = ~x,
         y = ~y,
@@ -160,7 +172,7 @@ catmaply<- function(
         colorscale=colorscale,
         showlegend=T,
         showscale=F,
-        legendgroup = paste("A. K.", cat_col[i])
+        legendgroup = leg_col[i]
       )
 
   }
