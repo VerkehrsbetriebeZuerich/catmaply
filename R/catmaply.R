@@ -44,6 +44,13 @@ catmaply<- function(
   # check columnnames
   cols <- colnames(df)
 
+  # columnnames without quotes
+  x <- as.character(substitute(x))
+  x_order <- as.character(substitute(x_order))
+  y <- as.character(substitute(y))
+  y_order <- as.character(substitute(y_order))
+  vals <- as.character(substitute(vals))
+
   if (
     !any(is.element(x, cols)) ||
     !any(is.element(x_order, cols)) ||

@@ -19,7 +19,19 @@ test_that("test catmaply_trace", {
     vals = "Ausl_Kat"
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x=fahrt_seq,
+    x_order = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    vals = Ausl_Kat
+  )
+  expect_true(is(fig, "plotly"))
 })
+
+
 
 test_that("test error_handling", {
   # non-existant column name
