@@ -2,11 +2,11 @@
 #'
 #' @param df data.frame or tibble holding the data.
 #' @param x column name holding the axis values for x.
-#' @param x_order column name holding the ordering axis values for x.
+#' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x.
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
 #' @param y column name holding the axis values for y.
-#' @param y_order column name holding the ordering axis values for y.
+#' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y.
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
 #' @param vals column name holding the values for the fields.
@@ -19,17 +19,18 @@
 #' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
+#' @param legend boolean indicating if legend should be displayed or not; (default: T).
 #'
 #' @return catmaply object
 #' @export
 catmaply<- function(
   df,
   x,
-  x_order,
+  x_order=NA,
   x_side="top",
   x_tickangle=90,
   y,
-  y_order,
+  y_order=NA,
   y_side="left",
   y_tickangle=0,
   vals,
@@ -38,7 +39,8 @@ catmaply<- function(
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
-  font_color = "#444"
+  font_color = "#444",
+  legend=T
 ) {
 
   # check columnnames
@@ -46,9 +48,9 @@ catmaply<- function(
 
   # columnnames without quotes
   x <- as.character(substitute(x))
-  x_order <- as.character(substitute(x_order))
+  x_order <- ifelse(missing(x_order), x, as.character(substitute(x_order)))
   y <- as.character(substitute(y))
-  y_order <- as.character(substitute(y_order))
+  y_order <- ifelse(missing(y_order), y, as.character(substitute(y_order)))
   vals <- as.character(substitute(vals))
 
   if (
@@ -81,6 +83,8 @@ catmaply<- function(
   if (font_size < 1)
     stop("Parameter 'font_size' needs to be bigger than or equal to one.")
 
+  if (!is.logical(legend))
+    stop("Parameter 'legend' needs to be logical/boolean.")
 
   # check categories and color palette
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
@@ -161,7 +165,7 @@ catmaply<- function(
 
   fig <- fig %>%
     plotly::layout(
-      showlegend=T,
+      showlegend=legend,
       xaxis = list(
         title="",
         tickmode='linear',
