@@ -88,6 +88,8 @@ catmaply<- function(
 
   # check categories and color palette
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
+  # order correctly to resolve issue #12
+  cat_col <- cat_col[order(cat_col)]
 
   # get color palette
   if (is.function(color_palette)) {
