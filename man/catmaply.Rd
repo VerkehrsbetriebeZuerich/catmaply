@@ -21,7 +21,8 @@ catmaply(
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color = "#444",
-  legend = T
+  legend = T,
+  legend_col
 )
 }
 \arguments{
@@ -29,7 +30,7 @@ catmaply(
 
 \item{x}{column name holding the axis values for x.}
 
-\item{x_order}{column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x.}
+\item{x_order}{column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").}
 
 \item{x_side}{on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").}
 
@@ -37,7 +38,7 @@ catmaply(
 
 \item{y}{column name holding the axis values for y.}
 
-\item{y_order}{column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y.}
+\item{y_order}{column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").}
 
 \item{y_side}{on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").}
 
@@ -61,6 +62,8 @@ Provide multiple font families, separated by commas, to indicate the preference 
 \item{font_color}{font color to be used for plot; (default: "#444")}
 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: T).}
+
+\item{legend_col}{column to be used for legend naming; (default: vals/color_palette)}
 }
 \value{
 catmaply object
