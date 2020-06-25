@@ -40,6 +40,15 @@ test_that("test catmaply_trace", {
     legend_col = Ausl_Kat
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x=fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    vals = Ausl_Kat
+  )
+  expect_true(is(fig, "plotly"))
 })
 
 
@@ -122,7 +131,7 @@ test_that("test error_handling", {
     )
   )
 
-  # check tick angle range
+  # check tick legend col
   expect_error(
     catmaply(
       df,
@@ -131,6 +140,30 @@ test_that("test error_handling", {
       y_order = "halt_seq",
       vals = "Ausl_Kat",
       legend_col = halt_seq
+    )
+  )
+
+  # check tick legend col
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat",
+      legend_col = "bla"
+    )
+  )
+
+  # check tick legend col
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      vals = "Ausl_Kat",
+      legend_col = c(1,2,3,4)
     )
   )
 })
