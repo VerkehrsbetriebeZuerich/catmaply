@@ -14,7 +14,8 @@ catmaply(
   y_order,
   y_side = "left",
   y_tickangle = 0,
-  vals,
+  z,
+  hover_template,
   color_palette = viridis::plasma,
   categorical_colorbar = F,
   categorical_col = NA,
@@ -44,7 +45,9 @@ catmaply(
 
 \item{y_tickangle}{the angle of the axis label on the x axis. options: range -180 until 180; (default:0).}
 
-\item{vals}{column name holding the values for the fields.}
+\item{z}{column name holding the values for the fields.}
+
+\item{hover_template}{template to be used to create the hover label; (default:missing).}
 
 \item{color_palette}{a color palette vector a function that is able to create one; (default: viridis::plasma).}
 
@@ -63,7 +66,7 @@ Provide multiple font families, separated by commas, to indicate the preference 
 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: T).}
 
-\item{legend_col}{column to be used for legend naming; (default: vals/color_palette)}
+\item{legend_col}{column to be used for legend naming; (default: z/color_palette)}
 }
 \value{
 catmaply object

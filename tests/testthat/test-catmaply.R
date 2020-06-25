@@ -4,19 +4,19 @@ context("catmaply - plotly plots")
 
 df <- vbz[[2]]$data
 
-test_that("test catmaply", {
+test_that("test catmaply single", {
   fig <- catmaply_single(df)
   expect_true(is(fig, "plotly"))
 })
 
-test_that("test catmaply_trace", {
+test_that("test catmaply", {
   fig <- catmaply(
     df,
     x='fahrt_seq',
     x_order = 'fahrt_seq',
     y = "Haltestellenlangname",
     y_order = "halt_seq",
-    vals = "Ausl_Kat"
+    z = "Ausl_Kat"
   )
   expect_true(is(fig, "plotly"))
 
@@ -26,7 +26,7 @@ test_that("test catmaply_trace", {
     x_order = fahrt_seq,
     y = Haltestellenlangname,
     y_order = halt_seq,
-    vals = Ausl_Kat
+    z = Ausl_Kat
   )
   expect_true(is(fig, "plotly"))
 
@@ -36,7 +36,7 @@ test_that("test catmaply_trace", {
     x=fahrt_seq,
     y = Haltestellenlangname,
     y_order = halt_seq,
-    vals = Ausl_Kat,
+    z = Ausl_Kat,
     legend_col = Ausl_Kat
   )
   expect_true(is(fig, "plotly"))
@@ -46,7 +46,62 @@ test_that("test catmaply_trace", {
     x=fahrt_seq,
     y = Haltestellenlangname,
     y_order = halt_seq,
-    vals = Ausl_Kat
+    z = Ausl_Kat
+  )
+  expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_hide = F,
+    hover_template = paste(
+      '<b>This</b>:', fahrt_seq,
+      '<br><b>That</b>:', halt_seq,
+      '<br><b>here</b>:', Ausl_Kat,
+      '<extra></extra>'
+    )
+  )
+  expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_hide = T,
+    hover_template = paste(
+      '<b>This</b>:', fahrt_seq,
+      '<br><b>That</b>:', halt_seq,
+      '<br><b>here</b>:', Ausl_Kat,
+      '<extra></extra>'
+    )
+  )
+  expect_true(is(fig, "plotly"))
+
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_hide = F
+  )
+  expect_true(is(fig, "plotly"))
+
+
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname)
   )
   expect_true(is(fig, "plotly"))
 })
@@ -62,7 +117,7 @@ test_that("test error_handling", {
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat"
+      z = "Ausl_Kat"
     )
   )
   # wrong color palette data type
@@ -73,7 +128,7 @@ test_that("test error_handling", {
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat",
+      z = "Ausl_Kat",
       color_palette = list(1, 2, 3)
     )
   )
@@ -87,7 +142,7 @@ test_that("test error_handling", {
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat",
+      z = "Ausl_Kat",
       color_palette = c("#444", "#444", "#444")
     )
   )
@@ -101,7 +156,7 @@ test_that("test error_handling", {
       x_side = 'left',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat"
+      z = "Ausl_Kat"
     )
   )
 
@@ -114,7 +169,7 @@ test_that("test error_handling", {
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       x_side = 'the other one',
-      vals = "Ausl_Kat"
+      z = "Ausl_Kat"
     )
   )
 
@@ -127,7 +182,7 @@ test_that("test error_handling", {
       x_tickangle = -9000,
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat"
+      z = "Ausl_Kat"
     )
   )
 
@@ -138,7 +193,7 @@ test_that("test error_handling", {
       x='fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat",
+      z = "Ausl_Kat",
       legend_col = halt_seq
     )
   )
@@ -150,7 +205,7 @@ test_that("test error_handling", {
       x='fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat",
+      z = "Ausl_Kat",
       legend_col = "bla"
     )
   )
@@ -162,8 +217,20 @@ test_that("test error_handling", {
       x='fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Ausl_Kat",
+      z = "Ausl_Kat",
       legend_col = c(1,2,3,4)
+    )
+  )
+
+  # template references wrong column
+  expect_error(
+    catmaply(
+      df,
+      x = fahrt_seq,
+      y = Haltestellenlangname,
+      y_order = halt_seq,
+      z = Ausl_Kat,
+      hover_template = paste(fahrt_seq, fs)
     )
   )
 })
@@ -179,7 +246,7 @@ test_that("test catmaply colorbar", {
       x_tickangle = -10,
       y = "Haltestellenlangname",
       y_order = "halt_seq",
-      vals = "Besetzung",
+      z = "Besetzung",
       categorical_colorbar = T,
       categorical_col = 'Ausl_Kat',
       color_palette = viridis::inferno(6)
@@ -195,7 +262,7 @@ test_that("test catmaply colorbar", {
         x_tickangle = -10,
         y = "Haltestellenlangname",
         y_order = "halt_seq",
-        vals = "Besetzung",
+        z = "Besetzung",
         categorical_colorbar = T,
         categorical_col = 'Ausl_Kat',
         color_palette = viridis::inferno
