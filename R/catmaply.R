@@ -128,22 +128,7 @@ catmaply<- function(
         x = !!rlang::sym(x),
         y = !!rlang::sym(y),
         vals = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(vals), NA),
-        label =
-          ifelse(
-            !is.na(!!rlang::sym('Besetzung')),
-            paste(
-              '<b>Drive</b>:', 'FZ_AB',
-              '<br><b>Stop</b>:', 'Haltestellenlangname',
-              '<br><b>Nr Passengers</b>:', 'Besetzung',
-              '<extra>A. K.', 'Ausl_Kat', '</extra>'
-            ),
-            paste(
-              '<b>Drive</b>:', 'FZ_AB',
-              '<br><b>Stop</b>:', 'Haltestellenlangname',
-              '<br><b>Nr Passengers</b>:N/A',
-              '<extra>A. K.', 'Ausl_Kat', '</extra>'
-            )
-          )
+        label = "hover_template"
       )
 
     if (categorical_colorbar) {
