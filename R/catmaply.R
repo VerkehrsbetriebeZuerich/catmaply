@@ -9,7 +9,9 @@
 #' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
-#' @param vals column name holding the values for the fields.
+#' @param z column name holding the values for the fields.
+#' @param hover_template template to be used to create the hover label; (default:missing).
+#' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
 #' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
 #' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
@@ -19,8 +21,8 @@
 #' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
-#' @param legend boolean indicating if legend should be displayed or not; (default: T).
-#' @param legend_col column to be used for legend naming; (default: vals/color_palette)
+#' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
+#' @param legend_col column to be used for legend naming; (default: z/color_palette)
 #'
 #' @return catmaply object
 #' @export
@@ -34,7 +36,9 @@ catmaply<- function(
   y_order,
   y_side="left",
   y_tickangle=0,
-  vals,
+  z,
+  hover_template,
+  hover_hide=F,
   color_palette=viridis::plasma,
   categorical_colorbar=F,
   categorical_col=NA,
@@ -54,10 +58,9 @@ catmaply<- function(
   x_order <- ifelse(missing(x_order), x, as.character(substitute(x_order)))
   y <- as.character(substitute(y))
   y_order <- ifelse(missing(y_order), y, as.character(substitute(y_order)))
-  vals <- as.character(substitute(vals))
-  categorical_col <- ifelse(!categorical_colorbar, vals, as.character(substitute(categorical_col)))
+  z <- as.character(substitute(z))
+  categorical_col <- ifelse(!categorical_colorbar, z, as.character(substitute(categorical_col)))
   legend_col <- ifelse(missing(legend_col), categorical_col, as.character(substitute(legend_col)))
-
 
   # check columnnames
   cols <- colnames(df)
@@ -67,18 +70,21 @@ catmaply<- function(
     !any(is.element(x_order, cols)) ||
     !any(is.element(y, cols)) ||
     !any(is.element(y_order, cols)) ||
-    !any(is.element(vals, cols)) ||
+    !any(is.element(z, cols)) ||
     !any(is.element(categorical_col, cols)) ||
     !any(is.element(legend_col, cols))
   )
-    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'vals', 'categorical_col', 'legend_col') must be valid column names in df.")
+    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'z', 'categorical_col', 'legend_col') must be valid column names in df.")
 
   # parameter check / error handling named params
 
-  if (!categorical_colorbar)
-    categorical_col <- vals
-  else if (!any(is.element(categorical_col, cols)))
-    stop("When using continuous vals that are grouped by column 'categorical_col', then categorical_col must be a valid column name in df.")
+  # substitute hover_template if submitted; is_hover_template is a workaround
+  # missing does not seem to work in a dplyr::mutate function for some reason.
+  is_hover_template <- F
+  if (!missing(hover_template) && !hover_hide) {
+    is_hover_template = T
+    hover_template <- substitute(hover_template)
+  }
 
   if (!any(is.element(c("left", "right"), y_side)))
     stop("Parameter 'y_side' only allows the following values: c('left', 'right')")
@@ -94,6 +100,9 @@ catmaply<- function(
 
   if (!is.logical(legend))
     stop("Parameter 'legend' needs to be logical/boolean.")
+
+  if (!is.logical(hover_hide))
+    stop("Parameter 'hover_hide' needs to be logical/boolean.")
 
   # check categories and color palette
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
@@ -127,21 +136,15 @@ catmaply<- function(
       dplyr::mutate(
         x = !!rlang::sym(x),
         y = !!rlang::sym(y),
-        vals = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(vals), NA),
+        z = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(z), NA),
         label =
           ifelse(
-            !is.na(!!rlang::sym('Besetzung')),
+            is_hover_template  && !hover_hide,
+            eval(hover_template),
             paste(
-              '<b>Drive</b>:', 'FZ_AB',
-              '<br><b>Stop</b>:', 'Haltestellenlangname',
-              '<br><b>Nr Passengers</b>:', 'Besetzung',
-              '<extra>A. K.', 'Ausl_Kat', '</extra>'
-            ),
-            paste(
-              '<b>Drive</b>:', 'FZ_AB',
-              '<br><b>Stop</b>:', 'Haltestellenlangname',
-              '<br><b>Nr Passengers</b>:N/A',
-              '<extra>A. K.', 'Ausl_Kat', '</extra>'
+              '<b>x</b>:', !!rlang::sym(x),
+              '<br><b>y</b>:', !!rlang::sym(y),
+              '<br><b>z</b>:', !!rlang::sym(z)
             )
           )
       )
@@ -159,21 +162,40 @@ catmaply<- function(
       )
     }
 
-    fig <- fig %>%
-      plotly::add_trace(
-        type = "heatmap",
-        name = leg_col[i],
-        data = temp,
-        x = ~x,
-        y = ~y,
-        z = ~vals,
-        text = ~label,
-        hovertemplate = '%{text}',
-        colorscale=colorscale,
-        showlegend=T,
-        showscale=F,
-        legendgroup = leg_col[i]
-      )
+    if (!hover_hide) {
+      # show hover label
+      fig <- fig %>%
+        plotly::add_trace(
+          type = "heatmap",
+          name = leg_col[i],
+          data = temp,
+          x = ~x,
+          y = ~y,
+          z = ~z,
+          text = ~label,
+          hovertemplate = '%{text}',
+          colorscale=colorscale,
+          showlegend=T,
+          showscale=F,
+          legendgroup = leg_col[i]
+        )
+    } else {
+      # don't show hover label
+      fig <- fig %>%
+        plotly::add_trace(
+          type = "heatmap",
+          name = leg_col[i],
+          data = temp,
+          x = ~x,
+          y = ~y,
+          z = ~z,
+          hoverinfo= "skip",
+          colorscale=colorscale,
+          showlegend=T,
+          showscale=F,
+          legendgroup = leg_col[i]
+        )
+    }
 
   }
 
@@ -208,4 +230,3 @@ catmaply<- function(
   return(plotly::partial_bundle(fig))
 
 }
-
