@@ -26,11 +26,11 @@
 catmaply<- function(
   df,
   x,
-  x_order=NA,
+  x_order,
   x_side="top",
   x_tickangle=90,
   y,
-  y_order=NA,
+  y_order,
   y_side="left",
   y_tickangle=0,
   vals,
