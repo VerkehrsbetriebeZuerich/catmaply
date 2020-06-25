@@ -130,7 +130,7 @@ catmaply(
     x_order = 'fahrt_seq',
     y = "Haltestellenlangname",
     y_order = "halt_seq",
-    vals = "Ausl_Kat"
+    z = "Ausl_Kat"
   )
 ```
 
@@ -152,7 +152,7 @@ catmaply(
     x_order = 'fahrt_seq',
     y = "Haltestellenlangname",
     y_order = "halt_seq",
-    vals = "Besetzung",
+    z = "Besetzung",
     categorical_colorbar = T,
     categorical_col = 'Ausl_Kat',
     color_palette = viridis::magma
@@ -174,7 +174,7 @@ catmaply(
     x_tickangle = 15,
     y = "Haltestellenlangname",
     y_order = "halt_seq",
-    vals = "Besetzung",
+    z = "Besetzung",
     categorical_colorbar = T,
     categorical_col = 'Ausl_Kat',
     color_palette = viridis::magma,
