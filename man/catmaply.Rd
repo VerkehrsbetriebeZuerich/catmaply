@@ -24,7 +24,8 @@ catmaply(
   font_size = 12,
   font_color = "#444",
   legend = T,
-  legend_col
+  legend_col,
+  source = "catmaply"
 )
 }
 \arguments{
@@ -70,6 +71,8 @@ Provide multiple font families, separated by commas, to indicate the preference 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
 
 \item{legend_col}{column to be used for legend naming; (default: z/color_palette)}
+
+\item{source}{a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).}
 }
 \value{
 catmaply object

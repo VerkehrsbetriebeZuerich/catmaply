@@ -23,6 +23,7 @@
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param legend_col column to be used for legend naming; (default: z/color_palette)
+#' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
 #' @return catmaply object
 #' @export
@@ -46,7 +47,8 @@ catmaply<- function(
   font_size = 12,
   font_color = "#444",
   legend=T,
-  legend_col
+  legend_col,
+  source="catmaply"
 ) {
 
   # check if categorical_colorbar is logical
@@ -80,10 +82,11 @@ catmaply<- function(
 
   # substitute hover_template if submitted; is_hover_template is a workaround
   # missing does not seem to work in a dplyr::mutate function for some reason.
-  is_hover_template <- F
-  if (!missing(hover_template) && !hover_hide) {
-    is_hover_template = T
+  is_hover_template <- (!missing(hover_template) && !hover_hide)
+  if (!missing(hover_template)) {
     hover_template <- substitute(hover_template)
+  } else {
+    hover_template <- ""
   }
 
   if (!any(is.element(c("left", "right"), y_side)))
@@ -128,7 +131,7 @@ catmaply<- function(
     stop("For each category needs to be exactly one color, if you use a colorbar, then two colors are needed for one category.")
   }
 
-  fig <- plotly::plot_ly()
+  fig <- plotly::plot_ly(source=source)
 
   for (i in seq.int(length.out = length(cat_col))) {
 
@@ -138,13 +141,13 @@ catmaply<- function(
         y = !!rlang::sym(y),
         z = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(z), NA),
         label =
-          ifelse(
-            is_hover_template  && !hover_hide,
+          dplyr::if_else(
+            rep((is_hover_template  && !hover_hide), NROW(.)),
             eval(hover_template),
             paste(
-              '<b>x</b>:', !!rlang::sym(x),
-              '<br><b>y</b>:', !!rlang::sym(y),
-              '<br><b>z</b>:', !!rlang::sym(z)
+              '<b>x</b>:', x,
+              '<br><b>y</b>:', y,
+              '<br><b>z</b>:', z
             )
           )
       )
@@ -227,6 +230,6 @@ catmaply<- function(
       )
     )
 
-  return(plotly::partial_bundle(fig))
-
+  return(fig)
 }
+
