@@ -115,8 +115,9 @@ catmaply<- function(
     stop("You need to define excactly one legend entry per category.")
 
   # order cat column correctly to resolve issue #12
-  cat_col <- cat_col[order(cat_col)]
-  leg_col <- cat_leg_comb[[legend_col]][order(cat_col)]
+  ordering <- order(cat_col)
+  cat_col <- cat_col[ordering]
+  leg_col <- cat_leg_comb[[legend_col]][ordering]
 
   # get color palette
   if (is.function(color_palette)) {
@@ -232,4 +233,3 @@ catmaply<- function(
 
   return(fig)
 }
-
