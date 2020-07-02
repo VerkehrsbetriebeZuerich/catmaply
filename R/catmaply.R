@@ -1,5 +1,8 @@
 #' Heatmap for categorical data using plotly
 #'
+#' @description \code{catmaply} is used to easily plot categorical data on heatmaps using plotly.
+#' It can be used to plot heatmaps on categorical variables or, otherwise, plot continuous variables with categorical color range.
+#'
 #' @param df data.frame or tibble holding the data.
 #' @param x column name holding the axis values for x.
 #' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
@@ -25,7 +28,51 @@
 #' @param legend_col column to be used for legend naming; (default: z/color_palette)
 #' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
-#' @return catmaply object
+#' @return plot_ly object
+#'
+#' @examples
+#'
+#' library(catmaply)
+#' library(viridis)
+#' library(dplyr)
+#'
+#' data("vbz")
+#' df <- vbz[[3]]$data
+#'
+#' # simple plot
+#' catmaply(
+#'    df,
+#'    x='fahrt_seq',
+#'    y = "Haltestellenlangname",
+#'    y_order = "halt_seq",
+#'    z = "Ausl_Kat"
+#' )
+#'
+#'
+#' # categorical color range and template
+#' catmaply(
+#'    df,
+#'    x=fahrt_seq,
+#'    x_order = fahrt_seq,
+#'    x_tickangle = 15,
+#'    y = Haltestellenlangname,
+#'    y_order = halt_seq,
+#'    z = Besetzung,
+#'    categorical_colorbar = T,
+#'    categorical_col = Ausl_Kat,
+#'    color_palette = viridis::inferno,
+#'    hover_template = paste(
+#'      '<b>Fahrt Nr.</b>:', fahrt_seq,
+#'      '<br><b>Haltestelle</b>:', Haltestellenlangname,
+#'      '<br><b>Auslastung</b>:', Ausl_Kat,
+#'      '<br><b>Besetzung</b>:', round(Besetzung, 2),
+#'      '<extra></extra>'
+#'    )
+#' )
+#'
+#'
+#'
+#'
 #' @export
 catmaply<- function(
   df,

@@ -40,39 +40,24 @@ library(plotly)
 library(lubridate)
 ```
 
-## Project Overview
 
-### Impletemented until today is the following:
+## Introduction
 
-Axis  (Issue #6):
+A heatmap a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that belongs to seperate groups/categories. 
 
-- Possibility to select x and y axis columns; ordering should be dynamic by any other column.
-- Possibility to set size, color and orientation of text in function call
-- Possibility to set axis position/side in function call
+This package is originally beeing developed for Zurich Public Transport (VBZ) to illustrate the utilization of the different routes and vehicles during different times of the day. It therefore groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and plots it for certain stops over time in a heatmap.
 
-Fields  (Issue #8):
+This package is can easily be integrated into a shiny dashboard; which supports additional intactions of different kind of plots using plotly events. A mini-demo app is provided with [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
 
-- Possibility to set columns for fields in function call, ordered by x and y.
-- Possibility to set categorical style (background color) with color palette.
-- Possibility to set colorbar per category (color ranges per category).
-- Empty fields are shown as white.
+This work is based on the plotly.js engine. 
 
-### Legend functionality (Issue #9):
+### Please submit feature requests
 
-- Possibility to show or hide legend in function call
-- Show / Hide fields based on click on legend (already implemented via traces)
-- Define legend names based on any column in input data.frame
+This package is still under active development. If you have features you would like to have added, please submit your suggestions (and bug-reports) at: <https://github.com/yvesmauron/catmaply/issues>
 
-### Label formatting (Issue #10):
+## News
 
-- Possibility to define if labels should be displayed or not in function call
-- Possibility to use data frame column with labels formatted in standard html (template) format to use for labels.
-
-### Open Points:
-
-- Annotations - possible but performance problems; other ways
-- User Testing
-- Improved documentation
+You can see the most recent changes to the package in NEWS.md. 
 
 ## Installation
 
@@ -81,20 +66,23 @@ To install the latest ("cutting-edge") GitHub version run:
 ```{r}
 # make sure that you have the corrent R Tools installed.
 # as you might need to build some packages from source
-
 # if do not have RTools installed, you can install it with:
 # install.packages('installr'); install.Rtools() # not tested on windows
 # or download it from here:
 # https://cran.r-project.org/bin/windows/Rtools/
 # in any case, make sure that you select the correct version, 
 # otherwise the installation will fail.
-
 # Then you'll need devtools
 # if (!require('devtools'))
   # install.packages('devtools')
-
 # Finally install the package
 # devtools::install_github('yvesmauron/catmaply')
+```
+
+To get the latest release available on CRAN, perform:
+
+```{r}
+install.packages("catmaply")
 ```
 
 Thereafter you can start using the package as usual:
@@ -110,6 +98,8 @@ Get demo data provided by package.
 ```{r}
 data("vbz")
 df <- vbz[[3]]$data
+
+knitr::kable(head(df, 10))
 ```
 
 The data shows has the following structures:
