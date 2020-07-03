@@ -82,7 +82,7 @@ To install the latest ("cutting-edge") GitHub version run:
 To get the latest release available on CRAN, perform:
 
 ```{r}
-install.packages("catmaply")
+#install.packages("catmaply")
 ```
 
 Thereafter you can start using the package as usual:
