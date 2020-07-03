@@ -1,1 +1,1 @@
-globalVariables("col_palette")
+utils::globalVariables(c("col_palette", "%>%"))

@@ -4,11 +4,6 @@ context("catmaply - plotly plots")
 
 df <- vbz[[2]]$data
 
-test_that("test catmaply single", {
-  fig <- catmaply_single(df)
-  expect_true(is(fig, "plotly"))
-})
-
 test_that("test catmaply", {
   fig <- catmaply(
     df,
@@ -270,15 +265,4 @@ test_that("test catmaply colorbar", {
       "plotly"
     )
   )
-})
-
-test_that("test catmaply_trace_time", {
-  fig <- catmaply_trace_time(df)
-  expect_true(is(fig, "plotly"))
-})
-
-test_that("test catmaply_demo", {
-  df <- generate_test_data(5, 10)
-  fig <- catmaply_demo(df)
-  expect_true(is(fig, "plotly"))
 })

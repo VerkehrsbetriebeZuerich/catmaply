@@ -25,7 +25,7 @@
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
-#' @param legend_col column to be used for legend naming; (default: z/color_palette)
+#' @param legend_col column to be used for legend naming; (default: z/categorical_col)
 #' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
 #' @return plot_ly object
@@ -188,7 +188,7 @@ catmaply<- function(
         z = ifelse(!!rlang::sym(categorical_col) == cat_col[i], !!rlang::sym(z), NA),
         label =
           dplyr::if_else(
-            rep((is_hover_template  && !hover_hide), NROW(.)),
+            rep((is_hover_template  && !hover_hide), NROW(df)),
             eval(hover_template),
             paste(
               '<b>x</b>:', x,

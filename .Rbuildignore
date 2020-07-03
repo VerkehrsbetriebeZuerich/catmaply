@@ -5,3 +5,5 @@
 ^LICENSE\.md$
 ^doc$
 ^Meta$
+^CONDUCT\.md$
+^codecov\.yml$
