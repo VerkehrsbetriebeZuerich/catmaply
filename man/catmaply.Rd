@@ -82,7 +82,7 @@ plot_ly object
 It can be used to plot heatmaps on categorical variables or, otherwise, plot continuous variables with categorical color range.
 }
 \examples{
-
+\dontrun{
 library(catmaply)
 library(viridis)
 library(dplyr)
@@ -120,8 +120,6 @@ catmaply(
      '<extra></extra>'
    )
 )
-
-
-
+}
 
 }
