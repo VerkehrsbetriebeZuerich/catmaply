@@ -31,7 +31,7 @@
 #' @return plot_ly object
 #'
 #' @examples
-#'
+#' \dontrun{
 #' library(catmaply)
 #' library(viridis)
 #' library(dplyr)
@@ -69,9 +69,7 @@
 #'      '<extra></extra>'
 #'    )
 #' )
-#'
-#'
-#'
+#' }
 #'
 #' @export
 catmaply<- function(

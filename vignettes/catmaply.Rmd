@@ -170,3 +170,145 @@ catmaply(
     font_size = 10
   )
 ```
+
+
+
+```{r out.width = '100%', fig.height=5}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat"
+  )
+```
+
+How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+
+To show a colorbar per category, we have to but a continuous number in the fields and categorize them with a categorical column, so in our example:
+
+- Besetzung are in the fileds
+- Ausl_Kat is the categorization over these fields.
+
+To change the color palette you can either use submit a color palette vector or a function that is able to return one.
+
+> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+
+```{r out.width = '100%', fig.height=5}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma
+  )
+```
+
+Now, lets mess around with axis formatting; lets change
+
+- font_color to the "purplish" color in used in the logo (#6D65AB)
+- change the size to 10
+- change the tick_angle for the x axis to 15
+
+
+```{r out.width = '100%', fig.height=5}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    x_tickangle = 15,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma,
+    font_color = '#6D65AB',
+    font_size = 10
+  )
+```
+
+
+Hover templating:
+
+```{r out.width = '100%', fig.height=5}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  )
+)
+```
+
+Define legend names:
+
+```{r out.width = '100%', fig.height=5}
+df <- df %>% 
+  mutate(
+    legend_col = paste("Kategorie", Ausl_Kat)
+  )
+
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend_col = legend_col
+)
+```
+
+What about hiding the legend all together.
+
+```{r out.width = '100%', fig.height=5}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend = F
+)
+```
