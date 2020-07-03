@@ -1,8 +1,8 @@
 # ---------------------------------------------
 # Testing plotting (rudimentary)
-context("catmaply - plotly plots")
+context("catmaply")
 
-df <- vbz[[2]]$data
+df <- vbz[[3]]$data
 
 test_that("test catmaply", {
   fig <- catmaply(
@@ -98,6 +98,59 @@ test_that("test catmaply", {
     z = Ausl_Kat,
     hover_template = paste(Haltestellenlangname)
   )
+  expect_true(is(fig, "plotly"))
+
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    legend_interactive = F
+  )
+  expect_true(is(fig, "plotly"))
+})
+
+
+test_that("test time axis", {
+  library(dplyr)
+
+  df <- df %>%
+    dplyr::mutate(
+      fahrt_name = paste("Abfahrt", fahrt_seq),
+      FZ_AB = lubridate::ymd_hms(paste("2020-06-03", !!rlang::sym('FZ_AB')))
+    ) %>%
+    dplyr::group_by(
+      !!rlang::sym('fahrt_seq')
+    ) %>%
+    dplyr::mutate(
+      abfahrt = min(!!rlang::sym('FZ_AB'))
+    ) %>%
+    dplyr::ungroup()
+
+  fig <- catmaply(
+    df,
+    x=abfahrt,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat",
+    legend_interactive = T
+  )
+
+  expect_true(is(fig, "plotly"))
+
+
+  fig <- catmaply(
+    df,
+    x=abfahrt,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat",
+    legend_interactive = F
+  )
+
   expect_true(is(fig, "plotly"))
 })
 
