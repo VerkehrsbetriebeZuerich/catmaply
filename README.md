@@ -20,7 +20,7 @@ This package is still under active development. If you have features you would l
 
 ## News
 
-You can see the most recent changes to the package in NEWS.md. 
+You can see the most recent changes to the package in [NEWS.md](https://github.com/yvesmauron/catmaply/blob/master/NEWS.md). 
 
 
 ### Code of conduct
