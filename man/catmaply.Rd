@@ -25,6 +25,14 @@ catmaply(
   font_color = "#444",
   legend = T,
   legend_col,
+  legend_interactive = T,
+  tickformatstops = list(list(dtickrange = list(NULL, 1000), value =
+    "\%H:\%M:\%S.\%L ms"), list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"),
+    list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), list(dtickrange =
+    list(3600000, 86400000), value = "\%H:\%M h"), list(dtickrange = list(86400000,
+    604800000), value = "\%H:\%M h"), list(dtickrange = list(604800000, "M1"), value =
+    "\%H:\%M h"), list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"),
+    list(dtickrange = list("M12", NULL), value = "\%H:\%M h")),
   source = "catmaply"
 )
 }
@@ -71,6 +79,22 @@ Provide multiple font families, separated by commas, to indicate the preference 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
 
 \item{legend_col}{column to be used for legend naming; (default: z/categorical_col)}
+
+\item{legend_interactive}{whether the legend should be interactive or not; i.e. remove traces on click; d(default: T).}
+
+\item{tickformatstops}{used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
+(default:
+list(
+  list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
+  list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
+  list(dtickrange = list(60000, 3600000), value = "%H:%M m"),
+  list(dtickrange = list(3600000, 86400000), value = "%H:%M h"),
+  list(dtickrange = list(86400000, 604800000), value = "%H:%M h"),
+  list(dtickrange = list(604800000, "M1"), value = "%H:%M h"),
+  list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
+  list(dtickrange = list("M12", NULL), value = "%H:%M h")
+  )
+)}
 
 \item{source}{a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).}
 }
