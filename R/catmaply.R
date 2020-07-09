@@ -40,6 +40,7 @@
 #'   list(dtickrange = list("M12", NULL), value = "%H:%M h")
 #'   )
 #' )
+#' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).
 #' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
 #' @return plot_ly object
@@ -118,6 +119,7 @@ catmaply <- function(
     list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
     list(dtickrange = list("M12", NULL), value = "%H:%M h")
   ),
+  rangeslider=T,
   source="catmaply"
 ) {
 
@@ -172,6 +174,9 @@ catmaply <- function(
 
   if (!is.logical(hover_hide))
     stop("Parameter 'hover_hide' needs to be logical/boolean.")
+
+  if (!is.logical(rangeslider))
+    stop("Parameter 'rangeslider' needs to be logical/boolean.")
 
   # preprocessing & logic
 
@@ -232,6 +237,7 @@ catmaply <- function(
           )
         )
     )
+
   fig <- plotly::plot_ly(source=source)
 
   if (legend && legend_interactive) {
@@ -278,7 +284,8 @@ catmaply <- function(
         font_family=font_family,
         font_size=font_size,
         font_color=font_color,
-        legend=legend
+        legend=legend,
+        rangeslider=rangeslider
       )
   }
   else {
@@ -296,7 +303,8 @@ catmaply <- function(
         font_family=font_family,
         font_size=font_size,
         font_color=font_color,
-        legend=legend
+        legend=legend,
+        rangeslider=rangeslider
       )
   }
 

@@ -31,6 +31,7 @@
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
+#' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).
 #'
 #' @return plot_ly object
 #'
@@ -50,7 +51,8 @@ catmaply_time_layout <- function(
   font_family,
   font_size,
   font_color,
-  legend
+  legend,
+  rangeslider
 ) {
   fig <- fig %>%
     plotly::layout(
@@ -61,7 +63,7 @@ catmaply_time_layout <- function(
         type='date',
         tickangle = 90,
         tickformatstops = tickformatstops,
-        rangeslider = list(visible=TRUE)
+        rangeslider = list(visible=rangeslider)
       ),
       yaxis = list(
         title="",
@@ -102,6 +104,7 @@ catmaply_time_layout <- function(
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
+#' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).
 #'
 #' @return plot_ly object
 #'
@@ -121,7 +124,8 @@ catmaply_layout <- function(
   font_family,
   font_size,
   font_color,
-  legend
+  legend,
+  rangeslider
 ){
 
   fig <- fig %>%
@@ -135,7 +139,7 @@ catmaply_layout <- function(
         categoryorder="array",
         categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
         side = x_side,
-        rangeslider = list(visible=TRUE)
+        rangeslider = list(visible=rangeslider)
       ),
       yaxis = list(
         title="",

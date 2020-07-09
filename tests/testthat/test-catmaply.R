@@ -137,6 +137,28 @@ test_that("test catmaply", {
     legend = F
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    rangeslider = T
+  )
+  expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    rangeslider = F
+  )
+  expect_true(is(fig, "plotly"))
 })
 
 

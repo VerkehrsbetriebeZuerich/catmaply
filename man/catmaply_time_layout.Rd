@@ -18,7 +18,8 @@ catmaply_time_layout(
   font_family,
   font_size,
   font_color,
-  legend
+  legend,
+  rangeslider
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ Provide multiple font families, separated by commas, to indicate the preference 
 \item{font_color}{font color to be used for plot; (default: "#444")}
 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
+
+\item{rangeslider}{whether or not the rangeslider should be displayed or not; (default: TRUE).}
 }
 \value{
 plot_ly object

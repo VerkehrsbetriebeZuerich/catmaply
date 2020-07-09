@@ -33,6 +33,7 @@ catmaply(
     604800000), value = "\%H:\%M h"), list(dtickrange = list(604800000, "M1"), value =
     "\%H:\%M h"), list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"),
     list(dtickrange = list("M12", NULL), value = "\%H:\%M h")),
+  rangeslider = T,
   source = "catmaply"
 )
 }
@@ -95,6 +96,8 @@ list(
   list(dtickrange = list("M12", NULL), value = "%H:%M h")
   )
 )}
+
+\item{rangeslider}{whether or not the rangeslider should be displayed or not; (default: TRUE).}
 
 \item{source}{a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).}
 }
