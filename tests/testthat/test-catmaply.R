@@ -378,6 +378,18 @@ test_that("test error_handling", {
       rangeslider = "bla"
     )
   )
+
+  expect_error(
+    catmaply(
+      as.matrix(df),
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      hover_hide = "bla"
+    )
+  )
 })
 
 # check colorbar
