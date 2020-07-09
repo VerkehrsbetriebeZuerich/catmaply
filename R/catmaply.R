@@ -26,7 +26,7 @@
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param legend_col column to be used for legend naming; (default: z/categorical_col)
-#' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; d(default: T).
+#' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; (default: T).
 #' @param tickformatstops used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
 #' (default:
 #' list(
@@ -86,7 +86,7 @@
 #' }
 #'
 #' @export
-catmaply<- function(
+catmaply <- function(
   df,
   x,
   x_order,
@@ -120,6 +120,9 @@ catmaply<- function(
   ),
   source="catmaply"
 ) {
+
+  if (!is.data.frame(df))
+    stop("Parameter 'df' must be of type data.frame/tibble.")
 
   # check if categorical_colorbar is logical
   if (!is.logical(categorical_colorbar))
@@ -163,6 +166,9 @@ catmaply<- function(
 
   if (!is.logical(legend))
     stop("Parameter 'legend' needs to be logical/boolean.")
+
+  if (!is.logical(legend_interactive))
+    stop("Parameter 'legend_interactive' needs to be logical/boolean.")
 
   if (!is.logical(hover_hide))
     stop("Parameter 'hover_hide' needs to be logical/boolean.")
@@ -228,7 +234,7 @@ catmaply<- function(
     )
   fig <- plotly::plot_ly(source=source)
 
-  if (legend_interactive) {
+  if (legend && legend_interactive) {
     fig <- fig %>%
       add_catmaply_traces(
         df=df,
@@ -250,12 +256,11 @@ catmaply<- function(
         z=z,
         hover_hide=hover_hide,
         categorical_colorbar=categorical_colorbar,
-        category_items = category_items,
         legend_items=legend_items,
-        color_palette=color_palette
+        color_palette=color_palette,
+        legend=legend
       )
   }
-
 
   #
   if (x_is_time) {

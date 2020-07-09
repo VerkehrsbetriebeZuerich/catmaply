@@ -5,6 +5,7 @@ context("catmaply")
 df <- vbz[[3]]$data
 
 test_that("test catmaply", {
+
   fig <- catmaply(
     df,
     x='fahrt_seq',
@@ -14,6 +15,7 @@ test_that("test catmaply", {
     z = "Ausl_Kat"
   )
   expect_true(is(fig, "plotly"))
+
 
   fig <- catmaply(
     df,
@@ -111,6 +113,30 @@ test_that("test catmaply", {
     legend_interactive = F
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    legend_interactive = T,
+    legend = F
+  )
+  expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    legend_interactive = F,
+    legend = F
+  )
+  expect_true(is(fig, "plotly"))
 })
 
 
@@ -149,6 +175,32 @@ test_that("test time axis", {
     y_order = "halt_seq",
     z = "Ausl_Kat",
     legend_interactive = F
+  )
+
+  expect_true(is(fig, "plotly"))
+
+
+  fig <- catmaply(
+    df,
+    x=abfahrt,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat",
+    legend_interactive = T,
+    legend = F
+  )
+
+  expect_true(is(fig, "plotly"))
+
+
+  fig <- catmaply(
+    df,
+    x=abfahrt,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat",
+    legend_interactive = F,
+    legend = F
   )
 
   expect_true(is(fig, "plotly"))
@@ -281,6 +333,18 @@ test_that("test error_handling", {
       hover_template = paste(fahrt_seq, fs)
     )
   )
+
+  expect_error(
+    catmaply(
+      as.matrix(df),
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
 })
 
 # check colorbar

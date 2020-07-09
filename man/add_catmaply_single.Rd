@@ -13,8 +13,8 @@ add_catmaply_single(
   hover_hide,
   color_palette,
   categorical_colorbar,
-  category_items,
-  legend_items
+  legend_items,
+  legend
 )
 }
 \arguments{
@@ -34,9 +34,9 @@ add_catmaply_single(
 
 \item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
-\item{category_items}{disctinct/unique items of ordered category items}
-
 \item{legend_items}{distinct/unique items of ordered legend items}
+
+\item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
 
 \item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).}
 }

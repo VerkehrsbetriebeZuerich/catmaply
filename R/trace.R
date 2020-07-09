@@ -105,8 +105,8 @@ add_catmaply_traces <- function(
 #' @param color_palette a color palette vector.
 #' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
 #' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
-#' @param category_items disctinct/unique items of ordered category items
 #' @param legend_items distinct/unique items of ordered legend items
+#' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #'
 #' @return plot_ly object
 #'
@@ -121,32 +121,50 @@ add_catmaply_single <- function(
   hover_hide,
   color_palette,
   categorical_colorbar,
-  category_items,
-  legend_items
+  legend_items,
+  legend
 ) {
 
-  discrete_col <- discrete_coloring(
-    categories=category_items,
-    col_palette=color_palette
-  )
-
-  fig <- fig %>%
-    plotly::add_trace(
-      type = "heatmap",
-      name = "",
-      data = df,
-      x = ~x,
-      y = ~y,
-      z = ~z,
-      text = ~label,
-      hovertemplate = '%{text}',
-      showlegend=FALSE,
-      colorscale=discrete_col$colorscale,
-      colorbar=list(
-        title="Legend",
-        len=0.5,
-        tickvals=discrete_col$tickvals,
-        ticktext=discrete_col$ticktext
-      )
+  if (legend) {
+    discrete_col <- discrete_coloring(
+      categories=legend_items,
+      col_palette=color_palette
     )
+
+    fig <- fig %>%
+      plotly::add_trace(
+        type = "heatmap",
+        name = "",
+        data = df,
+        x = ~x,
+        y = ~y,
+        z = ~z,
+        text = ~label,
+        hovertemplate = '%{text}',
+        showlegend=FALSE,
+        colorscale=discrete_col$colorscale,
+        colorbar=list(
+          title="Legend",
+          len=0.5,
+          tickvals=discrete_col$tickvals,
+          ticktext=discrete_col$ticktext
+        )
+      )
+  } else {
+    fig <- fig %>%
+      plotly::add_trace(
+        type = "heatmap",
+        name = "",
+        data = df,
+        x = ~x,
+        y = ~y,
+        z = ~z,
+        text = ~label,
+        hovertemplate = '%{text}',
+        showscale=F
+      )
+  }
+
+  return(fig)
+
 }

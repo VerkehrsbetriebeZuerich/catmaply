@@ -11,7 +11,7 @@
 #'
 #' @export
 discrete_coloring <- function(categories, col_palette) {
-  # TODO: create ticktext dynamically
+
   bvals <- c(0, seq.int(length.out = length(categories)))
   pal <- col_palette
 
@@ -34,7 +34,12 @@ discrete_coloring <- function(categories, col_palette) {
   # works only with even spacing until now
   ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
   # calc percentage of ticks * range (max - min) + min
-  tick_vals <- (ticks[ticks %% 2 != 0] / max(ticks)) * (max(bvals) - min(utils::tail(bvals, -1))) + min(utils::tail(bvals, -1))
+  tick_vals <- (
+    ticks[ticks %% 2 != 0] / max(ticks)
+  ) * (
+    max(bvals) - min(utils::tail(bvals, -1))
+  ) + min(utils::tail(bvals, -1))
+
   tick_text <- categories
 
   return(

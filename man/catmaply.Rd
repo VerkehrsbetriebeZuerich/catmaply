@@ -80,7 +80,7 @@ Provide multiple font families, separated by commas, to indicate the preference 
 
 \item{legend_col}{column to be used for legend naming; (default: z/categorical_col)}
 
-\item{legend_interactive}{whether the legend should be interactive or not; i.e. remove traces on click; d(default: T).}
+\item{legend_interactive}{whether the legend should be interactive or not; i.e. remove traces on click; (default: T).}
 
 \item{tickformatstops}{used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
 (default:
