@@ -274,6 +274,30 @@ catmaply(
 )
 ```
 
+
+You can also remove the interactivity (hiding traces by clicking on the legend); this could make sense if you want to have a better performance with lots of data or many traces.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend_interactive = F
+)
+```
+
 What about hiding the legend all together.
 
 ```{r out.width = '100%', fig.height=5, warning = FALSE}
@@ -282,6 +306,65 @@ catmaply(
   x=fahrt_seq,
   x_order = fahrt_seq,
   x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend = F
+)
+```
+
+
+Hmm, didn't we say that we want to show the development over time; wouldn't it make sense then if we could use time in the x axis?
+
+Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check if out by calculating the departure data of each drive.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+df <- df %>%
+  dplyr::mutate(
+    FZ_AB = lubridate::ymd_hms(paste("2020-06-03", !!rlang::sym('FZ_AB')))
+  ) %>%
+  dplyr::group_by(
+    !!rlang::sym('fahrt_seq')
+  ) %>%
+  dplyr::mutate(
+    departure = min(!!rlang::sym('FZ_AB'))
+  ) %>%
+  dplyr::ungroup()
+
+catmaply(
+  df,
+  x=departure,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  )
+)
+```
+
+Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you summarize the statistics of utilization sampled througout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, You can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [ploty](https://plotly.com/r/tick-formatting/):
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+
+catmaply(
+  df,
+  x=departure,
   y = Haltestellenlangname,
   y_order = halt_seq,
   z = Besetzung,
@@ -295,6 +378,16 @@ catmaply(
     '<br><b>Besetzung</b>:', round(Besetzung, 2),
     '<extra></extra>'
   ),
-  legend = F
+  tickformatstops=list(
+    list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L"),
+    list(dtickrange = list(1000, 60000), value = "%H:%M:%S"),
+    list(dtickrange = list(60000, 3600000), value = "%H:%M"),
+    list(dtickrange = list(3600000, 86400000), value = "%H:%M"),
+    list(dtickrange = list(86400000, 604800000), value = "%H:%M"),
+    list(dtickrange = list(604800000, "M1"), value = "%H:%M"),
+    list(dtickrange = list("M1", "M12"), value = "%H:%M"),
+    list(dtickrange = list("M12", NULL), value = "%H:%M")
+  )
 )
 ```
+
