@@ -8,6 +8,7 @@
 #' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
+#' @param x_init_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
 #' @param y column name holding the axis values for y.
 #' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
@@ -93,6 +94,7 @@ catmaply <- function(
   x_order,
   x_side="top",
   x_tickangle=90,
+  x_init_range=30,
   y,
   y_order,
   y_side="left",
@@ -178,6 +180,14 @@ catmaply <- function(
   if (!is.logical(rangeslider))
     stop("Parameter 'rangeslider' needs to be logical/boolean.")
 
+  if (!is.numeric(x_init_range))
+    stop("Parameter 'x_init_range' needs to be integer.")
+
+  if (x_init_range < 2) {
+    warning(paste("Parameter 'x_init_range' needs to larger than 2.", "Changing parameter from", x_init_range, " to 2."))
+    x_init_range <- 2
+  }
+
   # preprocessing & logic
 
   # substitute hover_template if submitted; is_hover_template is a workaround
@@ -191,8 +201,9 @@ catmaply <- function(
 
   x_is_time <- F
   # check if x axis is POSXxt
-  if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt")))
+  if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt"))){
     x_is_time <- T
+  }
 
   # check categories and color palette
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
@@ -296,6 +307,7 @@ catmaply <- function(
         x_order=x_order,
         x_side=x_side,
         x_tickangle=x_tickangle,
+        x_init_range=x_init_range,
         y=y,
         y_order=y_order,
         y_side=y_side,

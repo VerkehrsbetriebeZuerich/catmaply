@@ -159,6 +159,17 @@ test_that("test catmaply", {
     rangeslider = F
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    x_init_range = 2,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat"
+  )
+  expect_true(is(fig, "plotly"))
 })
 
 
@@ -226,6 +237,7 @@ test_that("test time axis", {
   )
 
   expect_true(is(fig, "plotly"))
+
 })
 
 
@@ -386,8 +398,31 @@ test_that("test error_handling", {
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      x_init_range = "0",
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
       z = "Ausl_Kat",
-      hover_hide = "bla"
+    )
+  )
+
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      x_init_range = 1,
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
     )
   )
 })
