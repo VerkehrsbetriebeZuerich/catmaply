@@ -7,9 +7,6 @@
 add_catmaply_traces(
   fig,
   df,
-  x,
-  y,
-  z,
   hover_hide,
   color_palette,
   categorical_colorbar,
@@ -21,12 +18,6 @@ add_catmaply_traces(
 \item{fig}{plotly object}
 
 \item{df}{data.frame or tibble holding the data.}
-
-\item{x}{column name holding the axis values for x.}
-
-\item{y}{column name holding the axis values for y.}
-
-\item{z}{column name holding the values for the fields.}
 
 \item{hover_hide}{boolean indicating if the hover label should be hidden or not; (default: FALSE).}
 
