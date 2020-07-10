@@ -188,6 +188,9 @@ catmaply <- function(
     x_init_range <- 2
   }
 
+  if (categorical_colorbar && !legend)
+    warning("Parameter 'categorical_colorbar' and 'categorical_col' will be ignored if parameter 'legend' is FALSE")
+
   # preprocessing & logic
 
   # substitute hover_template if submitted; is_hover_template is a workaround
