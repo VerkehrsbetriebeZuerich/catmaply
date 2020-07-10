@@ -11,6 +11,7 @@ catmaply_layout(
   x_order,
   x_side,
   x_tickangle,
+  x_init_range,
   y,
   y_order,
   y_side,
@@ -34,6 +35,8 @@ catmaply_layout(
 \item{x_side}{on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").}
 
 \item{x_tickangle}{the angle of the axis label on the x axis. options: range -180 until 180; (default:90).}
+
+\item{x_init_range}{the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).}
 
 \item{y}{column name holding the axis values for y.}
 
