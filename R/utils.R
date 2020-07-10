@@ -40,7 +40,6 @@ discrete_coloring <- function(categories, col_palette, range_min, range_max) {
     dcolorscale[index + 1,] <- c(nvals[i + 1], ifelse(discrete_colorbar, col_palette[index + 1], col_palette[i]))
   }
 
-
   # calculate tick values for legend (lowest point to max point)
   # works only with even spacing until now
   ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
