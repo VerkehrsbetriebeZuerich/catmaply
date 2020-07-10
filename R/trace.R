@@ -153,5 +153,4 @@ add_catmaply_single <- function(
   }
 
   return(fig)
-
 }
