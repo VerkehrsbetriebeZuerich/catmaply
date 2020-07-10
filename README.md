@@ -1,4 +1,4 @@
-catmaply <img src="man/figures/logo.png" align="right" height="192 px"/>
+catmaply
 ======================
 
 [![R build status](https://github.com/yvesmauron/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/yvesmauron/catmaply/actions) [![codecov](https://codecov.io/gh/yvesmauron/catmaply/branch/master/graph/badge.svg)](https://codecov.io/gh/yvesmauron/catmaply) [![](https://img.shields.io/badge/lifecycle-development-blue.svg)](https://www.tidyverse.org/lifecycle/#development)
@@ -8,7 +8,7 @@ catmaply <img src="man/figures/logo.png" align="right" height="192 px"/>
 
 A heatmap a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that belongs to seperate groups/categories. 
 
-This package is originally beeing developed for Zurich Public Transport (VBZ) to illustrate the utilization of different routes and vehicles during different times of the day. It therefore groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and plots it for certain stops over time in a heatmap.
+This package is originally beeing developed for Zurich Public Transport (VBZ) to illustrate the utilization of different routes and vehicles during different times of the day. It therefore groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and plots it for certain stops over time in a heatmap using plotly.
 
 This package can easily be integrated into a shiny dashboard; which supports additional intactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a seperate github repository named [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
 

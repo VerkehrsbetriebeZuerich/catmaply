@@ -188,6 +188,9 @@ catmaply <- function(
     x_init_range <- 2
   }
 
+  if (categorical_colorbar && !legend)
+    warning("Parameter 'categorical_colorbar' and 'categorical_col' will be ignored if parameter 'legend' is FALSE")
+
   # preprocessing & logic
 
   # substitute hover_template if submitted; is_hover_template is a workaround
@@ -230,6 +233,8 @@ catmaply <- function(
     stop("For each category needs to be exactly one color, if you use a colorbar, then two colors are needed for one category.")
   }
 
+  # create strucutre for following plots
+  # changes to this structure might affect traces
   df <- df %>%
     dplyr::mutate(
       x = !!rlang::sym(x),
@@ -255,9 +260,6 @@ catmaply <- function(
     fig <- fig %>%
       add_catmaply_traces(
         df=df,
-        x=x,
-        y=y,
-        z=z,
         hover_hide=hover_hide,
         categorical_colorbar=categorical_colorbar,
         category_items = category_items,
@@ -268,9 +270,6 @@ catmaply <- function(
     fig <- fig %>%
       add_catmaply_single(
         df=df,
-        x=x,
-        y=y,
-        z=z,
         hover_hide=hover_hide,
         categorical_colorbar=categorical_colorbar,
         legend_items=legend_items,

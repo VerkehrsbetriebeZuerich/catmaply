@@ -4,9 +4,6 @@
 #'
 #' @param fig plotly object
 #' @param df data.frame or tibble holding the data.
-#' @param x column name holding the axis values for x.
-#' @param y column name holding the axis values for y.
-#' @param z column name holding the values for the fields.
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector.
 #' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
@@ -22,9 +19,6 @@
 add_catmaply_traces <- function(
   fig,
   df,
-  x,
-  y,
-  z,
   hover_hide,
   color_palette,
   categorical_colorbar,
@@ -98,13 +92,7 @@ add_catmaply_traces <- function(
 #'
 #' @param fig plotly object
 #' @param df data.frame or tibble holding the data.
-#' @param x column name holding the axis values for x.
-#' @param y column name holding the axis values for y.
-#' @param z column name holding the values for the fields.
-#' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector.
-#' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
-#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
 #' @param legend_items distinct/unique items of ordered legend items
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #'
@@ -115,9 +103,6 @@ add_catmaply_traces <- function(
 add_catmaply_single <- function(
   fig,
   df,
-  x,
-  y,
-  z,
   hover_hide,
   color_palette,
   categorical_colorbar,
@@ -128,7 +113,9 @@ add_catmaply_single <- function(
   if (legend) {
     discrete_col <- discrete_coloring(
       categories=legend_items,
-      col_palette=color_palette
+      col_palette=color_palette,
+      range_min = min(stats::na.omit(df$z)),
+      range_max = max(stats::na.omit(df$z))
     )
 
     fig <- fig %>%
@@ -144,8 +131,8 @@ add_catmaply_single <- function(
         showlegend=FALSE,
         colorscale=discrete_col$colorscale,
         colorbar=list(
-          title="Legend",
-          len=0.5,
+          title="",
+          #len=0.5,
           tickvals=discrete_col$tickvals,
           ticktext=discrete_col$ticktext
         )
@@ -166,5 +153,4 @@ add_catmaply_single <- function(
   }
 
   return(fig)
-
 }

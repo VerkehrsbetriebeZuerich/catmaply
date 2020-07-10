@@ -4,12 +4,14 @@
 \alias{discrete_coloring}
 \title{Generates the parameters necessary for dicrete coloring and colorbar}
 \usage{
-discrete_coloring(categories, col_palette)
+discrete_coloring(categories, col_palette, range_min, range_max)
 }
 \arguments{
 \item{categories}{categories, for coloring should done}
 
 \item{col_palette}{the color palette}
+
+\item{range_min}{max of z range; (default: length(categories))}
 }
 \value{
 list(colorscale, tickvals, ticktext)

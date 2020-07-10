@@ -7,9 +7,6 @@
 add_catmaply_single(
   fig,
   df,
-  x,
-  y,
-  z,
   hover_hide,
   color_palette,
   categorical_colorbar,
@@ -22,23 +19,11 @@ add_catmaply_single(
 
 \item{df}{data.frame or tibble holding the data.}
 
-\item{x}{column name holding the axis values for x.}
-
-\item{y}{column name holding the axis values for y.}
-
-\item{z}{column name holding the values for the fields.}
-
-\item{hover_hide}{boolean indicating if the hover label should be hidden or not; (default: FALSE).}
-
 \item{color_palette}{a color palette vector.}
-
-\item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
-
-\item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).}
 }
 \value{
 plot_ly object

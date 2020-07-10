@@ -2,6 +2,8 @@
 #'
 #' @param categories categories, for coloring should done
 #' @param col_palette the color palette
+#' @param range_min min of z range; (default: 1)
+#' @param range_min max of z range; (default: length(categories))
 #'
 #' @return list(colorscale, tickvals, ticktext)
 #'
@@ -10,14 +12,22 @@
 #' @keywords internal
 #'
 #' @export
-discrete_coloring <- function(categories, col_palette) {
+discrete_coloring <- function(categories, col_palette, range_min, range_max) {
+
+  if (!is.vector(categories))
+    stop("Parameter 'categories' must be a vector.")
+
+  if (!is.vector(col_palette))
+    stop("Parameter 'col_palette' must be a vector.")
+
+  discrete_colorbar <- F
+  if ((length(categories) * 2) == length(col_palette)) {
+    discrete_colorbar <- T
+  } else if (length(categories) != length(col_palette)) {
+    stop("Parameter 'col_palette' must have the same of twice the length of category parameter.")
+  }
 
   bvals <- c(0, seq.int(length.out = length(categories)))
-  pal <- col_palette
-
-  if (length(bvals) != (length(pal) + 1)) {
-    stop("length(bvals) should be equal to (length(pal) -1)")
-  }
 
   bvals <- bvals[order(bvals)]
   nvals <- (bvals - min(bvals)) / (max(bvals) - min(bvals))
@@ -26,19 +36,21 @@ discrete_coloring <- function(categories, col_palette) {
 
   for (i in seq.int(length.out = length(nvals) -1 )) {
     index <- ((i - 1) * 2) + 1
-    dcolorscale[index,] <- c(nvals[i], pal[i])
-    dcolorscale[index + 1,] <- c(nvals[i + 1], pal[i])
+    dcolorscale[index,] <- c(nvals[i], ifelse(discrete_colorbar, col_palette[index], col_palette[i]))
+    dcolorscale[index + 1,] <- c(nvals[i + 1], ifelse(discrete_colorbar, col_palette[index + 1], col_palette[i]))
   }
 
   # calculate tick values for legend (lowest point to max point)
   # works only with even spacing until now
   ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
+  range_min <- ifelse(discrete_colorbar, range_min, 1)
+  range_max <- ifelse(discrete_colorbar, range_max, max(bvals))
   # calc percentage of ticks * range (max - min) + min
   tick_vals <- (
     ticks[ticks %% 2 != 0] / max(ticks)
   ) * (
-    max(bvals) - min(utils::tail(bvals, -1))
-  ) + min(utils::tail(bvals, -1))
+    range_max - range_min
+  ) + range_min
 
   tick_text <- categories
 
@@ -50,43 +62,3 @@ discrete_coloring <- function(categories, col_palette) {
     )
   )
 }
-
-
-
-#  #' Generate Test Data
-#  #'
-#  #' @param nr_stops number of stops
-#  #' @param nr_drives number of drives
-#  #'
-#  #' @return tibble
-#  #'
-#  #' @export
-#  generate_test_data <- function(
-#    nr_stops=35,
-#    nr_drives=100
-#  ){
-#    # ---------------------------
-#    # generate data
-#    drive_ids <- sort(rep(seq(1, nr_drives), nr_stops))
-#    drive_names <- paste("Drive", drive_ids, sep = "_")
-#
-#    stop_ids <- rep(seq.int(1, nr_stops), nr_drives)
-#    stop_names <- paste("Stop", stop_ids, sep = "_")
-#
-#    nr_passengers = sample(1:50, nr_stops * nr_drives, replace=TRUE)
-#
-#    # ---------------------------
-#    # create input dataframe
-#    df <- dplyr::tibble(
-#      "Stop_id" = stop_ids,
-#      "Stop_names" = stop_names,
-#      "Drive_id" = drive_ids,
-#      "Drive_names" = drive_names,
-#      "Passengers" = nr_passengers,
-#      "Category" = ifelse(nr_passengers > 35, "high", ifelse(nr_passengers > 20, "medium", "low")),
-#      "Some_label" = rep("<b>Bla Label</b>", nr_stops * nr_drives)
-#    )
-#
-#    return(df)
-#  }
-
