@@ -79,7 +79,7 @@ To install the latest ("cutting-edge") GitHub version run:
 # devtools::install_github('yvesmauron/catmaply')
 ```
 
-To get the latest release available Version on CRAN, perform:
+To get the latest available version on CRAN, perform:
 
 ```{r}
 #install.packages("catmaply")
@@ -109,7 +109,7 @@ The data shows has the following structures:
 - `Ausl_Kat` shows that category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
 - `Besetzung` is e.g. the number of people per m^2.
 
-So let's do a visualisation with this kind of information
+So let' visualize it.
 
 ```{r out.width = '100%', fig.height=5, warning = FALSE}
 catmaply(
