@@ -170,6 +170,16 @@ test_that("test catmaply", {
     z = "Ausl_Kat"
   )
   expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    color_palette = viridis::inferno(10)
+  )
+  expect_true(is(fig, "plotly"))
 })
 
 

@@ -224,7 +224,7 @@ catmaply <- function(
   if (is.function(color_palette)) {
     color_palette <- color_palette(length(cat_col) * ifelse(categorical_colorbar, 2, 1))
   } else if (is.vector(color_palette) && !is.list(color_palette)) {
-    color_palette <- color_palette
+    color_palette <- utils::head(color_palette, length(cat_col))
   } else {
     stop("Parameter 'color_palette' can either be a function producing a color_palette vector or a color paletet vector itself.")
   }

@@ -43,11 +43,11 @@ library(lubridate)
 
 ## Introduction
 
-A heatmap a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that belongs to seperate groups/categories. 
+A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that can be grouped into categories. 
 
-This package is originally beeing developed for Zurich Public Transport (VBZ) to illustrate the utilization of different routes and vehicles during different times of the day. It therefore groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and plots it for certain stops over time in a heatmap.
+This package is originally beeing developed for Zurich Public Transport (VBZ) to illustrate the utilization of different routes and vehicles during different times of the day. Therefore, it groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and illustrates it for certain stops over time in a heatmap.
 
-This package can easily be integrated into a shiny dashboard; which supports additional intactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a seperate github repository named [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
+This package can easily be integrated into a shiny dashboard which supports additional interactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a seperate github repository named [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
 
 This work is based on the plotly.js engine. 
 
@@ -57,35 +57,35 @@ This package is still under active development. If you have features you would l
 
 ### News
 
-You can see the most recent changes to the package in [NEWS.md](https://github.com/yvesmauron/catmaply/blob/master/NEWS.md).
+You can see the most recent changes of the package in [NEWS.md](https://github.com/yvesmauron/catmaply/blob/master/NEWS.md).
 
 ## Installation
 
 To install the latest ("cutting-edge") GitHub version run:
 
 ```{r}
-# make sure that you have the corrent R Tools installed.
+# make sure that you have the corrent RTools installed.
 # as you might need to build some packages from source
-# if do not have RTools installed, you can install it with:
+# if you don't have RTools installed, you can install it with:
 # install.packages('installr'); install.Rtools() # not tested on windows
 # or download it from here:
 # https://cran.r-project.org/bin/windows/Rtools/
 # in any case, make sure that you select the correct version, 
 # otherwise the installation will fail.
-# Then you'll need devtools
+# then you'll need devtools
 # if (!require('devtools'))
   # install.packages('devtools')
-# Finally install the package
+# finally install the package
 # devtools::install_github('yvesmauron/catmaply')
 ```
 
-To get the latest available version on CRAN, perform:
+To get the latest version on CRAN, perform:
 
 ```{r}
 #install.packages("catmaply")
 ```
 
-Thereafter you can start using the package as usual:
+Thereafter, you can start using the package as usual:
 
 ```{r}
 library(catmaply)
@@ -102,11 +102,11 @@ df <- vbz[[3]]$data
 knitr::kable(head(df, 10))
 ```
 
-The data shows has the following structures:
+The main columns of the `vbz` data.frame can be described as follows:
 
 - `fahrt_seq` shows the order of the drives
-- `Haltenstellenlangname` shows the names of the stops, that need to be ordered by halt_seq
-- `Ausl_Kat` shows that category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
+- `Haltenstellenlangname` shows the names of the stops, that need to be ordered by `halt_seq`
+- `Ausl_Kat` shows the category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
 - `Besetzung` is e.g. the number of people per m^2.
 
 So let' visualize it.
@@ -125,7 +125,7 @@ How about differences in one category, e.g. one colorbar per category. Also, let
 
 To show a colorbar per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
 
-- `Besetzung` in the fileds
+- `Besetzung` in the fields
 - `Ausl_Kat` is the categorization over these fields.
 
 To change the color palette you can either submit a color palette vector or a function that is able to return one.
@@ -298,7 +298,7 @@ catmaply(
 )
 ```
 
-What about hiding the legend all together.
+What about hiding the legend all together?
 
 ```{r out.width = '100%', fig.height=5, warning = FALSE}
 catmaply(
@@ -322,9 +322,9 @@ catmaply(
 ```
 
 
-Hmm, didn't we say that we want to show the development over time; wouldn't it make sense then if we could use time in the x axis?
+Hmm, didn't we say that we want to show the development over time? Wouldn't it make sense then, if we could use time in the x axis?
 
-Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check if out by calculating the departure data of each drive.
+Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check it out by calculating the departure date of each drive.
 
 ```{r out.width = '100%', fig.height=5, warning = FALSE}
 df <- df %>%
