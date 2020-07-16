@@ -177,7 +177,7 @@ test_that("test catmaply", {
     y = Haltestellenlangname,
     y_order = halt_seq,
     z = Ausl_Kat,
-    color_palette = viridis(10)
+    color_palette = viridis::inferno(10)
   )
   expect_true(is(fig, "plotly"))
 })
