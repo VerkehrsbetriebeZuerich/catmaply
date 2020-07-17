@@ -185,7 +185,7 @@ catmaply <- function(
   if (!is.logical(categorical_colorbar))
     stop("Parameter 'categorical_colorbar' must be logical")
 
-  #TODO: Test text column behavior
+  # only annotate graph, if text column is provided
   annotated <- !missing(text)
 
   # substitute column references, so that they can be passed without quotes
@@ -266,7 +266,6 @@ catmaply <- function(
   if (!is.character(slider_currentvalue_prefix))
     stop("Parameter 'slider_currentvalue_prefix' needs to be a character.")
 
-  #TODO: testing
   if (!slider_currentvalue_visible && nchar(slider_currentvalue_prefix) > 0) {
     warning(paste("Parameter 'slider_currentvalue_prefix' will be ignored as slider_currentvalue_visible is False"))
     slider_currentvalue_prefix <- ""

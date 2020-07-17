@@ -442,6 +442,91 @@ test_that("test error_handling", {
     )
   )
 
+  # currentvalue hidden but prefix
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps = list(
+        list(range=c(1, 30)),
+        list(name="nachmittag", range=c(31, 50))
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5,
+        slider_step_name="BLA"
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5,
+        slider_step_name="Ausl_Kat"
+      )
+    )
+  )
+})
+
+
+test_that("test warnigns", {
   # too small range, warning
   expect_warning(
     catmaply(
@@ -454,7 +539,71 @@ test_that("test error_handling", {
       z = "Ausl_Kat",
     )
   )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider_currentvalue_visible=F,
+      slider_currentvalue_prefix = "Warning"
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = T,
+      rangeslider = F
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = T
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = T
+    )
+  )
 })
+
 
 # check colorbar
 test_that("test catmaply colorbar", {

@@ -282,7 +282,6 @@ add_catmaply_slider <- function(
 
   visible_index <- 1
 
-  #TODO: Test that user cannot activate both
   if (all(c("slider_start", "slider_range", "slider_shift", "slider_step_name") %in% names(slider_steps))){
 
     step_name_col <- slider_steps$slider_step_name[1]
