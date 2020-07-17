@@ -17,6 +17,7 @@ catmaply(
   y_tickangle = 0,
   z,
   text,
+  text_color = "#444",
   hover_template,
   hover_hide = FALSE,
   color_palette = viridis::plasma,
@@ -36,6 +37,9 @@ catmaply(
     "\%H:\%M h"), list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"),
     list(dtickrange = list("M12", NULL), value = "\%H:\%M h")),
   rangeslider = TRUE,
+  slider = FALSE,
+  slider_prefix = "",
+  slider_steps = list(slider_start = 1, slider_range = 15, slider_shift = 5),
   source = "catmaply"
 )
 }
@@ -63,6 +67,8 @@ catmaply(
 \item{z}{column name holding the values for the fields.}
 
 \item{text}{optional column name holding the values that should be displayed in the fields. NA values will not be displayed.}
+
+\item{text_color}{font color to be used for text; (default: "#444").}
 
 \item{hover_template}{template to be used to create the hover label; (default:missing).}
 
@@ -106,18 +112,13 @@ list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
 
 \item{rangeslider}{boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).}
 
-\item{source}{a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).}
-
-\item{text_color}{font color to be used for text; (default: "#444").}
-
-\item{slider}{boolean value indicating whether the slider should be displayed or not. Cannot be used in combination
-with \code{rangeslider} parameter. (default: FALSE).}
+\item{slider}{boolean value indicating whether to use slider or not; if specified, \code{rangeslider} will not be displayed; (default: FALSE).}
 
 \item{slider_prefix}{prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").}
 
 \item{slider_steps}{list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
-\code{custom}; whereas the \code{auto} mode creates the steps automatically and \coder{custom} takes custom instructions on how to create the steps.
-For mode \code{auto}, a \list{list} with the following elements has to be submitted (values of the list element are just examples): \cr
+\code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
+For mode \code{auto}, a \code{list} with the following elements has to be submitted (values of the list element are just examples): \cr
 list( \cr
   slider_start=1, \cr
   slider_range=15, \cr
@@ -132,13 +133,15 @@ list( \cr
   list(name="Step_One", range=c(1, 50)), \cr
   list(name="Step_Two", range=c(5, 55)), \cr
   ... \cr
-).
+). \cr
 (default: \cr
 list( \cr
   slider_start=1, \cr
   slider_range=15, \cr
   slider_shift=5, \cr
 )).}
+
+\item{source}{a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).}
 }
 \value{
 plot_ly object

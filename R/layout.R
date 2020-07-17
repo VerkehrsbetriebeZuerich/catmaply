@@ -136,7 +136,8 @@ catmaply_layout <- function(
       xaxis = list(
         title="",
         tickmode='linear',
-        range = c(0, x_range),
+        fixedrange=F,
+        range=x_range,
         tickangle = x_tickangle,
         categoryorder="array",
         categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
@@ -157,4 +158,6 @@ catmaply_layout <- function(
         color = font_color
       )
     )
+
+  return(fig)
 }

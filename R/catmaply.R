@@ -45,10 +45,11 @@
 #'   ) \cr
 #' ).
 #' @param rangeslider boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).
+#' @param slider boolean value indicating whether to use slider or not; if specified, \code{rangeslider} will not be displayed; (default: FALSE).
 #' @param slider_prefix prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").
 #' @param slider_steps list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
-#' \code{custom}; whereas the \code{auto} mode creates the steps automatically and \coder{custom} takes custom instructions on how to create the steps.
-#' For mode \code{auto}, a \list{list} with the following elements has to be submitted (values of the list element are just examples): \cr
+#' \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
+#' For mode \code{auto}, a \code{list} with the following elements has to be submitted (values of the list element are just examples): \cr
 #' list( \cr
 #'   slider_start=1, \cr
 #'   slider_range=15, \cr
@@ -63,7 +64,7 @@
 #'   list(name="Step_One", range=c(1, 50)), \cr
 #'   list(name="Step_Two", range=c(5, 55)), \cr
 #'   ... \cr
-#' ).
+#' ). \cr
 #' (default: \cr
 #' list( \cr
 #'   slider_start=1, \cr
@@ -129,6 +130,7 @@ catmaply <- function(
   y_tickangle=0,
   z,
   text,
+  text_color="#444",
   hover_template,
   hover_hide=FALSE,
   color_palette=viridis::plasma,
@@ -136,7 +138,7 @@ catmaply <- function(
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
-  font_color = "#444",
+  font_color="#444",
   legend=T,
   legend_col,
   legend_interactive=TRUE,
@@ -151,8 +153,13 @@ catmaply <- function(
     list(dtickrange = list("M12", NULL), value = "%H:%M h")
   ),
   rangeslider=TRUE,
+  slider=FALSE,
   slider_prefix="",
-  slider_steps=NA,
+  slider_steps=list(
+    slider_start=1,
+    slider_range=15,
+    slider_shift=5
+  ),
   source="catmaply"
 ) {
 
@@ -163,6 +170,9 @@ catmaply <- function(
   if (!is.logical(categorical_colorbar))
     stop("Parameter 'categorical_colorbar' must be logical")
 
+  #TODO: Test text column behavior
+  annotations <- !missing(text)
+
   # substitute column references, so that they can be passed without quotes
   x <- as.character(substitute(x))
   x_order <- ifelse(missing(x_order), x, as.character(substitute(x_order)))
@@ -171,6 +181,7 @@ catmaply <- function(
   z <- as.character(substitute(z))
   categorical_col <- ifelse(!categorical_colorbar, z, as.character(substitute(categorical_col)))
   legend_col <- ifelse(missing(legend_col), categorical_col, as.character(substitute(legend_col)))
+  text <- ifelse(!annotations, z, as.character(substitute(text)))
 
   # check columnnames
   cols <- colnames(df)
@@ -183,9 +194,10 @@ catmaply <- function(
     !any(is.element(y_order, cols)) ||
     !any(is.element(z, cols)) ||
     !any(is.element(categorical_col, cols)) ||
-    !any(is.element(legend_col, cols))
+    !any(is.element(legend_col, cols)) ||
+    !any(is.element(text, cols))
   )
-    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'z', 'categorical_col', 'legend_col') must be valid column names in df.")
+    stop("Parameters c('x', 'x_order', 'y', 'y_order', 'z', 'categorical_col', 'legend_col'. 'text') - if submitted - must be valid column names in df.")
 
   if (!any(is.element(c("left", "right"), y_side)))
     stop("Parameter 'y_side' only allows the following values: c('left', 'right')")
@@ -211,6 +223,9 @@ catmaply <- function(
   if (!is.logical(rangeslider))
     stop("Parameter 'rangeslider' needs to be logical/boolean.")
 
+  if (!is.list(slider_steps))
+    stop("Parameter 'slider_steps' needs to be a list.")
+
   if (!is.numeric(x_range))
     stop("Parameter 'x_range' needs to be integer.")
 
@@ -221,6 +236,25 @@ catmaply <- function(
 
   if (categorical_colorbar && !legend)
     warning("Parameter 'categorical_colorbar' and 'categorical_col' will be ignored if parameter 'legend' is FALSE")
+
+  if (!is.logical(slider))
+    stop("Parameter 'slider' needs to be logical/boolean.")
+
+  # overrule rangelslider if slider is specified
+  #TODO: Test that user cannot activate both
+  if (slider && rangeslider) {
+    warning(paste("Parameter 'rangeslider' will be ignored as slider is specified"))
+    rangeslider <- F
+  }
+
+  #TODO: Test that user cannot activate both
+  if (slider && legend_interactive) {
+    warning(paste("An interactive legend is not supported when using slider at the moment. Overwriting legend_interactive with F."))
+    legend_interactive <- F
+  }
+
+  if (slider)
+    x_range <- c()
 
   # preprocessing & logic
 
@@ -252,15 +286,16 @@ catmaply <- function(
   legend_items <- cat_leg_comb[[legend_col]][ordering]
 
   # get color palette
+  pal_len <- length(cat_col) * ifelse(categorical_colorbar, 2, 1)
   if (is.function(color_palette)) {
-    color_palette <- color_palette(length(cat_col) * ifelse(categorical_colorbar, 2, 1))
+    color_palette <- color_palette(pal_len)
   } else if (is.vector(color_palette) && !is.list(color_palette)) {
-    color_palette <- utils::head(color_palette, length(cat_col))
+    color_palette <- utils::head(color_palette, pal_len)
   } else {
     stop("Parameter 'color_palette' can either be a function producing a color_palette vector or a color paletet vector itself.")
   }
 
-  if (length(color_palette) != (length(category_items) * ifelse(categorical_colorbar, 2, 1))) {
+  if (length(color_palette) != pal_len) {
     stop("For each category needs to be exactly one color, if you use a colorbar, then two colors are needed for one category.")
   }
 
@@ -271,7 +306,10 @@ catmaply <- function(
       x = !!rlang::sym(x),
       y = !!rlang::sym(y),
       z = !!rlang::sym(z),
+      text = !!rlang::sym(text),
+      x_order = !!rlang::sym(x_order),
       category = !!rlang::sym(categorical_col),
+      legend = !!rlang::sym(legend_col),
       label =
         dplyr::if_else(
           rep((is_hover_template  && !hover_hide), NROW(df)),
@@ -287,7 +325,21 @@ catmaply <- function(
 
   fig <- plotly::plot_ly(source=source)
 
-  if (legend && legend_interactive) {
+  sliders <- NA
+  if (slider) {
+    fig <- fig %>%
+      add_catmaply_slider(
+        df = df,
+        slider_prefix=slider_prefix,
+        slider_steps=slider_steps,
+        text_color=text_color,
+        color_palette=color_palette,
+        categorical_colorbar=categorical_colorbar,
+        category_items=category_items,
+        legend_items=legend_items
+      )
+
+  } else if (legend && legend_interactive) {
     fig <- fig %>%
       add_catmaply_traces(
         df=df,
