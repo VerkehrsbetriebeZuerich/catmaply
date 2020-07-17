@@ -287,7 +287,8 @@ add_catmaply_slider <- function(
           title="",
           len=1,
           tickvals=discrete_col$tickvals,
-          ticktext=discrete_col$ticktext
+          ticktext=discrete_col$ticktext,
+          y=1
         )
       )
 
