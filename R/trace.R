@@ -314,7 +314,7 @@ add_catmaply_slider <- function(
     steps[[i]] = list(
       args = list(
         # 'visible',
-        list(visible=1:iterations == i),
+        list(visible=1:length(slider_steps) == i),
         list(annotations=annotations)
       ),
       method = 'update',
