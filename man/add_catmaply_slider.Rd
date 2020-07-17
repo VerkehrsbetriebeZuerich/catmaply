@@ -7,14 +7,21 @@
 add_catmaply_slider(
   fig,
   df,
+  annotated,
   text_color = "#444",
-  slider_prefix = "",
+  text_size = 12,
+  text_font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   slider_steps,
-  hover_hide = NA,
+  slider_currentvalue_prefix = "",
+  slider_step_visible,
+  slider_currentvalue_visible,
+  slider_tick_visible,
+  hover_hide,
   color_palette,
   categorical_colorbar,
   category_items,
-  legend_items
+  legend_items,
+  legend
 )
 }
 \arguments{
@@ -22,7 +29,11 @@ add_catmaply_slider(
 
 \item{df}{data.frame or tibble holding the data.}
 
+\item{annotated}{boolean indicating if annotations should be displayed.}
+
 \item{text_color}{font color to be used for text; (default: "#444").}
+
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greather than or equal to 1; (default: 12).}
 
 \item{slider_steps}{list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
 \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
@@ -49,6 +60,14 @@ list( \cr
   slider_shift=5, \cr
 )).}
 
+\item{slider_currentvalue_prefix}{prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").}
+
+\item{slider_step_visible}{boolean indicating if the step names should be displayed for the slider. (default: TRUE).}
+
+\item{slider_currentvalue_visible}{boolean indicating if the currently selected value should be displayed above the slider. (default: TRUE).}
+
+\item{slider_tick_visible}{boolean indicating if the tickvalues should be displayed below the slider. (default: TRUE).}
+
 \item{hover_hide}{boolean indicating if the hover label should be hidden or not; (default: FALSE).}
 
 \item{color_palette}{a color palette vector.}
@@ -58,6 +77,11 @@ list( \cr
 \item{category_items}{disctinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
+
+\item{text_font_color}{the typeface that will be applied by the web browser for the text/annotation.
+The web browser will only be able to apply a font if it is available on the system which it operates.
+Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+(default: c("Open Sans", "verdana", "arial", "sans-serif")).}
 
 \item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).}
 }

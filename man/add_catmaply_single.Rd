@@ -11,7 +11,8 @@ add_catmaply_single(
   color_palette,
   categorical_colorbar,
   legend_items,
-  legend
+  legend,
+  visible = 1
 )
 }
 \arguments{
