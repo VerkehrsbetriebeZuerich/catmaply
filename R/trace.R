@@ -107,7 +107,8 @@ add_catmaply_single <- function(
   color_palette,
   categorical_colorbar,
   legend_items,
-  legend
+  legend,
+  visible=1
 ) {
 
   if (legend) {
@@ -128,13 +129,15 @@ add_catmaply_single <- function(
         z = ~z,
         text = ~label,
         hovertemplate = '%{text}',
+        visible = visible,
         showlegend=FALSE,
         colorscale=discrete_col$colorscale,
         colorbar=list(
           title="",
-          #len=0.5,
+          len=1,
           tickvals=discrete_col$tickvals,
-          ticktext=discrete_col$ticktext
+          ticktext=discrete_col$ticktext,
+          y=1
         )
       )
   } else {
@@ -148,6 +151,7 @@ add_catmaply_single <- function(
         z = ~z,
         text = ~label,
         hovertemplate = '%{text}',
+        visible = visible,
         showscale=F
       )
   }
@@ -264,32 +268,15 @@ add_catmaply_slider <- function(
       color_palette_idx <- c(sapply(legend_idx, function(i) c(2 * (i - 1) + 1, 2 * (i - 1) + 2)))
     }
 
-    discrete_col <- discrete_coloring(
-      categories=legend_items[legend_idx],
-      col_palette=color_palette[color_palette_idx],
-      range_min = min(stats::na.omit(tmp$z)),
-      range_max = max(stats::na.omit(tmp$z))
-    )
-
     fig <- fig %>%
-      plotly::add_trace(
-        type = "heatmap",
-        data = tmp,
-        x = ~x,
-        y = ~y,
-        z = ~z,
-        text = ~label,
-        hovertemplate = '%{text}',
-        visible = ifelse(i == visible_index, T, F),
-        showlegend = FALSE,
-        colorscale=discrete_col$colorscale,
-        colorbar=list(
-          title="",
-          len=1,
-          tickvals=discrete_col$tickvals,
-          ticktext=discrete_col$ticktext,
-          y=1
-        )
+      add_catmaply_single(
+        df=tmp,
+        hover_hide=hover_hide,
+        color_palette=color_palette[color_palette_idx],
+        categorical_colorbar=categorical_colorbar,
+        legend_items=legend_items[legend_idx],
+        legend=T,
+        visible=i==visible_index
       )
 
     tmp <- tmp %>%
@@ -339,3 +326,4 @@ add_catmaply_slider <- function(
 
   return(fig)
 }
+
