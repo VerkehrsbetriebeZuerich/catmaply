@@ -8,12 +8,14 @@
 #' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
-#' @param x_init_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
+#' @param x_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
 #' @param y column name holding the axis values for y.
 #' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
 #' @param z column name holding the values for the fields.
+#' @param text optional column name holding the values that should be displayed in the fields. NA values will not be displayed.
+#' @param text_color font color to be used for text; (default: "#444").
 #' @param hover_template template to be used to create the hover label; (default:missing).
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
@@ -24,24 +26,50 @@
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
 #' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
 #' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
-#' @param font_color font color to be used for plot; (default: "#444")
+#' @param font_color font color to be used for plot; (default: "#444").
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
-#' @param legend_col column to be used for legend naming; (default: z/categorical_col)
+#' @param legend_col column to be used for legend naming; (default: z/categorical_col).
 #' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; (default: T).
-#' @param tickformatstops used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
-#' (default:
-#' list(
-#'   list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
-#'   list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
-#'   list(dtickrange = list(60000, 3600000), value = "%H:%M m"),
-#'   list(dtickrange = list(3600000, 86400000), value = "%H:%M h"),
-#'   list(dtickrange = list(86400000, 604800000), value = "%H:%M h"),
-#'   list(dtickrange = list(604800000, "M1"), value = "%H:%M h"),
-#'   list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
-#'   list(dtickrange = list("M12", NULL), value = "%H:%M h")
-#'   )
-#' )
-#' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).
+#' @param tickformatstops used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or
+#' more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
+#' (default: \cr
+#' list( \cr
+#' list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
+#'   list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"), \cr
+#'   list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), \cr
+#'   list(dtickrange = list(3600000, 86400000), value = "\%H:\%M h"), \cr
+#'   list(dtickrange = list(86400000, 604800000), value = "\%H:\%M h"), \cr
+#'   list(dtickrange = list(604800000, "M1"), value = "\%H:\%M h"), \cr
+#'   list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"), \cr
+#'   list(dtickrange = list("M12", NULL), value = "\%H:\%M h") \cr
+#'   ) \cr
+#' ).
+#' @param rangeslider boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).
+#' @param slider_prefix prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").
+#' @param slider_steps list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
+#' \code{custom}; whereas the \code{auto} mode creates the steps automatically and \coder{custom} takes custom instructions on how to create the steps.
+#' For mode \code{auto}, a \list{list} with the following elements has to be submitted (values of the list element are just examples): \cr
+#' list( \cr
+#'   slider_start=1, \cr
+#'   slider_range=15, \cr
+#'   slider_shift=5, \cr
+#' ) \cr
+#' This will create the steps automatically for you, essentially starting at position \code{slider_start},
+#' shifting the window of size \code{slider_range} along the x axis with a stepsize of \code{slider_shift}. The stepnames
+#' are automatically selected with the x value of the left side of the slider_range (so for 1 it would take the first value of the x axis as name of the step). \cr
+#' With custom, on the other hand, you can define the step configuration without any restrictions. The custom
+#' configuration needs to be defined in a \code{list} with the following elements. \cr
+#' list( \cr
+#'   list(name="Step_One", range=c(1, 50)), \cr
+#'   list(name="Step_Two", range=c(5, 55)), \cr
+#'   ... \cr
+#' ).
+#' (default: \cr
+#' list( \cr
+#'   slider_start=1, \cr
+#'   slider_range=15, \cr
+#'   slider_shift=5, \cr
+#' )).
 #' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
 #' @return plot_ly object
@@ -94,23 +122,24 @@ catmaply <- function(
   x_order,
   x_side="top",
   x_tickangle=90,
-  x_init_range=30,
+  x_range=30,
   y,
   y_order,
   y_side="left",
   y_tickangle=0,
   z,
+  text,
   hover_template,
-  hover_hide=F,
+  hover_hide=FALSE,
   color_palette=viridis::plasma,
-  categorical_colorbar=F,
+  categorical_colorbar=FALSE,
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color = "#444",
   legend=T,
   legend_col,
-  legend_interactive=T,
+  legend_interactive=TRUE,
   tickformatstops=list(
     list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
     list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
@@ -121,7 +150,9 @@ catmaply <- function(
     list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
     list(dtickrange = list("M12", NULL), value = "%H:%M h")
   ),
-  rangeslider=T,
+  rangeslider=TRUE,
+  slider_prefix="",
+  slider_steps=NA,
   source="catmaply"
 ) {
 
@@ -180,12 +211,12 @@ catmaply <- function(
   if (!is.logical(rangeslider))
     stop("Parameter 'rangeslider' needs to be logical/boolean.")
 
-  if (!is.numeric(x_init_range))
-    stop("Parameter 'x_init_range' needs to be integer.")
+  if (!is.numeric(x_range))
+    stop("Parameter 'x_range' needs to be integer.")
 
-  if (x_init_range < 2) {
-    warning(paste("Parameter 'x_init_range' needs to larger than 2.", "Changing parameter from", x_init_range, " to 2."))
-    x_init_range <- 2
+  if (x_range < 2) {
+    warning(paste("Parameter 'x_range' needs to larger than 2.", "Changing parameter from", x_range, " to 2."))
+    x_range <- 2
   }
 
   if (categorical_colorbar && !legend)
@@ -306,7 +337,7 @@ catmaply <- function(
         x_order=x_order,
         x_side=x_side,
         x_tickangle=x_tickangle,
-        x_init_range=x_init_range,
+        x_range=x_range,
         y=y,
         y_order=y_order,
         y_side=y_side,
