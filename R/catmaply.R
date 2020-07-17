@@ -16,6 +16,11 @@
 #' @param z column name holding the values for the fields.
 #' @param text optional column name holding the values that should be displayed in the fields. NA values will not be displayed.
 #' @param text_color font color to be used for text; (default: "#444").
+#' @param text_size font size to be used for text/annotation. Needs to be a number greather than or equal to 1; (default: 12).
+#' @param text_font_color the typeface that will be applied by the web browser for the text/annotation.
+#' The web browser will only be able to apply a font if it is available on the system which it operates.
+#' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+#' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
 #' @param hover_template template to be used to create the hover label; (default:missing).
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
@@ -46,7 +51,6 @@
 #' ).
 #' @param rangeslider boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).
 #' @param slider boolean value indicating whether to use slider or not; if specified, \code{rangeslider} will not be displayed; (default: FALSE).
-#' @param slider_prefix prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").
 #' @param slider_steps list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
 #' \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
 #' For mode \code{auto}, a \code{list} with the following elements has to be submitted (values of the list element are just examples): \cr
@@ -54,6 +58,7 @@
 #'   slider_start=1, \cr
 #'   slider_range=15, \cr
 #'   slider_shift=5, \cr
+#'   slider_step_name="x"
 #' ) \cr
 #' This will create the steps automatically for you, essentially starting at position \code{slider_start},
 #' shifting the window of size \code{slider_range} along the x axis with a stepsize of \code{slider_shift}. The stepnames
@@ -71,6 +76,10 @@
 #'   slider_range=15, \cr
 #'   slider_shift=5, \cr
 #' )).
+#' @param slider_currentvalue_prefix prefix to be used for the slider title. Only used if \code{slider=TRUE}. (default: "").
+#' @param slider_step_visible boolean indicating if the step names should be displayed for the slider. (default: TRUE).
+#' @param slider_currentvalue_visible boolean indicating if the currently selected value should be displayed above the slider. (default: TRUE).
+#' @param slider_tick_visible boolean indicating if the tickvalues should be displayed below the slider. (default: TRUE).
 #' @param source a character string of length 1. Match the value of this string with the source argument in event_data() to retrieve the event data corresponding to a specific plot (shiny apps can have multiple plots).
 #'
 #' @return plot_ly object
@@ -131,17 +140,19 @@ catmaply <- function(
   z,
   text,
   text_color="#444",
+  text_size=12,
+  text_font_family=c("Open Sans", "verdana", "arial", "sans-serif"),
   hover_template,
-  hover_hide=FALSE,
+  hover_hide=F,
   color_palette=viridis::plasma,
-  categorical_colorbar=FALSE,
+  categorical_colorbar=F,
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color="#444",
   legend=T,
   legend_col,
-  legend_interactive=TRUE,
+  legend_interactive=T,
   tickformatstops=list(
     list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
     list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
@@ -152,14 +163,18 @@ catmaply <- function(
     list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
     list(dtickrange = list("M12", NULL), value = "%H:%M h")
   ),
-  rangeslider=TRUE,
-  slider=FALSE,
-  slider_prefix="",
+  rangeslider=T,
+  slider=F,
   slider_steps=list(
     slider_start=1,
     slider_range=15,
-    slider_shift=5
+    slider_shift=5,
+    slider_step_name="x"
   ),
+  slider_currentvalue_prefix="",
+  slider_step_visible=T,
+  slider_currentvalue_visible=T,
+  slider_tick_visible=T,
   source="catmaply"
 ) {
 
@@ -171,7 +186,7 @@ catmaply <- function(
     stop("Parameter 'categorical_colorbar' must be logical")
 
   #TODO: Test text column behavior
-  annotations <- !missing(text)
+  annotated <- !missing(text)
 
   # substitute column references, so that they can be passed without quotes
   x <- as.character(substitute(x))
@@ -181,7 +196,7 @@ catmaply <- function(
   z <- as.character(substitute(z))
   categorical_col <- ifelse(!categorical_colorbar, z, as.character(substitute(categorical_col)))
   legend_col <- ifelse(missing(legend_col), categorical_col, as.character(substitute(legend_col)))
-  text <- ifelse(!annotations, z, as.character(substitute(text)))
+  text <- ifelse(!annotated, z, as.character(substitute(text)))
 
   # check columnnames
   cols <- colnames(df)
@@ -211,6 +226,9 @@ catmaply <- function(
   if (font_size < 1)
     stop("Parameter 'font_size' needs to be bigger than or equal to one.")
 
+  if (text_size < 1)
+    stop("Parameter 'text_size' needs to be bigger than or equal to one.")
+
   if (!is.logical(legend))
     stop("Parameter 'legend' needs to be logical/boolean.")
 
@@ -237,8 +255,22 @@ catmaply <- function(
   if (categorical_colorbar && !legend)
     warning("Parameter 'categorical_colorbar' and 'categorical_col' will be ignored if parameter 'legend' is FALSE")
 
-  if (!is.logical(slider))
-    stop("Parameter 'slider' needs to be logical/boolean.")
+  if (
+    !is.logical(slider) ||
+    !is.logical(slider_step_visible) ||
+    !is.logical(slider_currentvalue_visible) ||
+    !is.logical(slider_tick_visible)
+  )
+    stop("Parameter 'slider', 'slider_step_visible', 'slider_currentvalue_visible', 'slider_tick_visible' need to be logical/boolean.")
+
+  if (!is.character(slider_currentvalue_prefix))
+    stop("Parameter 'slider_currentvalue_prefix' needs to be a character.")
+
+  #TODO: testing
+  if (!slider_currentvalue_visible && nchar(slider_currentvalue_prefix) > 0) {
+    warning(paste("Parameter 'slider_currentvalue_prefix' will be ignored as slider_currentvalue_visible is False"))
+    slider_currentvalue_prefix <- ""
+  }
 
   # overrule rangelslider if slider is specified
   #TODO: Test that user cannot activate both
@@ -330,13 +362,21 @@ catmaply <- function(
     fig <- fig %>%
       add_catmaply_slider(
         df = df,
-        slider_prefix=slider_prefix,
+        annotated=annotated,
+        slider_currentvalue_prefix=slider_currentvalue_prefix,
         slider_steps=slider_steps,
+        slider_step_visible=slider_step_visible,
+        slider_currentvalue_visible=slider_currentvalue_visible,
+        slider_tick_visible=slider_tick_visible,
+        hover_hide=hover_hide,
         text_color=text_color,
+        text_size=text_size,
+        text_font_family=text_font_family,
         color_palette=color_palette,
         categorical_colorbar=categorical_colorbar,
         category_items=category_items,
-        legend_items=legend_items
+        legend_items=legend_items,
+        legend=legend
       )
 
   } else if (legend && legend_interactive) {

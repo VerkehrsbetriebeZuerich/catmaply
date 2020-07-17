@@ -378,6 +378,7 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong data type for df
   expect_error(
     catmaply(
       as.matrix(df),
@@ -389,9 +390,10 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong parameter for rangeslider
   expect_error(
     catmaply(
-      as.matrix(df),
+      df,
       x='fahrt_seq',
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
@@ -401,10 +403,12 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong text size
   expect_error(
     catmaply(
-      as.matrix(df),
+      df,
       x='fahrt_seq',
+      text_size = 0,
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
@@ -412,6 +416,20 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong font size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      font_size = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  # range not as number
   expect_error(
     catmaply(
       df,
@@ -424,6 +442,7 @@ test_that("test error_handling", {
     )
   )
 
+  # too small range, warning
   expect_warning(
     catmaply(
       df,
