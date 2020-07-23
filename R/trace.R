@@ -108,7 +108,8 @@ add_catmaply_single <- function(
   categorical_colorbar,
   legend_items,
   legend,
-  visible=1
+  visible=1,
+  colorbar_y=NA
 ) {
 
   discrete_col <- discrete_coloring(
@@ -117,6 +118,7 @@ add_catmaply_single <- function(
     range_min = min(stats::na.omit(df$z)),
     range_max = max(stats::na.omit(df$z))
   )
+  #browser()
 
   if (legend) { # legend
 
@@ -140,7 +142,7 @@ add_catmaply_single <- function(
             len=1,
             tickvals=discrete_col$tickvals,
             ticktext=discrete_col$ticktext,
-            y=1
+            y=colorbar_y
           )
         )
     } else { # legend & no hover
@@ -162,7 +164,7 @@ add_catmaply_single <- function(
             len=1,
             tickvals=discrete_col$tickvals,
             ticktext=discrete_col$ticktext,
-            y=1
+            y=colorbar_y
           )
         )
     }
@@ -202,6 +204,7 @@ add_catmaply_single <- function(
     }
 
   }
+  #browser()
 
   return(fig)
 }
@@ -353,30 +356,21 @@ add_catmaply_slider <- function(
         categorical_colorbar=categorical_colorbar,
         legend_items=legend_items[legend_idx],
         legend=legend,
-        visible=i==visible_index
+        visible=i==visible_index,
+        colorbar_y=1
       )
 
-    tmp <- tmp %>%
-      stats::na.omit()
 
     annotations <- list()
 
-    if (NROW(tmp) > 0 && annotated) {
-      annotations <- lapply(
-        1:NROW(tmp),
-        function(i) {
-          list(x = tmp$x[i],
-               y=tmp$y[i],
-               text=as.character(tmp$text[i]),
-               showarrow=F,
-               font=list(
-                 family=text_font_family,
-                 color=text_color,
-                 size=text_size
-               )
-          )
-        })
-    }
+    if ( annotated )
+      annotations <- catmaply_annotations(
+        df=tmp,
+        annotated=annotated,
+        text_color=text_color,
+        text_size=text_size,
+        text_font_family=text_font_family
+      )
 
     if (i == visible_index)
       start_annotations <- annotations
@@ -413,3 +407,54 @@ add_catmaply_slider <- function(
   return(fig)
 }
 
+
+#' Get catmaply annotation list
+#'
+#' Function to produce catmaply traces.
+#'
+#' @param fig plotly object
+#' @param df data.frame or tibble holding the data.
+#' @param annotated boolean indicating if annotations should be displayed.
+#' @param text_color font color to be used for text; (default: "#444").
+#' @param text_size font size to be used for text/annotation. Needs to be a number greather than or equal to 1; (default: 12).
+#' @param text_font_color the typeface that will be applied by the web browser for the text/annotation.
+#' The web browser will only be able to apply a font if it is available on the system which it operates.
+#' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+#' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
+#'
+#' @return list
+#'
+#'
+#' @keywords internal
+#' @export
+catmaply_annotations <- function(
+  df,
+  annotated,
+  text_color="#444",
+  text_size=12,
+  text_font_family=c("Open Sans", "verdana", "arial", "sans-serif")
+) {
+  df <- df %>%
+    stats::na.omit()
+
+  annotations <- list()
+
+  if (NROW(df) > 0) {
+    annotations <- lapply(
+      1:NROW(df),
+      function(i) {
+        list(x = df$x[i],
+             y=df$y[i],
+             text=as.character(df$text[i]),
+             showarrow=F,
+             font=list(
+               family=text_font_family,
+               color=text_color,
+               size=text_size
+             )
+        )
+      })
+  }
+
+  return(annotations)
+}

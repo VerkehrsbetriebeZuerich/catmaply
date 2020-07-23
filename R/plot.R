@@ -286,6 +286,8 @@ catmaply <- function(
 
   if (slider)
     x_range <- c()
+  else
+    x_range <- c(0.5, x_range + 0.5)
 
   # preprocessing & logic
 
@@ -356,8 +358,7 @@ catmaply <- function(
 
   fig <- plotly::plot_ly(source=source)
 
-  sliders <- NA
-  if (slider) {
+  if (slider) { # slider - special handling for annotations
     fig <- fig %>%
       add_catmaply_slider(
         df = df,
@@ -378,26 +379,42 @@ catmaply <- function(
         legend=legend
       )
 
-  } else if (legend && legend_interactive) {
-    fig <- fig %>%
-      add_catmaply_traces(
-        df=df,
-        hover_hide=hover_hide,
-        categorical_colorbar=categorical_colorbar,
-        category_items = category_items,
-        legend_items=legend_items,
-        color_palette=color_palette
-      )
-  } else {
-    fig <- fig %>%
-      add_catmaply_single(
-        df=df,
-        hover_hide=hover_hide,
-        categorical_colorbar=categorical_colorbar,
-        legend_items=legend_items,
-        color_palette=color_palette,
-        legend=legend
-      )
+  } else { # no slider
+    if (legend && legend_interactive) {
+      fig <- fig %>%
+        add_catmaply_traces(
+          df=df,
+          hover_hide=hover_hide,
+          categorical_colorbar=categorical_colorbar,
+          category_items = category_items,
+          legend_items=legend_items,
+          color_palette=color_palette
+        )
+    } else {
+      fig <- fig %>%
+        add_catmaply_single(
+          df=df,
+          hover_hide=hover_hide,
+          categorical_colorbar=categorical_colorbar,
+          legend_items=legend_items,
+          color_palette=color_palette,
+          legend=legend
+        )
+    }
+
+    if ( annotated ) { # annotated
+      fig <- fig %>%
+        plotly::layout(
+          annotations = catmaply_annotations(
+            df=df,
+            annotated=annotated,
+            text_color=text_color,
+            text_size=text_size,
+            text_font_family=text_font_family
+          )
+        )
+    }
+
   }
 
   #
