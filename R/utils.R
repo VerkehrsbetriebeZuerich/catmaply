@@ -14,10 +14,10 @@
 #' @export
 discrete_coloring <- function(categories, col_palette, range_min, range_max) {
 
-  if (!is.vector(categories))
+  if (!is.vector(categories) || is.list(categories))
     stop("Parameter 'categories' must be a vector.")
 
-  if (!is.vector(col_palette))
+  if (!is.vector(col_palette) || is.list(col_palette))
     stop("Parameter 'col_palette' must be a vector.")
 
   discrete_colorbar <- F

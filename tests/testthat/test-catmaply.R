@@ -458,6 +458,32 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong text size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      categorical_colorbar = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  # wrong text size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      font_size = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
   # wrong font size
   expect_error(
     catmaply(
@@ -634,9 +660,6 @@ test_that("test error_handling", {
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
-      text=Ausl_Kat,
-      slider=T,
-      legend_interactive = F,
       rangeslider = ""
     )
   )
@@ -650,9 +673,6 @@ test_that("test error_handling", {
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
-      text=Ausl_Kat,
-      slider=T,
-      legend_interactive = F,
       hover_hide = ""
     )
   )
@@ -666,8 +686,6 @@ test_that("test error_handling", {
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
-      text=Ausl_Kat,
-      slider=T,
       legend_interactive = ""
     )
   )
@@ -681,8 +699,6 @@ test_that("test error_handling", {
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
-      text=Ausl_Kat,
-      slider=T,
       legend = ""
     )
   )

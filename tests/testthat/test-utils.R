@@ -60,3 +60,32 @@ test_that("Test discrete_coloring with custom color ranges", {
   expect_error(discrete_coloring(categories, col_palette[1:4]))
 
 })
+
+test_that("Test discrete_coloring input error handling", {
+
+  data("vbz")
+
+  df <- vbz[[3]]$data
+
+  categories <- paste("Category", seq.int(5))
+  col_palette <- viridis::magma(length(categories) * 2)
+
+  expect_error(
+    discrete_coloring(
+      categories = as.list(categories),
+      col_palette =  col_palette,
+      range_max = max(stats::na.omit(df$Besetzung)),
+      range_min = min(stats::na.omit(df$Besetzung))
+    )
+  )
+  expect_error(
+    discrete_coloring(
+      categories = categories,
+      col_palette =  as.list(col_palette),
+      range_max = max(stats::na.omit(df$Besetzung)),
+      range_min = min(stats::na.omit(df$Besetzung))
+    )
+  )
+
+
+})
