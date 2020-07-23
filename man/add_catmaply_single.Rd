@@ -12,7 +12,8 @@ add_catmaply_single(
   categorical_colorbar,
   legend_items,
   legend,
-  visible = 1
+  visible = 1,
+  colorbar_y = NA
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ add_catmaply_single(
 \item{legend_items}{distinct/unique items of ordered legend items}
 
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
+
+\item{colorbar_y}{y position of colorbar; (default: NA).}
 }
 \value{
 plot_ly object

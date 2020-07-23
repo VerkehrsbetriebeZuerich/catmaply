@@ -95,6 +95,7 @@ add_catmaply_traces <- function(
 #' @param color_palette a color palette vector.
 #' @param legend_items distinct/unique items of ordered legend items
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
+#' @param colorbar_y y position of colorbar; (default: NA).
 #'
 #' @return plot_ly object
 #'
