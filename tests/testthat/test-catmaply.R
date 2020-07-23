@@ -160,11 +160,37 @@ test_that("test catmaply", {
   )
   expect_true(is(fig, "plotly"))
 
+  # legend & no hover
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    legend_interactive = F,
+    hover_hide = T
+  )
+  expect_true(is(fig, "plotly"))
+
+  # no legend & no hover
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Ausl_Kat,
+    hover_template = paste(Haltestellenlangname),
+    legend = F,
+    hover_hide = T
+  )
+  expect_true(is(fig, "plotly"))
+
   fig <- catmaply(
     df,
     x='fahrt_seq',
     x_order = 'fahrt_seq',
-    x_init_range = 2,
+    x_range = 2,
     y = "Haltestellenlangname",
     y_order = "halt_seq",
     z = "Ausl_Kat"
@@ -178,6 +204,21 @@ test_that("test catmaply", {
     y_order = halt_seq,
     z = Ausl_Kat,
     color_palette = viridis::inferno(10)
+  )
+  expect_true(is(fig, "plotly"))
+
+  fig <- catmaply(
+    df,
+    x = fahrt_seq,
+    y = Haltestellenlangname,
+    y_order = halt_seq,
+    z = Besetzung,
+    categorical_colorbar=T,
+    categorical_col = Ausl_Kat,
+    color_palette = viridis::inferno,
+    slider=T,
+    rangeslider = F,
+    legend_interactive = F
   )
   expect_true(is(fig, "plotly"))
 })
@@ -217,7 +258,8 @@ test_that("test time axis", {
     y = "Haltestellenlangname",
     y_order = "halt_seq",
     z = "Ausl_Kat",
-    legend_interactive = F
+    legend_interactive = F,
+    text=Ausl_Kat
   )
 
   expect_true(is(fig, "plotly"))
@@ -378,6 +420,7 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong data type for df
   expect_error(
     catmaply(
       as.matrix(df),
@@ -389,9 +432,10 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong parameter for rangeslider
   expect_error(
     catmaply(
-      as.matrix(df),
+      df,
       x='fahrt_seq',
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
@@ -401,10 +445,12 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong text size
   expect_error(
     catmaply(
-      as.matrix(df),
+      df,
       x='fahrt_seq',
+      text_size = 0,
       x_order = 'fahrt_seq',
       y = "Haltestellenlangname",
       y_order = "halt_seq",
@@ -412,30 +458,379 @@ test_that("test error_handling", {
     )
   )
 
+  # wrong text size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      categorical_colorbar = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  # wrong text size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      font_size = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  # wrong font size
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      font_size = 0,
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat"
+    )
+  )
+
+  # range not as number
   expect_error(
     catmaply(
       df,
       x='fahrt_seq',
       x_order = 'fahrt_seq',
-      x_init_range = "0",
+      x_range = "0",
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
     )
   )
 
+  # currentvalue hidden but prefix
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps = list(
+        list(range=c(1, 30)),
+        list(name="nachmittag", range=c(31, 50))
+      )
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps = list(
+        list(name="nachmittag", range=c(30, 1)),
+        list(name="nachmittag", range=c(31, 50))
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5,
+        slider_step_name="BLA"
+      )
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=list(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5,
+        slider_step_name="Ausl_Kat"
+      )
+    )
+  )
+
+  # slider step is not list
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_steps=c(
+        slider_start=1,
+        slider_range=15,
+        slider_shift=5,
+        slider_step_name="Ausl_Kat"
+      )
+    )
+  )
+
+  # slider step is not list
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = F,
+      slider_currentvalue_prefix = 1
+    )
+  )
+
+  # rangeslider not logical
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      rangeslider = ""
+    )
+  )
+
+  # hover_hide not logical
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      hover_hide = ""
+    )
+  )
+
+  # legend_interactive not logical
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      legend_interactive = ""
+    )
+  )
+
+  # legend not logical
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      legend = ""
+    )
+  )
+
+  # legend not logical
+  expect_error(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      y_side="oben"
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x = fahrt_seq,
+      y = Haltestellenlangname,
+      y_order = halt_seq,
+      z = Besetzung,
+      categorical_colorbar="BLA",
+      categorical_col = Ausl_Kat,
+      color_palette = viridis::inferno,
+      slider=T,
+      rangeslider = F,
+      legend_interactive = F
+    )
+  )
+
+  expect_error(
+    catmaply(
+      df,
+      x = fahrt_seq,
+      y = Haltestellenlangname,
+      y_order = halt_seq,
+      z = Besetzung,
+      categorical_colorbar=T,
+      categorical_col = Ausl_Kat,
+      color_palette = viridis::inferno,
+      slider="BLA",
+      rangeslider = F,
+      legend_interactive = F
+    )
+  )
+})
+
+
+
+test_that("test warnigns", {
+  # too small range, warning
   expect_warning(
     catmaply(
       df,
       x='fahrt_seq',
       x_order = 'fahrt_seq',
-      x_init_range = 1,
+      x_range = 1,
       y = "Haltestellenlangname",
       y_order = "halt_seq",
       z = "Ausl_Kat",
     )
   )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider_currentvalue_visible=F,
+      slider_currentvalue_prefix = "Warning"
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = T,
+      rangeslider = F
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = T
+    )
+  )
+
+  # currentvalue hidden but prefix
+  expect_warning(
+    catmaply(
+      df,
+      x='fahrt_seq',
+      x_order = 'fahrt_seq',
+      y = "Haltestellenlangname",
+      y_order = "halt_seq",
+      z = "Ausl_Kat",
+      text=Ausl_Kat,
+      slider=T,
+      legend_interactive = F,
+      rangeslider = T
+    )
+  )
 })
+
 
 # check colorbar
 test_that("test catmaply colorbar", {

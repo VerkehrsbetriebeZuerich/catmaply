@@ -93,7 +93,7 @@ catmaply_time_layout <- function(
 #' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
-#' @param x_init_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
+#' @param x_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
 #' @param y column name holding the axis values for y.
 #' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
@@ -118,7 +118,7 @@ catmaply_layout <- function(
   x_order,
   x_side,
   x_tickangle,
-  x_init_range,
+  x_range,
   y,
   y_order,
   y_side,
@@ -136,7 +136,8 @@ catmaply_layout <- function(
       xaxis = list(
         title="",
         tickmode='linear',
-        range = c(0, x_init_range),
+        fixedrange=F,
+        range=x_range,
         tickangle = x_tickangle,
         categoryorder="array",
         categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
@@ -157,4 +158,6 @@ catmaply_layout <- function(
         color = font_color
       )
     )
+
+  return(fig)
 }

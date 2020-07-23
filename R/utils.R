@@ -14,17 +14,17 @@
 #' @export
 discrete_coloring <- function(categories, col_palette, range_min, range_max) {
 
-  if (!is.vector(categories))
+  if (!is.vector(categories) || is.list(categories))
     stop("Parameter 'categories' must be a vector.")
 
-  if (!is.vector(col_palette))
+  if (!is.vector(col_palette) || is.list(col_palette))
     stop("Parameter 'col_palette' must be a vector.")
 
   discrete_colorbar <- F
   if ((length(categories) * 2) == length(col_palette)) {
     discrete_colorbar <- T
   } else if (length(categories) != length(col_palette)) {
-    stop("Parameter 'col_palette' must have the same of twice the length of category parameter.")
+    stop("Parameter 'col_palette' must have the same or twice the length of category parameter.")
   }
 
   bvals <- c(0, seq.int(length.out = length(categories)))
