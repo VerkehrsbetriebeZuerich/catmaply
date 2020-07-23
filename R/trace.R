@@ -119,7 +119,6 @@ add_catmaply_single <- function(
     range_min = min(stats::na.omit(df$z)),
     range_max = max(stats::na.omit(df$z))
   )
-  #browser()
 
   if (legend) { # legend
 

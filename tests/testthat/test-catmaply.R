@@ -169,7 +169,7 @@ test_that("test catmaply", {
     z = Ausl_Kat,
     hover_template = paste(Haltestellenlangname),
     legend_interactive = F,
-    hover_hide = F
+    hover_hide = T
   )
   expect_true(is(fig, "plotly"))
 
@@ -182,7 +182,7 @@ test_that("test catmaply", {
     z = Ausl_Kat,
     hover_template = paste(Haltestellenlangname),
     legend = F,
-    hover_hide = F
+    hover_hide = T
   )
   expect_true(is(fig, "plotly"))
 
