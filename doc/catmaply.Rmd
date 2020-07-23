@@ -1,0 +1,393 @@
+---
+title: "catmaply - categorical heatmaps with plotly"
+date: "`r Sys.Date()`"
+author: "Yves Mauron"
+output: 
+  html_document:
+    fig_width: 10
+    fig_height: 9
+    self_contained: yes
+    toc: true
+---
+<!--
+vignette: >
+  %\VignetteIndexEntry{catmaply - categorical heatmaps with plotly}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+
+output:
+ html_document:
+  fig_width: 10
+  fig_height: 9
+  self_contained: yes
+  toc: true
+---
+
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{Introduction to heatmaply}
+-->
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(plotly)
+library(lubridate)
+```
+
+
+## Introduction
+
+A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that can be grouped into categories. 
+
+This package is originally beeing developed for Verkehrsbetriebe Zürich (VBZ), the public transport operator in the Swiss city of Zurich, to illustrate the utilization of different routes and vehicles during different times of the day. Therefore, it groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and illustrates it for certain stops over time in a heatmap.
+
+This package can easily be integrated into a shiny dashboard which supports additional interactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a seperate github repository named [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
+
+This work is based on the plotly.js engine. 
+
+### Please submit feature requests
+
+This package is still under active development. If you have features you would like to have added, please submit your suggestions (and bug-reports) at: <https://github.com/yvesmauron/catmaply/issues>
+
+### News
+
+You can see the most recent changes of the package in [NEWS.md](https://github.com/yvesmauron/catmaply/blob/master/NEWS.md).
+
+## Installation
+
+To install the latest ("cutting-edge") GitHub version run:
+
+```{r}
+# make sure that you have the corrent RTools installed.
+# as you might need to build some packages from source
+# if you don't have RTools installed, you can install it with:
+# install.packages('installr'); install.Rtools() # not tested on windows
+# or download it from here:
+# https://cran.r-project.org/bin/windows/Rtools/
+# in any case, make sure that you select the correct version, 
+# otherwise the installation will fail.
+# then you'll need devtools
+# if (!require('devtools'))
+  # install.packages('devtools')
+# finally install the package
+# devtools::install_github('yvesmauron/catmaply')
+```
+
+To get the latest version on CRAN, perform:
+
+```{r}
+#install.packages("catmaply")
+```
+
+Thereafter, you can start using the package as usual:
+
+```{r}
+library(catmaply)
+```
+
+## Usage
+
+Get demo data provided by package.
+
+```{r}
+data("vbz")
+df <- vbz[[3]]$data
+
+knitr::kable(head(df, 10))
+```
+
+The main columns of the `vbz` data.frame can be described as follows:
+
+- `fahrt_seq` shows the order of the drives
+- `Haltenstellenlangname` shows the names of the stops, that need to be ordered by `halt_seq`
+- `Ausl_Kat` shows the category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
+- `Besetzung` is e.g. the number of people per m^2.
+
+So let' visualize it.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+    df,
+    x='fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Ausl_Kat"
+  )
+```
+
+How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+
+To show a colorbar per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
+
+- `Besetzung` in the fields
+- `Ausl_Kat` is the categorization over these fields.
+
+To change the color palette you can either submit a color palette vector or a function that is able to return one.
+
+> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma
+  )
+```
+
+Now, lets mess around with axis formatting; lets change
+
+- font_color to the "purplish" color used in the logo (#6D65AB)
+- change the size to 10
+- change the tick_angle for the x axis to 15
+
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    x_tickangle = 15,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma,
+    font_color = '#6D65AB',
+    font_size = 10
+  )
+```
+
+How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+
+To show a colorbar per category, we have to but a continuous number in the fields and categorize them with a categorical column, so in our example:
+
+- Besetzung are in the fileds
+- Ausl_Kat is the categorization over these fields.
+
+To change the color palette you can either use submit a color palette vector or a function that is able to return one.
+
+> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma
+  )
+```
+
+Now, lets mess around with axis formatting; lets change
+
+- font_color to the "purplish" color in used in the logo (#6D65AB)
+- change the size to 10
+- change the tick_angle for the x axis to 15
+
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+    df,
+    x='fahrt_seq',
+    x_order = 'fahrt_seq',
+    x_tickangle = 15,
+    y = "Haltestellenlangname",
+    y_order = "halt_seq",
+    z = "Besetzung",
+    categorical_colorbar = T,
+    categorical_col = 'Ausl_Kat',
+    color_palette = viridis::magma,
+    font_color = '#6D65AB',
+    font_size = 10
+  )
+```
+
+
+What about a custom hover label; lets define a custom hover template by defining the parameter `hover_template`.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  )
+)
+```
+
+Define custom names for the legend by setting the `legend_col` parameter.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+df <- df %>% 
+  mutate(
+    legend_col = paste("Kategorie", Ausl_Kat)
+  )
+
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend_col = legend_col
+)
+```
+
+
+You can also remove the interactivity (hiding traces by clicking on the legend); this could make sense if you want to have a better performance with lots of data or many traces.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend_interactive = F
+)
+```
+
+What about hiding the legend all together?
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+catmaply(
+  df,
+  x=fahrt_seq,
+  x_order = fahrt_seq,
+  x_tickangle = 15,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  legend = F
+)
+```
+
+
+Hmm, didn't we say that we want to show the development over time? Wouldn't it make sense then, if we could use time in the x axis?
+
+Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check it out by calculating the departure date of each drive.
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+df <- df %>%
+  dplyr::mutate(
+    FZ_AB = lubridate::ymd_hms(paste("2020-06-03", !!rlang::sym('FZ_AB')))
+  ) %>%
+  dplyr::group_by(
+    !!rlang::sym('fahrt_seq')
+  ) %>%
+  dplyr::mutate(
+    departure = min(!!rlang::sym('FZ_AB'))
+  ) %>%
+  dplyr::ungroup()
+
+catmaply(
+  df,
+  x=departure,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  )
+)
+```
+
+Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you summarize the statistics of utilization sampled througout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, You can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [ploty](https://plotly.com/r/tick-formatting/):
+
+```{r out.width = '100%', fig.height=5, warning = FALSE}
+
+catmaply(
+  df,
+  x=departure,
+  y = Haltestellenlangname,
+  y_order = halt_seq,
+  z = Besetzung,
+  categorical_colorbar = T,
+  categorical_col = Ausl_Kat,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', fahrt_seq,
+    '<br><b>Haltestelle</b>:', Haltestellenlangname,
+    '<br><b>Auslastung</b>:', Ausl_Kat,
+    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<extra></extra>'
+  ),
+  tickformatstops=list(
+    list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L"),
+    list(dtickrange = list(1000, 60000), value = "%H:%M:%S"),
+    list(dtickrange = list(60000, 3600000), value = "%H:%M"),
+    list(dtickrange = list(3600000, 86400000), value = "%H:%M"),
+    list(dtickrange = list(86400000, 604800000), value = "%H:%M"),
+    list(dtickrange = list(604800000, "M1"), value = "%H:%M"),
+    list(dtickrange = list("M1", "M12"), value = "%H:%M"),
+    list(dtickrange = list("M12", NULL), value = "%H:%M")
+  )
+)
+```
+
