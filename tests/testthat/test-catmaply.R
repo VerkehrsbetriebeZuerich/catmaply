@@ -217,7 +217,8 @@ test_that("test time axis", {
     y = "Haltestellenlangname",
     y_order = "halt_seq",
     z = "Ausl_Kat",
-    legend_interactive = F
+    legend_interactive = F,
+    text=Ausl_Kat
   )
 
   expect_true(is(fig, "plotly"))

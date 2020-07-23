@@ -2,12 +2,13 @@
 % Please edit documentation in R/catmaply.R
 \docType{package}
 \name{catmaply-package}
-\alias{catmaply}
 \alias{catmaply-package}
+\alias{_PACKAGE}
 \title{catmaply: Heatmap for categorical data using plotly}
 \description{
-To learn more about catmaply, start with the vignettes:
-`browseVignettes(package = "catmaply")`
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
+This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
 }
 \seealso{
 Useful links:
