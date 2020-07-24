@@ -15,7 +15,6 @@
 #'
 #'
 #' @keywords internal
-#' @export
 add_catmaply_traces <- function(
   fig,
   df,
@@ -100,7 +99,6 @@ add_catmaply_traces <- function(
 #' @return plot_ly object
 #'
 #' @keywords internal
-#' @export
 add_catmaply_single <- function(
   fig,
   df,
@@ -262,7 +260,6 @@ add_catmaply_single <- function(
 #'
 #'
 #' @keywords internal
-#' @export
 add_catmaply_slider <- function(
   fig,
   df,
@@ -426,7 +423,6 @@ add_catmaply_slider <- function(
 #'
 #'
 #' @keywords internal
-#' @export
 catmaply_annotations <- function(
   df,
   annotated,

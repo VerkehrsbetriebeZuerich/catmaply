@@ -10,9 +10,10 @@
 #' @importFrom utils tail
 #'
 #' @keywords internal
-#'
-#' @export
 discrete_coloring <- function(categories, col_palette, range_min, range_max) {
+
+  if (is.factor(categories))
+    categories <- as.character(categories)
 
   if (!is.vector(categories) || is.list(categories))
     stop("Parameter 'categories' must be a vector.")

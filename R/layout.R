@@ -36,7 +36,6 @@
 #' @return plot_ly object
 #'
 #' @keywords internal
-#' @export
 catmaply_time_layout <- function(
   fig,
   df,
@@ -110,7 +109,6 @@ catmaply_time_layout <- function(
 #' @return plot_ly object
 #'
 #' @keywords internal
-#' @export
 catmaply_layout <- function(
   fig,
   df,

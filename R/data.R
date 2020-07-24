@@ -8,7 +8,7 @@
 #'   \item{stop_seq}{Sequence order of stops.}
 #'   \item{stop_name}{Name of the stop.}
 #'   \item{trip_id}{Id of trip}
-#'   \item{circulation_name}{Name of circulation
+#'   \item{circulation_name}{Name of circulation.}
 #'   \item{line_name}{Name of line.}
 #'   \item{vehicle}{Type of vehicle.}
 #'   \item{occupancy}{Occupancy.}
