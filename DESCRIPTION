@@ -5,7 +5,7 @@ Authors@R: c(
       person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut", "cre")),
       person("Aron", "Weller", role='aut')
     )
-Maintainer: Yves Mauron <yves.mauron@trivadis.com>
+Maintainer: Yves Mauron <ypmauron@gmail.com>
 Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps using plotly.
 License: MIT + file LICENSE
 Encoding: UTF-8
