@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-This package provides untility und plotting function to efficiently plot categorical data on heatmaps.
+This package provides untility und plotting function to efficiently plot categorical data on heatmaps using plotly.
 }
 \seealso{
 Useful links:
@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Yves Mauron \email{yves.mauron@trivadis.com} [copyright holder]
+\strong{Maintainer}: Yves Mauron \email{ypmauron@gmail.com}
 
 Authors:
 \itemize{
