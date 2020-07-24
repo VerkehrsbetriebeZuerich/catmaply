@@ -1,4 +1,4 @@
-#' Generates the parameters necessary for dicrete coloring and colorbar
+#' Generates the parameters necessary for discrete coloring and colorbar
 #'
 #' @param categories categories, for coloring should done
 #' @param col_palette the color palette

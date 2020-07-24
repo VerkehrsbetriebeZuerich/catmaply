@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{discrete_coloring}
 \alias{discrete_coloring}
-\title{Generates the parameters necessary for dicrete coloring and colorbar}
+\title{Generates the parameters necessary for discrete coloring and colorbar}
 \usage{
 discrete_coloring(categories, col_palette, range_min, range_max)
 }
@@ -17,6 +17,6 @@ discrete_coloring(categories, col_palette, range_min, range_max)
 list(colorscale, tickvals, ticktext)
 }
 \description{
-Generates the parameters necessary for dicrete coloring and colorbar
+Generates the parameters necessary for discrete coloring and colorbar
 }
 \keyword{internal}

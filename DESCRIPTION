@@ -1,12 +1,12 @@
 Package: catmaply
-Title: Heatmap for categorical data using plotly
+Title: Heatmap for Categorical Data using Plotly
 Version: 0.9.0
 Authors@R: c(
       person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut", "cre")),
       person("Aron", "Weller", role='aut')
     )
 Maintainer: Yves Mauron <ypmauron@gmail.com>
-Description: This package provides untility und plotting function to efficiently plot categorical data on heatmaps using plotly.
+Description: This package provides utility and plotting functions to efficiently plot categorical data on a heatmap using plotly.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

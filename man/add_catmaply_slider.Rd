@@ -33,7 +33,7 @@ add_catmaply_slider(
 
 \item{text_color}{font color to be used for text; (default: "#444").}
 
-\item{text_size}{font size to be used for text/annotation. Needs to be a number greather than or equal to 1; (default: 12).}
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greaterthan or equal to 1; (default: 12).}
 
 \item{slider_steps}{list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
 \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
@@ -74,7 +74,7 @@ list( \cr
 
 \item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
-\item{category_items}{disctinct/unique items of ordered category items}
+\item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
 

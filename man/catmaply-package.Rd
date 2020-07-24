@@ -4,11 +4,11 @@
 \name{catmaply-package}
 \alias{catmaply-package}
 \alias{_PACKAGE}
-\title{catmaply: Heatmap for categorical data using plotly}
+\title{catmaply: Heatmap for Categorical Data using Plotly}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-This package provides untility und plotting function to efficiently plot categorical data on heatmaps using plotly.
+This package provides utility and plotting functions to efficiently plot categorical data on a heatmap using plotly.
 }
 \seealso{
 Useful links:

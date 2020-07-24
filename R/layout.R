@@ -28,7 +28,7 @@
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
 #' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
-#' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
+#' @param font_size font size to be used for plot. needs to be a number greaterthan or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).
@@ -101,7 +101,7 @@ catmaply_time_layout <- function(
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
 #' (default: c("Open Sans", "verdana", "arial", "sans-serif")).
-#' @param font_size font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).
+#' @param font_size font size to be used for plot. needs to be a number greaterthan or equal to 1; (default: 12).
 #' @param font_color font color to be used for plot; (default: "#444")
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param rangeslider whether or not the rangeslider should be displayed or not; (default: TRUE).

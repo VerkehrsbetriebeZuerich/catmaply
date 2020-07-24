@@ -25,7 +25,7 @@ add_catmaply_traces(
 
 \item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
-\item{category_items}{disctinct/unique items of ordered category items}
+\item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
 
