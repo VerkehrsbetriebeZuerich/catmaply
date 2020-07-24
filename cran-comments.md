@@ -14,7 +14,6 @@ testing is conducted on the following R versions (OS)
   - R 3.5 (ubuntu-16.04)
   - R 3.4 (ubuntu-16.04)
 
-
 ## R CMD check results
 There were no ERRORs or WARNINGs.
 
