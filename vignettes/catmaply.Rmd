@@ -1,5 +1,5 @@
 ---
-title: "catmaply - categorical heatmaps with plotly"
+title: "catmaply"
 date: "`r Sys.Date()`"
 author: "Yves Mauron"
 output: 
@@ -89,293 +89,322 @@ Thereafter, you can start using the package as usual:
 
 ```{r}
 library(catmaply)
+library(dplyr)
 ```
 
 ## Usage
 
-Get demo data provided by package.
+Catmaply provides real-live data of VBZ to easily start experimenting with the package. For demonstration purposes and simplicity, we will use it in this notebook. As usual, you can access the data as follows.
 
-```{r}
+```{r out.width='100%'}
 data("vbz")
-df <- vbz[[3]]$data
+df <- na.omit(vbz[[1]])
 
-knitr::kable(head(df, 10))
+str(df)
 ```
 
 The main columns of the `vbz` data.frame can be described as follows:
 
-- `fahrt_seq` shows the order of the drives
-- `Haltenstellenlangname` shows the names of the stops, that need to be ordered by `halt_seq`
-- `Ausl_Kat` shows the category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
-- `Besetzung` is e.g. the number of people per m^2.
+- `trip_seq` shows the order of the trips
+- `stop_name` shows the names of the stops, that need to be ordered by `stop_seq`
+- `occ_category` shows the category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
+- `occupancy` is e.g. the number of people per m^2.
 
-So let' visualize it.
+### Default behaviour
 
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+Catmaply expects at least arguments for both axis (`x`, `y`) and the fields (`z`). To visualize the occupancy for all stops and trips, we can put the `stop_seq` on `y`, `trip_seq` on `x` and `occupancy` on `z` as follows:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x='fahrt_seq',
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    z = "Ausl_Kat"
+    x = "trip_seq",
+    y = "stop_seq",
+    z = "occ_category"
+  ) 
+```
+
+By default, catmaply produces an interactive heatmap with a rangeslider, legend items that show and/or hide data for a specific occupancy category by clicking on it and a hover label, that shows the values for `x`, `y` and `z` on hover.
+
+Also, please note that you can use both, column names with and without quotes as column references for e.g. x, y, z. E.g. if you we want to put the stop_names on the `y` axis, we can simply put the `stop_name` on `y` and order it using `stop_seq` (the x axis has of course the same functionality); as shown in the following:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+    df,
+    x = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occ_category
+  ) 
+```
+
+What about more expressive labels for the legend? You can use any column for the legend entries, as long as it matches the category in the fields. So, if you would like to show `occ_cat_name` ("low", "medium", "high") in the legend instead of `occ_category` (1,2,3,..), you can set the parameter `legend_col` and overwrite the legend labels as follows:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+    df,
+    x = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occ_category,
+    legend_col = occ_cat_name
+  ) 
+```
+
+Not happy with the color palette? Then let's change it :-). To change the color palette you can either submit a color palette vector or a function that is able to return one.
+
+> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+    df,
+    x = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occ_category,
+    color_palette = viridis::magma,
+    legend_col = occ_cat_name
   )
 ```
 
-How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+You don't like all this interactivity of the legend or you need more performance for large plots? Let's turn the interactive legend off by setting `legend_interactive = F`.
 
-To show a colorbar per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+    df,
+    x = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occ_category,
+    color_palette = viridis::magma,
+    legend_interactive = F,
+    legend_col = occ_cat_name
+  )
+```
 
-- `Besetzung` in the fields
-- `Ausl_Kat` is the categorization over these fields.
+### Color ranges per category
+
+How about illustrating differences in one category? You can illustrate values that are particularly low (high) within one category by specifyingt one colorbar per category. 
+
+To show one colorbar per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
+
+- `occupancy` in the fields
+- `occ_category` is the categorization over these fields.
 
 To change the color palette you can either submit a color palette vector or a function that is able to return one.
 
 > Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
 
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x='fahrt_seq',
-    x_order = 'fahrt_seq',
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    z = "Besetzung",
+    x = trip_seq,
+    x_order = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occupancy,
     categorical_colorbar = T,
-    categorical_col = 'Ausl_Kat',
-    color_palette = viridis::magma
-  )
-```
-
-Now, lets mess around with axis formatting; lets change
-
-- font_color to the "purplish" color used in the logo (#6D65AB)
-- change the size to 10
-- change the tick_angle for the x axis to 15
-
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
-catmaply(
-    df,
-    x='fahrt_seq',
-    x_order = 'fahrt_seq',
-    x_tickangle = 15,
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    z = "Besetzung",
-    categorical_colorbar = T,
-    categorical_col = 'Ausl_Kat',
+    categorical_col = occ_category,
     color_palette = viridis::magma,
-    font_color = '#6D65AB',
-    font_size = 10
+    legend_col = occ_cat_name
   )
 ```
 
-How about differences in one category, e.g. one colorbar per category. Also, let's take another color palette (magma).
+This works also for non-interactive legends.
 
-To show a colorbar per category, we have to but a continuous number in the fields and categorize them with a categorical column, so in our example:
-
-- Besetzung are in the fileds
-- Ausl_Kat is the categorization over these fields.
-
-To change the color palette you can either use submit a color palette vector or a function that is able to return one.
-
-> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x='fahrt_seq',
-    x_order = 'fahrt_seq',
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    z = "Besetzung",
+    x = trip_seq,
+    x_order = trip_seq,
+    y = stop_name,
+    y_order = stop_seq,
+    z = occupancy,
     categorical_colorbar = T,
-    categorical_col = 'Ausl_Kat',
-    color_palette = viridis::magma
-  )
-```
-
-Now, lets mess around with axis formatting; lets change
-
-- font_color to the "purplish" color in used in the logo (#6D65AB)
-- change the size to 10
-- change the tick_angle for the x axis to 15
-
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
-catmaply(
-    df,
-    x='fahrt_seq',
-    x_order = 'fahrt_seq',
-    x_tickangle = 15,
-    y = "Haltestellenlangname",
-    y_order = "halt_seq",
-    z = "Besetzung",
-    categorical_colorbar = T,
-    categorical_col = 'Ausl_Kat',
+    categorical_col = occ_category,
     color_palette = viridis::magma,
+    legend_interactive = F,
+    legend_col = occ_cat_name
+  )
+```
+
+### Axis formatting
+
+Now, lets mess around with axis formatting; let's change
+
+- `font_color` to the "purplish" color used in the logo (#6D65AB)
+- `font_size` to 10 pt.
+- `font_family` to "verdana"
+- `x_tickangle` to 15 and, just for fun, 
+- `y_tickangle` to -10
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+    df,
+    x='trip_seq',
+    x_order = 'trip_seq',
+    x_tickangle = 15,
+    y = "stop_name",
+    y_order = "stop_seq",
+    y_tickangle = -10,
+    z = "occupancy",
+    categorical_colorbar = T,
+    categorical_col = 'occ_category',
+    color_palette = viridis::magma,
+    font_size = 10,
     font_color = '#6D65AB',
-    font_size = 10
+    font_family = "verdana",
+    legend_col = occ_cat_name
   )
 ```
 
+### Hover
 
-What about a custom hover label; lets define a custom hover template by defining the parameter `hover_template`.
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+What about a custom hover label? Catmpaly allows to define custom hover templates with the parameter `hover_template`; which can take `html` tags to make it more appealing. Here is an example that creates bold column names of the respective values; also it rounds the occupancy to 2 decimal points.
+```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=fahrt_seq,
-  x_order = fahrt_seq,
+  x=trip_seq,
+  x_order = trip_seq,
   x_tickangle = 15,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Besetzung,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
   categorical_colorbar = T,
-  categorical_col = Ausl_Kat,
+  categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
-  )
+  ),
+  legend_col = occ_cat_name
 )
 ```
 
-Define custom names for the legend by setting the `legend_col` parameter.
+> Note: usually it is a good idea to add the `<extra></extra>` tag at the end to hide trace information. 
 
-```{r out.width = '100%', fig.height=5, warning = FALSE}
-df <- df %>% 
-  mutate(
-    legend_col = paste("Kategorie", Ausl_Kat)
-  )
+Legend and fancy hover template is too much info; you want simplicity and, thus, hide the legend altogether? Go ahead.. :-)
 
+```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=fahrt_seq,
-  x_order = fahrt_seq,
+  x=trip_seq,
+  x_order = trip_seq,
   x_tickangle = 15,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Besetzung,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
   categorical_colorbar = T,
-  categorical_col = Ausl_Kat,
+  categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  legend_col = legend_col
-)
-```
-
-
-You can also remove the interactivity (hiding traces by clicking on the legend); this could make sense if you want to have a better performance with lots of data or many traces.
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
-catmaply(
-  df,
-  x=fahrt_seq,
-  x_order = fahrt_seq,
-  x_tickangle = 15,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Ausl_Kat,
-  color_palette = viridis::inferno,
-  hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
-    '<extra></extra>'
-  ),
-  legend_interactive = F
-)
-```
-
-What about hiding the legend all together?
-
-```{r out.width = '100%', fig.height=5, warning = FALSE}
-catmaply(
-  df,
-  x=fahrt_seq,
-  x_order = fahrt_seq,
-  x_tickangle = 15,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Ausl_Kat,
-  color_palette = viridis::inferno,
-  hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
-    '<extra></extra>'
-  ),
+  legend_col = occ_cat_name,
   legend = F
 )
 ```
 
+Minimalist or visual person that does not like hover nor legend...? 
 
-Hmm, didn't we say that we want to show the development over time? Wouldn't it make sense then, if we could use time in the x axis?
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  x_tickangle = 15,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_hide = T,
+  legend_col = occ_cat_name,
+  legend = F
+)
+```
 
-Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check it out by calculating the departure date of each drive.
+Ok, no hover but legend it is... (for completeness).
 
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  x_tickangle = 15,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_hide = T,
+  legend_col = occ_cat_name,
+  legend = T
+)
+```
+
+### Time Axis
+
+Hmm, didn't we say that we want to show the development over time? Wouldn't it make sense then, if we could illustrate time dynamically on the x axis?
+
+Lets check out how a dynamic x axis can be created if you put a column of type `PSIXct` or `POSIXt` on the x axis. Lets check it out by calculating the departure datetime of each drive.
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
 df <- df %>%
-  dplyr::mutate(
-    FZ_AB = lubridate::ymd_hms(paste("2020-06-03", !!rlang::sym('FZ_AB')))
-  ) %>%
+  na.omit() %>%
   dplyr::group_by(
-    !!rlang::sym('fahrt_seq')
+    trip_seq
   ) %>%
   dplyr::mutate(
-    departure = min(!!rlang::sym('FZ_AB'))
+    departure_date_time = min(na.omit(lubridate::ymd_hms(paste("2020-08-01", departure_time))))
   ) %>%
   dplyr::ungroup()
 
 catmaply(
   df,
-  x=departure,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Besetzung,
+  x=departure_date_time,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
   categorical_colorbar = T,
-  categorical_col = Ausl_Kat,
+  categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   )
 )
 ```
 
-Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you summarize the statistics of utilization sampled througout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, You can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [ploty](https://plotly.com/r/tick-formatting/):
+Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you sample the utilization throughout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, you can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [ploty](https://plotly.com/r/tick-formatting/ ):
 
-```{r out.width = '100%', fig.height=5, warning = FALSE}
+```{r fig.height=8, out.width='100%', warning = FALSE}
 
 catmaply(
   df,
-  x=departure,
-  y = Haltestellenlangname,
-  y_order = halt_seq,
-  z = Besetzung,
+  x=departure_date_time,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
   categorical_colorbar = T,
-  categorical_col = Ausl_Kat,
+  categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', fahrt_seq,
-    '<br><b>Haltestelle</b>:', Haltestellenlangname,
-    '<br><b>Auslastung</b>:', Ausl_Kat,
-    '<br><b>Besetzung</b>:', round(Besetzung, 2),
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
   tickformatstops=list(
@@ -391,3 +420,217 @@ catmaply(
 )
 ```
 
+### Slider
+
+Besides the rangeslider, it is also possible to use a simple slider/scrollbar. This might be especially favourable for annotationed headmaps shown in the next section 
+
+You can switch to a slider as easy as follows:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T # activate slider
+)
+```
+
+To add a prefix for the current value (the one above the slider); set the `slider_currentvalue_prefix` as follows:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T, # activate slider,
+  slider_currentvalue_prefix = "Trip: "
+)
+```
+
+Also, you can show/hide various elements of the slider, more specifically the steps, ticks and current value. This gets you almost a scrollbar feeling:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T, # activate slider,
+  slider_currentvalue_visible = F,
+  slider_step_visible = F,
+  slider_tick_visible = F
+)
+```
+
+The slider steps are created automatically for you, however, you can also define them yourself. Catmaply provides two modes to alter the way the slider steps are created: auto, and custom list.
+
+Mode auto alters the way the steps are automatically created for you. You need to provide parameter `slider_steps` a list with the following parameters:
+
+- `slider_start` (numeric):  the starting-point of the slider on the `x` axis. 
+- `slider_range` (numeric):  the size of the window of the slider.
+- `slider_shift` (numeric):  how much units the window should be moved to the right for each step.
+- `slider_step_name` (column): the name of the step; which must match the occurence of `x`.
+
+For example, if want to create a slider that starts at trip 5 with a window of size 15 trips and a shift of size 10 trips; you can do this as follows: 
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T, # activate slider,
+  slider_currentvalue_visible = F,
+  slider_steps=list(
+    slider_start=1,
+    slider_range=15,
+    slider_shift=10,
+    slider_step_name="x" # same name as x axis (must be character)
+  )
+)
+```
+
+Besides mode auto, you can also get full control of the slider steps by providing a list with the following elements:
+
+- `name` name of the step
+- `range` range to be covered by the step
+
+A simple example is shown below:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T, # activate slider,
+  slider_currentvalue_visible = F,
+  slider_steps = list(
+    list(name="Very important step one", range=c(12, 37)), 
+    list(name="Very important step two", range=c(87, 111))
+  )
+)
+```
+
+### Annotations
+
+Sometimes it makes sense to add annotations to a heatmap. With catmaply, you can add and format annotations relatively easily with the following parameters:
+
+- `text` column name holding the values of the text to be displayed.
+- `text_color` the color of the text (similar to font_color).
+- `text_size` the size to be used for the text (similar to font_size).
+- `text_font_family` the font family to be used for the text (similar to font_family).
+
+Adding annotations to the previous slider example can be achieved as follows:
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  text = occ_category,
+  text_color="#000",
+  text_size=12,
+  text_font_family="Open Sans",
+  categorical_colorbar = T,
+  categorical_col = occ_category,
+  color_palette = viridis::plasma,
+  hover_template = paste(
+    '<b>Fahrt Nr.</b>:', trip_seq,
+    '<br><b>Haltestelle</b>:', stop_name,
+    '<br><b>Auslastung</b>:', occ_category,
+    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = F, # to prevent warning
+  slider = T, # activate slider,
+  slider_currentvalue_visible = F,
+  slider_steps=list(
+    slider_start=1,
+    slider_range=15,
+    slider_shift=10,
+    slider_step_name="x" # same name as x axis (must be character)
+  )
+)
+```
+
+> Note: annotations can also be used with rangeslider or no slider at all. However, lots of annotations might have a negative influence on the performance. Only text values that are not NA are used for annotations.
+
+## Credits
+This package only exists thanks to the amazing work done by many people in the open source community. Beyond the many people working on the pipeline of R, thanks should go to the plotly team, and especially to Carson Sievert and others working on the R package of plotly. Also, a special thanks to VBZ for providing advice on the functionality of the package as well as providing a real-life dataset; also, I would like to thank VBZ for investing time to test the package and for using it in your awesome shiny VBZ dashboard.
+
+## Session info
+```{r}
+sessionInfo()
+```
