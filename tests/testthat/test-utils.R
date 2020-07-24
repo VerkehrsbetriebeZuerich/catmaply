@@ -27,6 +27,12 @@ test_that("Test discrete_coloring", {
 
   expect_error(discrete_coloring(categories, col_palette[1:4]))
 
+  # factor
+  categories <- as.factor(paste("Category", seq.int(5)))
+  col_palette <- viridis::magma(length(categories))
+
+  dc <- discrete_coloring(categories = categories, col_palette =  col_palette)
+  expect_true(is(dc, "list"))
 })
 
 
