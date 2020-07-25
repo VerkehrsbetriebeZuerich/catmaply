@@ -33,7 +33,7 @@ add_catmaply_slider(
 
 \item{text_color}{font color to be used for text; (default: "#444").}
 
-\item{text_size}{font size to be used for text/annotation. Needs to be a number greaterthan or equal to 1; (default: 12).}
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).}
 
 \item{slider_steps}{list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
 \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.

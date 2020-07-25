@@ -19,7 +19,7 @@ catmaply_annotations(
 
 \item{text_color}{font color to be used for text; (default: "#444").}
 
-\item{text_size}{font size to be used for text/annotation. Needs to be a number greaterthan or equal to 1; (default: 12).}
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).}
 
 \item{fig}{plotly object}
 

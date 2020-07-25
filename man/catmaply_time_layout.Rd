@@ -60,7 +60,7 @@ The web browser will only be able to apply a font if it is available on the syst
 Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
 (default: c("Open Sans", "verdana", "arial", "sans-serif")).}
 
-\item{font_size}{font size to be used for plot. needs to be a number greaterthan or equal to 1; (default: 12).}
+\item{font_size}{font size to be used for plot. needs to be a number greater than or equal to 1; (default: 12).}
 
 \item{font_color}{font color to be used for plot; (default: "#444")}
 

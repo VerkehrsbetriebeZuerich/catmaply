@@ -76,7 +76,7 @@ catmaply(
 
 \item{text_color}{font color to be used for text; (default: "#444").}
 
-\item{text_size}{font size to be used for text/annotation. Needs to be a number greather than or equal to 1; (default: 12).}
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).}
 
 \item{text_font_family}{the typeface that will be applied by the web browser for the text/annotation.
 The web browser will only be able to apply a font if it is available on the system which it operates.
@@ -98,7 +98,7 @@ The web browser will only be able to apply a font if it is available on the syst
 Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
 (default: c("Open Sans", "verdana", "arial", "sans-serif")).}
 
-\item{font_size}{font size to be used for plot. needs to be a number greather than or equal to 1; (default: 12).}
+\item{font_size}{font size to be used for plot. needs to be a number greater than or equal to 1; (default: 12).}
 
 \item{font_color}{font color to be used for plot; (default: "#444").}
 

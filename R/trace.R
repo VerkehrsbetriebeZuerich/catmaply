@@ -216,7 +216,7 @@ add_catmaply_single <- function(
 #' @param df data.frame or tibble holding the data.
 #' @param annotated boolean indicating if annotations should be displayed.
 #' @param text_color font color to be used for text; (default: "#444").
-#' @param text_size font size to be used for text/annotation. Needs to be a number greaterthan or equal to 1; (default: 12).
+#' @param text_size font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).
 #' @param text_font_color the typeface that will be applied by the web browser for the text/annotation.
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
@@ -413,7 +413,7 @@ add_catmaply_slider <- function(
 #' @param df data.frame or tibble holding the data.
 #' @param annotated boolean indicating if annotations should be displayed.
 #' @param text_color font color to be used for text; (default: "#444").
-#' @param text_size font size to be used for text/annotation. Needs to be a number greaterthan or equal to 1; (default: 12).
+#' @param text_size font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).
 #' @param text_font_color the typeface that will be applied by the web browser for the text/annotation.
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;

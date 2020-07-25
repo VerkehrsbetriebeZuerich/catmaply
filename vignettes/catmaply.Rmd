@@ -380,7 +380,7 @@ catmaply(
 )
 ```
 
-Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you sample the utilization throughout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, you can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [ploty](https://plotly.com/r/tick-formatting/ ):
+Currently, formatting of the time axis is optimised to analyse daily data; e.g. if you sample the utilization throughout the year and then summarise it to get the utilization of a typical day. Thus, the formatting of the max zoom level is still hours and not years. However, you can change the individual formatting of the respective zoom level by setting the `tickformatstops` parameter. So, if you want to e.g. remove the h, m, s and ms that indicate the unit of time above, you could achieve this as follows (more infos can be found in the tick formatting example of [plotly](https://plotly.com/r/tick-formatting/ ):
 
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 
