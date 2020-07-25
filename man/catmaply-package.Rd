@@ -27,9 +27,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Yves Mauron \email{ypmauron@gmail.com}
 
-Authors:
+Other contributors:
 \itemize{
-  \item Aron Weller
+  \item Aron Weller [contributor]
+  \item Trivadis AG [copyright holder]
 }
 
 }

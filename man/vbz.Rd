@@ -5,7 +5,7 @@
 \alias{vbz}
 \title{Sample files provided by VBZ}
 \format{
-list of data frame
+list with data.frame elements
 \describe{
   \item{trip_seq}{Sequence order of trips.}
   \item{stop_seq}{Sequence order of stops.}

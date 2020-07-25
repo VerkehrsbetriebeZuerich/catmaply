@@ -2,7 +2,7 @@
 #'
 #' Sample data of three distinct routes.
 #'
-#' @format list of data frame
+#' @format list with data.frame elements
 #' \describe{
 #'   \item{trip_seq}{Sequence order of trips.}
 #'   \item{stop_seq}{Sequence order of stops.}
