@@ -174,41 +174,39 @@ It can be used to plot heatmaps on categorical variables or, otherwise, plot con
 \dontrun{
 library(catmaply)
 library(viridis)
-library(dplyr)
 
 data("vbz")
-df <- vbz[[3]]$data
+df <- vbz[[3]]
 
 # simple plot
 catmaply(
-   df,
-   x='fahrt_seq',
-   y = "Haltestellenlangname",
-   y_order = "halt_seq",
-   z = "Ausl_Kat"
+  df,
+  x=trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occ_category
 )
 
 
 # categorical color range and template
 catmaply(
-   df,
-   x=fahrt_seq,
-   x_order = fahrt_seq,
-   x_tickangle = 15,
-   y = Haltestellenlangname,
-   y_order = halt_seq,
-   z = Besetzung,
-   categorical_colorbar = T,
-   categorical_col = Ausl_Kat,
-   color_palette = viridis::inferno,
-   hover_template = paste(
-     '<b>Fahrt Nr.</b>:', fahrt_seq,
-     '<br><b>Haltestelle</b>:', Haltestellenlangname,
-     '<br><b>Auslastung</b>:', Ausl_Kat,
-     '<br><b>Besetzung</b>:', round(Besetzung, 2),
-     '<extra></extra>'
-   )
+  df,
+  x = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_colorbar=T,
+  categorical_col = occ_category,
+  color_palette = viridis::inferno,
+  hover_template = paste(
+    '<b>Trip</b>:', trip_seq,
+    '<br><b>Stop</b>:', stop_seq,
+    '<br><b>Occupancy</b>:', occ_category,
+    '<extra></extra>'
+  )
 )
+# for more examples, see vignette
 }
 
 }

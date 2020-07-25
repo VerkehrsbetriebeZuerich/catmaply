@@ -9,7 +9,7 @@
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Methods and plotting functions for displaying categorical data on an 
-             interactive heatmap using 'plotly'. It provides functionality for strictly 
+             interactive heatmap using 'plotly'. Provides functionality for strictly 
              categorical heatmaps, heatmaps illustrating categorized continuous data 
              and annotated heatmaps. Also, there are various options to interact with the x-axis
              to prevent overlapping axis labels, e.g. via simple sliders or range sliders. 
