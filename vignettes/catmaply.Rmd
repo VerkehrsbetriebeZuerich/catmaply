@@ -87,7 +87,7 @@ library(dplyr)
 
 ## Usage
 
-Catmaply provides real-live data of VBZ to easily start experimenting with the package. For demonstration purposes and simplicity, we will use it in this notebook. As usual, you can access the data as follows.
+Catmaply provides data of VBZ to easily start experimenting with the package. For demonstration purposes and simplicity, we will use it in this notebook. As usual, you can access the data as follows.
 
 ```{r out.width='100%'}
 data("vbz")
@@ -100,7 +100,7 @@ The main columns of the `vbz` data.frame can be described as follows:
 
 - `trip_seq` shows the order of the trips
 - `stop_name` shows the names of the stops, that need to be ordered by `stop_seq`
-- `occ_category` shows the category of the data point (e.g. 1 - very little people in the bus, x - bus is full)
+- `occ_category` shows the category of the data point (e.g. 1 - very few people in the bus, 5 - bus is full)
 - `occupancy` is e.g. the number of people per m^2.
 
 ### Default behaviour
@@ -110,15 +110,15 @@ Catmaply expects at least arguments for both axis (`x`, `y`) and the fields (`z`
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x = "trip_seq",
-    y = "stop_seq",
-    z = "occ_category"
+    x = trip_seq,
+    y = stop_seq,
+    z = occ_category
   ) 
 ```
 
 By default, catmaply produces an interactive heatmap with a rangeslider, legend items that show and/or hide data for a specific occupancy category by clicking on it and a hover label, that shows the values for `x`, `y` and `z` on hover.
 
-Also, please note that you can use both, column names with and without quotes as column references for e.g. x, y, z. E.g. if you we want to put the stop_names on the `y` axis, we can simply put the `stop_name` on `y` and order it using `stop_seq` (the x axis has of course the same functionality); as shown in the following:
+Also, please note that you can use both, column names with and without quotes as column references for e.g. x, y, z. E.g. if we want to put the stop_names on the `y` axis, we can simply put the `stop_name` on `y` and order it using `stop_seq` (the x axis has of course the same functionality); as shown in the following:
 
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
@@ -159,7 +159,7 @@ catmaply(
   )
 ```
 
-You don't like all this interactivity of the legend or you need more performance for large plots? Let's turn the interactive legend off by setting `legend_interactive = F`.
+You don't like all this interactivity of the legend or you need more performance for large plots? Let's turn the interactive legend off by setting `legend_interactive = FALSE`.
 
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
@@ -169,7 +169,7 @@ catmaply(
     y_order = stop_seq,
     z = occ_category,
     color_palette = viridis::magma,
-    legend_interactive = F,
+    legend_interactive = FALSE,
     legend_col = occ_cat_name
   )
 ```
@@ -195,7 +195,7 @@ catmaply(
     y = stop_name,
     y_order = stop_seq,
     z = occupancy,
-    categorical_colorbar = T,
+    categorical_colorbar = TRUE,
     categorical_col = occ_category,
     color_palette = viridis::magma,
     legend_col = occ_cat_name
@@ -212,10 +212,10 @@ catmaply(
     y = stop_name,
     y_order = stop_seq,
     z = occupancy,
-    categorical_colorbar = T,
+    categorical_colorbar = TRUE,
     categorical_col = occ_category,
     color_palette = viridis::magma,
-    legend_interactive = F,
+    legend_interactive = FALSE,
     legend_col = occ_cat_name
   )
 ```
@@ -240,7 +240,7 @@ catmaply(
     y_order = "stop_seq",
     y_tickangle = -10,
     z = "occupancy",
-    categorical_colorbar = T,
+    categorical_colorbar = TRUE,
     categorical_col = 'occ_category',
     color_palette = viridis::magma,
     font_size = 10,
@@ -262,7 +262,7 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
@@ -289,7 +289,7 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
@@ -300,7 +300,7 @@ catmaply(
     '<extra></extra>'
   ),
   legend_col = occ_cat_name,
-  legend = F
+  legend = FALSE
 )
 ```
 
@@ -315,12 +315,12 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
-  hover_hide = T,
+  hover_hide = TRUE,
   legend_col = occ_cat_name,
-  legend = F
+  legend = FALSE
 )
 ```
 
@@ -335,12 +335,12 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
-  hover_hide = T,
+  hover_hide = TRUE,
   legend_col = occ_cat_name,
-  legend = T
+  legend = TRUE
 )
 ```
 
@@ -367,14 +367,14 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   )
 )
@@ -390,14 +390,14 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
   tickformatstops=list(
@@ -428,18 +428,19 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T # activate slider
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE # activate slider
 )
 ```
 
@@ -453,18 +454,19 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T, # activate slider,
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE, # activate slider,
   slider_currentvalue_prefix = "Trip: "
 )
 ```
@@ -479,21 +481,22 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T, # activate slider,
-  slider_currentvalue_visible = F,
-  slider_step_visible = F,
-  slider_tick_visible = F
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE, # activate slider,
+  slider_currentvalue_visible = FALSE,
+  slider_step_visible = FALSE,
+  slider_tick_visible = FALSE
 )
 ```
 
@@ -516,19 +519,20 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T, # activate slider,
-  slider_currentvalue_visible = F,
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE, # activate slider,
+  slider_currentvalue_visible = FALSE,
   slider_steps=list(
     slider_start=1,
     slider_range=15,
@@ -553,19 +557,20 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::inferno,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T, # activate slider,
-  slider_currentvalue_visible = F,
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE, # activate slider,
+  slider_currentvalue_visible = FALSE,
   slider_steps = list(
     list(name="Very important step one", range=c(12, 37)), 
     list(name="Very important step two", range=c(87, 111))
@@ -596,19 +601,20 @@ catmaply(
   text_color="#000",
   text_size=12,
   text_font_family="Open Sans",
-  categorical_colorbar = T,
+  categorical_colorbar = TRUE,
   categorical_col = occ_category,
   color_palette = viridis::plasma,
   hover_template = paste(
-    '<b>Fahrt Nr.</b>:', trip_seq,
-    '<br><b>Haltestelle</b>:', stop_name,
-    '<br><b>Auslastung</b>:', occ_category,
-    '<br><b>occupancy</b>:', round(occupancy, 2),
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
     '<extra></extra>'
   ),
-  rangeslider = F, # to prevent warning
-  slider = T, # activate slider,
-  slider_currentvalue_visible = F,
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = TRUE, # activate slider,
+  slider_currentvalue_visible = FALSE,
   slider_steps=list(
     slider_start=1,
     slider_range=15,
@@ -621,7 +627,7 @@ catmaply(
 > Note: annotations can also be used with rangeslider or no slider at all. However, lots of annotations might have a negative influence on the performance. Only text values that are not NA are used for annotations.
 
 ## Credits
-This package only exists thanks to the amazing work done by many people in the open source community. Beyond the many people working on the pipeline of R, thanks should go to the plotly team, and especially to Carson Sievert and others working on the R package of plotly. Also, a special thanks to VBZ for providing advice on the functionality of the package as well as providing a real-life dataset; also, I would like to thank VBZ for investing time to test the package and for using it in your awesome shiny VBZ dashboard.
+This package only exists thanks to the amazing work done by many people in the open source community. Beyond the many people working on the pipeline of R, thanks should go to the plotly team, and especially to Carson Sievert and others working on the R package of plotly. Also, a special thanks to VBZ for providing advice on the functionality of the package as well as providing the vbz dataset; also, I would like to thank VBZ for investing time to test the package and for using it in your awesome shiny VBZ dashboard.
 
 ## Session info
 ```{r}
