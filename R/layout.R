@@ -134,7 +134,7 @@ catmaply_layout <- function(
       xaxis = list(
         title="",
         tickmode='linear',
-        fixedrange=F,
+        fixedrange=FALSE,
         range=x_range,
         tickangle = x_tickangle,
         categoryorder="array",

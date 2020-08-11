@@ -85,9 +85,7 @@
 #' @return plot_ly object
 #'
 #' @examples
-#' \dontrun{
 #' library(catmaply)
-#' library(viridis)
 #'
 #' data("vbz")
 #' df <- vbz[[3]]
@@ -110,9 +108,8 @@
 #'   y = stop_name,
 #'   y_order = stop_seq,
 #'   z = occupancy,
-#'   categorical_colorbar=T,
+#'   categorical_colorbar=TRUE,
 #'   categorical_col = occ_category,
-#'   color_palette = viridis::inferno,
 #'   hover_template = paste(
 #'     '<b>Trip</b>:', trip_seq,
 #'     '<br><b>Stop</b>:', stop_seq,
@@ -121,7 +118,6 @@
 #'   )
 #' )
 #' # for more examples, see vignette
-#' }
 #'
 #' @export
 catmaply <- function(
@@ -278,7 +274,7 @@ catmaply <- function(
 
   #TODO: Test that user cannot activate both
   if (slider && legend_interactive) {
-    warning(paste("An interactive legend is not supported when using slider at the moment. Overwriting legend_interactive with F."))
+    warning(paste("An interactive legend is not supported when using slider at the moment. Overwriting legend_interactive with FALSE."))
     legend_interactive <- FALSE
   }
 

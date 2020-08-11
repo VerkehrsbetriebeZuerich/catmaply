@@ -58,8 +58,8 @@ add_catmaply_traces <- function(
           text = ~label,
           hovertemplate = '%{text}',
           colorscale=colorscale,
-          showlegend=T,
-          showscale=F,
+          showlegend=TRUE,
+          showscale=FALSE,
           legendgroup = legend_items[i]
         )
     } else {
@@ -74,8 +74,8 @@ add_catmaply_traces <- function(
           z = ~z,
           hoverinfo= "skip",
           colorscale=colorscale,
-          showlegend=T,
-          showscale=F,
+          showlegend=TRUE,
+          showscale=FALSE,
           legendgroup = legend_items[i]
         )
     }
@@ -182,7 +182,7 @@ add_catmaply_single <- function(
           hovertemplate = '%{text}',
           colorscale=discrete_col$colorscale,
           visible = visible,
-          showscale=F
+          showscale=FALSE
         )
     } else { # no legend & no hover
       fig <- fig %>%
@@ -197,7 +197,7 @@ add_catmaply_single <- function(
           hoverinfo= "skip",
           colorscale=discrete_col$colorscale,
           visible = visible,
-          showscale=F
+          showscale=FALSE
         )
     }
 
@@ -385,7 +385,7 @@ add_catmaply_slider <- function(
 
   fig <- fig %>%
     plotly::layout(
-      showlegend=F,
+      showlegend=FALSE,
       annotations = start_annotations,
       sliders=list(
         list(
@@ -442,7 +442,7 @@ catmaply_annotations <- function(
         list(x = df$x[i],
              y=df$y[i],
              text=as.character(df$text[i]),
-             showarrow=F,
+             showarrow=FALSE,
              font=list(
                family=text_font_family,
                color=text_color,

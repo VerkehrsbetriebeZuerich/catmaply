@@ -21,9 +21,9 @@ discrete_coloring <- function(categories, col_palette, range_min, range_max) {
   if (!is.vector(col_palette) || is.list(col_palette))
     stop("Parameter 'col_palette' must be a vector.")
 
-  discrete_colorbar <- F
+  discrete_colorbar <- FALSE
   if ((length(categories) * 2) == length(col_palette)) {
-    discrete_colorbar <- T
+    discrete_colorbar <- TRUE
   } else if (length(categories) != length(col_palette)) {
     stop("Parameter 'col_palette' must have the same or twice the length of category parameter.")
   }

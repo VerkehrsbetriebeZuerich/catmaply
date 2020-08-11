@@ -41,9 +41,9 @@ test_that("error handling - plot.R", {
       categorical_colorbar="BLA",
       categorical_col = occ_category,
       color_palette = viridis::inferno,
-      slider=T,
-      rangeslider = F,
-      legend_interactive = F
+      slider=TRUE,
+      rangeslider = FALSE,
+      legend_interactive = FALSE
     )
   )
   # non-existant column name
@@ -67,7 +67,7 @@ test_that("error handling - plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
+      slider=TRUE,
       y_side="oben"
     )
   )
@@ -177,9 +177,9 @@ test_that("error handling - plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps=c(
         slider_start=1,
         slider_range=15,
@@ -208,12 +208,12 @@ test_that("error handling - plot.R", {
       y = stop_name,
       y_order = stop_seq,
       z = occupancy,
-      categorical_colorbar=T,
+      categorical_colorbar=TRUE,
       categorical_col = occ_category,
       color_palette = viridis::inferno,
       slider="BLA",
-      rangeslider = F,
-      legend_interactive = F
+      rangeslider = FALSE,
+      legend_interactive = FALSE
     )
   )
   # slider step is not list
@@ -226,9 +226,9 @@ test_that("error handling - plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_currentvalue_prefix = 1
     )
   )
@@ -318,9 +318,9 @@ test_that("error handling - trace.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps=list(
         slider_start=1,
         slider_range=15,
@@ -338,9 +338,9 @@ test_that("error handling - trace.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps=list(
         slider_start=1,
         slider_range=15,
@@ -359,9 +359,9 @@ test_that("error handling - trace.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps=list(
         slider_start=1,
         slider_range=15,
@@ -380,9 +380,9 @@ test_that("error handling - trace.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps = list(
         list(range=c(1, 30)),
         list(name="nachmittag", range=c(31, 50))
@@ -399,9 +399,9 @@ test_that("error handling - trace.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = F,
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = FALSE,
       slider_steps = list(
         list(name="nachmittag", range=c(30, 1)),
         list(name="nachmittag", range=c(31, 50))
@@ -463,7 +463,7 @@ test_that("test catmaply", {
     y = stop_name,
     y_order = stop_seq,
     z = occ_category,
-    hover_hide = F,
+    hover_hide = FALSE,
     hover_template = paste(
       '<b>This</b>:', trip_seq,
       '<br><b>That</b>:', stop_seq,
@@ -480,7 +480,7 @@ test_that("test catmaply", {
     y = stop_name,
     y_order = stop_seq,
     z = occ_category,
-    hover_hide = T,
+    hover_hide = TRUE,
     hover_template = paste(
       '<b>This</b>:', trip_seq,
       '<br><b>That</b>:', stop_seq,
@@ -497,7 +497,7 @@ test_that("test catmaply", {
     y = stop_name,
     y_order = stop_seq,
     z = occ_category,
-    hover_hide = F
+    hover_hide = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -520,7 +520,7 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    legend_interactive = F
+    legend_interactive = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -532,8 +532,8 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    legend_interactive = T,
-    legend = F
+    legend_interactive = TRUE,
+    legend = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -545,8 +545,8 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    legend_interactive = F,
-    legend = F
+    legend_interactive = FALSE,
+    legend = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -558,7 +558,7 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    rangeslider = T
+    rangeslider = TRUE
   )
   expect_true(is(fig, "plotly"))
 
@@ -570,7 +570,7 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    rangeslider = F
+    rangeslider = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -582,8 +582,8 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    legend_interactive = F,
-    hover_hide = T
+    legend_interactive = FALSE,
+    hover_hide = TRUE
   )
   expect_true(is(fig, "plotly"))
 
@@ -595,8 +595,8 @@ test_that("test catmaply", {
     y_order = stop_seq,
     z = occ_category,
     hover_template = paste(stop_name),
-    legend = F,
-    hover_hide = T
+    legend = FALSE,
+    hover_hide = TRUE
   )
   expect_true(is(fig, "plotly"))
 
@@ -630,12 +630,12 @@ test_that("test catmaply", {
     y = stop_name,
     y_order = stop_seq,
     z = occupancy,
-    categorical_colorbar=T,
+    categorical_colorbar=TRUE,
     categorical_col = occ_category,
     color_palette = viridis::inferno,
-    slider=T,
-    rangeslider = F,
-    legend_interactive = F
+    slider=TRUE,
+    rangeslider = FALSE,
+    legend_interactive = FALSE
   )
   expect_true(is(fig, "plotly"))
 })
@@ -665,7 +665,7 @@ test_that("test catmaply", {
     y = "stop_name",
     y_order = "stop_seq",
     z = "occ_category",
-    legend_interactive = T
+    legend_interactive = TRUE
   )
   expect_true(is(fig, "plotly"))
 
@@ -676,7 +676,7 @@ test_that("test catmaply", {
     y = "stop_name",
     y_order = "stop_seq",
     z = "occ_category",
-    legend_interactive = F,
+    legend_interactive = FALSE,
     text=occ_category
   )
   expect_true(is(fig, "plotly"))
@@ -688,8 +688,8 @@ test_that("test catmaply", {
     y = "stop_name",
     y_order = "stop_seq",
     z = "occ_category",
-    legend_interactive = T,
-    legend = F
+    legend_interactive = TRUE,
+    legend = FALSE
   )
   expect_true(is(fig, "plotly"))
 
@@ -700,8 +700,8 @@ test_that("test catmaply", {
     y = "stop_name",
     y_order = "stop_seq",
     z = "occ_category",
-    legend_interactive = F,
-    legend = F
+    legend_interactive = FALSE,
+    legend = FALSE
   )
   expect_true(is(fig, "plotly"))
 })
@@ -734,7 +734,7 @@ test_that("warnings- plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider_currentvalue_visible=F,
+      slider_currentvalue_visible=FALSE,
       slider_currentvalue_prefix = "Warning"
     )
   )
@@ -749,9 +749,9 @@ test_that("warnings- plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = T,
-      rangeslider = F
+      slider=TRUE,
+      legend_interactive = TRUE,
+      rangeslider = FALSE
     )
   )
 
@@ -765,9 +765,9 @@ test_that("warnings- plot.R", {
       y_order = "stop_seq",
       z = "occ_category",
       text=occ_category,
-      slider=T,
-      legend_interactive = F,
-      rangeslider = T
+      slider=TRUE,
+      legend_interactive = FALSE,
+      rangeslider = TRUE
     )
   )
 })
@@ -788,7 +788,7 @@ test_that("colorbar - plot.R", {
       y = "stop_name",
       y_order = "stop_seq",
       z = "occupancy",
-      categorical_colorbar = T,
+      categorical_colorbar = TRUE,
       categorical_col = 'occ_category',
       color_palette = viridis::inferno(6)
     )
@@ -802,10 +802,10 @@ test_that("colorbar - plot.R", {
       y = "stop_name",
       y_order = "stop_seq",
       z = "occupancy",
-      categorical_colorbar = T,
+      categorical_colorbar = TRUE,
       categorical_col = 'occ_category',
       color_palette = viridis::inferno(6),
-      legend = T
+      legend = TRUE
     )
   )
 
@@ -820,7 +820,7 @@ test_that("colorbar - plot.R", {
         y = "stop_name",
         y_order = "stop_seq",
         z = "occupancy",
-        categorical_colorbar = T,
+        categorical_colorbar = TRUE,
         categorical_col = 'occ_category',
         color_palette = viridis::inferno
       ),
@@ -839,11 +839,11 @@ test_that("colorbar - plot.R", {
         y = "stop_name",
         y_order = "stop_seq",
         z = "occupancy",
-        categorical_colorbar = T,
+        categorical_colorbar = TRUE,
         categorical_col = 'occ_category',
         color_palette = viridis::inferno,
-        legend_interactive = F,
-        legend = T
+        legend_interactive = FALSE,
+        legend = TRUE
       ),
       "plotly"
     )
@@ -859,10 +859,10 @@ test_that("colorbar - plot.R", {
       y = "stop_name",
       y_order = "stop_seq",
       z = "occupancy",
-      categorical_colorbar = T,
+      categorical_colorbar = TRUE,
       categorical_col = 'occ_category',
       color_palette = viridis::inferno,
-      legend = F
+      legend = FALSE
     )
   )
 
