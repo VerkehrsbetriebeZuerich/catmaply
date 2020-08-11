@@ -25,7 +25,7 @@
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
 #' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
-#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
+#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: NA).
 #' @param font_family the typeface that will be applied by the web browser.
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
@@ -34,7 +34,7 @@
 #' @param font_color font color to be used for plot; (default: "#444").
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param legend_col column to be used for legend naming; (default: z/categorical_col).
-#' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; (default: T).
+#' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; (default: TRUE).
 #' @param tickformatstops used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or
 #' more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
 #' (default: \cr
@@ -141,16 +141,16 @@ catmaply <- function(
   text_size=12,
   text_font_family=c("Open Sans", "verdana", "arial", "sans-serif"),
   hover_template,
-  hover_hide=F,
+  hover_hide=FALSE,
   color_palette=viridis::plasma,
-  categorical_colorbar=F,
+  categorical_colorbar=FALSE,
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
   font_color="#444",
-  legend=T,
+  legend=TRUE,
   legend_col,
-  legend_interactive=T,
+  legend_interactive=TRUE,
   tickformatstops=list(
     list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
     list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
@@ -161,8 +161,8 @@ catmaply <- function(
     list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
     list(dtickrange = list("M12", NULL), value = "%H:%M h")
   ),
-  rangeslider=T,
-  slider=F,
+  rangeslider=TRUE,
+  slider=FALSE,
   slider_steps=list(
     slider_start=1,
     slider_range=15,
@@ -170,9 +170,9 @@ catmaply <- function(
     slider_step_name="x"
   ),
   slider_currentvalue_prefix="",
-  slider_step_visible=T,
-  slider_currentvalue_visible=T,
-  slider_tick_visible=T,
+  slider_step_visible=TRUE,
+  slider_currentvalue_visible=TRUE,
+  slider_tick_visible=TRUE,
   source="catmaply"
 ) {
 
@@ -273,13 +273,13 @@ catmaply <- function(
   #TODO: Test that user cannot activate both
   if (slider && rangeslider) {
     warning(paste("Parameter 'rangeslider' will be ignored as slider is specified"))
-    rangeslider <- F
+    rangeslider <- FALSE
   }
 
   #TODO: Test that user cannot activate both
   if (slider && legend_interactive) {
     warning(paste("An interactive legend is not supported when using slider at the moment. Overwriting legend_interactive with F."))
-    legend_interactive <- F
+    legend_interactive <- FALSE
   }
 
   if (slider)
@@ -298,10 +298,10 @@ catmaply <- function(
     hover_template <- ""
   }
 
-  x_is_time <- F
+  x_is_time <- FALSE
   # check if x axis is POSXxt
   if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt"))){
-    x_is_time <- T
+    x_is_time <- TRUE
   }
 
   # check categories and color palette
