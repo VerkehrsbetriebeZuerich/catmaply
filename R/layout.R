@@ -5,8 +5,10 @@
 #' @param fig plotly object
 #' @param df data.frame or tibble holding the data.
 #' @param x column name holding the axis values for x.
+#' @param x_order column name holding the ordering axis values for x. if no order is specified, then x will be used for ordering x; (default:"x").
 #' @param x_side on which side the axis labels on the x axis should appear. options: c("top", "bottom"); (default:"top").
 #' @param x_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:90).
+#' @param x_range the initial range that should be displayed on the x axis. Only works with non-time x-axis at the moment; (default: 30).
 #' @param y column name holding the axis values for y.
 #' @param y_order column name holding the ordering axis values for y. if no order is specified, then y will be used for ordering y; (default:"y").
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
@@ -40,8 +42,10 @@ catmaply_time_layout <- function(
   fig,
   df,
   x,
+  x_order,
   x_side,
   x_tickangle,
+  x_range,
   y,
   y_order,
   y_side,
@@ -53,6 +57,9 @@ catmaply_time_layout <- function(
   legend,
   rangeslider
 ) {
+
+  date_x <- unique(df[[x]][order(df[[x_order]])])
+
   fig <- fig %>%
     plotly::layout(
       showlegend=legend,
@@ -60,9 +67,12 @@ catmaply_time_layout <- function(
         title="",
         side = x_side,
         type='date',
+        range=list(date_x[1], date_x[x_range]),
         tickangle = 90,
         tickformatstops = tickformatstops,
-        rangeslider = list(visible=rangeslider)
+        rangeslider = list(
+          visible=rangeslider
+        )
       ),
       yaxis = list(
         title="",
@@ -140,7 +150,9 @@ catmaply_layout <- function(
         tickvals=unique(df[[x_order]][order(df[[x_order]])]),
         ticktext=unique(df[[x]][order(df[[x_order]])]),
         side = x_side,
-        rangeslider = list(visible=rangeslider)
+        rangeslider = list(
+          visible=rangeslider
+        )
       ),
       yaxis = list(
         title="",

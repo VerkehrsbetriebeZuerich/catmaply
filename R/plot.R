@@ -432,8 +432,10 @@ catmaply <- function(
       catmaply_time_layout(
         df=df,
         x=x,
+        x_order=x_order,
         x_side=x_side,
         x_tickangle=x_tickangle,
+        x_range=x_range,
         y=y,
         y_order=y_order,
         y_side=y_side,
