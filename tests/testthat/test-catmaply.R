@@ -18,19 +18,19 @@ test_that("error handling - plot.R", {
       z = "occ_category"
     )
   )
-  # categorical_colorbar not logical
+  # categorical_color_range not logical
   expect_error(
     catmaply(
       df,
       x='trip_seq',
-      categorical_colorbar = 0,
+      categorical_color_range = 0,
       x_order = 'trip_seq',
       y = "stop_name",
       y_order = "stop_seq",
       z = "occ_category"
     )
   )
-  # categorical_colorbar not logical
+  # categorical_color_range not logical
   expect_error(
     catmaply(
       df,
@@ -38,7 +38,7 @@ test_that("error handling - plot.R", {
       y = stop_name,
       y_order = stop_seq,
       z = occupancy,
-      categorical_colorbar="BLA",
+      categorical_color_range="BLA",
       categorical_col = occ_category,
       color_palette = viridis::inferno,
       slider=TRUE,
@@ -208,7 +208,7 @@ test_that("error handling - plot.R", {
       y = stop_name,
       y_order = stop_seq,
       z = occupancy,
-      categorical_colorbar=TRUE,
+      categorical_color_range=TRUE,
       categorical_col = occ_category,
       color_palette = viridis::inferno,
       slider="BLA",
@@ -671,7 +671,7 @@ test_that("test catmaply", {
     y = stop_name,
     y_order = stop_seq,
     z = occupancy,
-    categorical_colorbar=TRUE,
+    categorical_color_range=TRUE,
     categorical_col = occ_category,
     color_palette = viridis::inferno,
     slider=TRUE,
@@ -829,7 +829,7 @@ test_that("colorbar - plot.R", {
       y = "stop_name",
       y_order = "stop_seq",
       z = "occupancy",
-      categorical_colorbar = TRUE,
+      categorical_color_range = TRUE,
       categorical_col = 'occ_category',
       color_palette = viridis::inferno(6)
     )
@@ -843,7 +843,7 @@ test_that("colorbar - plot.R", {
       y = "stop_name",
       y_order = "stop_seq",
       z = "occupancy",
-      categorical_colorbar = TRUE,
+      categorical_color_range = TRUE,
       categorical_col = 'occ_category',
       color_palette = viridis::inferno(6),
       legend = TRUE
@@ -861,7 +861,7 @@ test_that("colorbar - plot.R", {
         y = "stop_name",
         y_order = "stop_seq",
         z = "occupancy",
-        categorical_colorbar = TRUE,
+        categorical_color_range = TRUE,
         categorical_col = 'occ_category',
         color_palette = viridis::inferno
       ),
@@ -880,30 +880,13 @@ test_that("colorbar - plot.R", {
         y = "stop_name",
         y_order = "stop_seq",
         z = "occupancy",
-        categorical_colorbar = TRUE,
+        categorical_color_range = TRUE,
         categorical_col = 'occ_category',
         color_palette = viridis::inferno,
         legend_interactive = FALSE,
         legend = TRUE
       ),
       "plotly"
-    )
-  )
-
-  # no legend but categorical colun
-  expect_warning(
-    catmaply(
-      df,
-      x='trip_seq',
-      x_order = 'trip_seq',
-      x_tickangle = -10,
-      y = "stop_name",
-      y_order = "stop_seq",
-      z = "occupancy",
-      categorical_colorbar = TRUE,
-      categorical_col = 'occ_category',
-      color_palette = viridis::inferno,
-      legend = FALSE
     )
   )
 

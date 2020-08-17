@@ -23,7 +23,7 @@ catmaply(
   hover_template,
   hover_hide = FALSE,
   color_palette = viridis::plasma,
-  categorical_colorbar = FALSE,
+  categorical_color_range = FALSE,
   categorical_col = NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
@@ -89,9 +89,9 @@ Provide multiple font families, separated by commas, to indicate the preference 
 
 \item{color_palette}{a color palette vector a function that is able to create one; (default: viridis::plasma).}
 
-\item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
+\item{categorical_color_range}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
-\item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: NA).}
+\item{categorical_col}{if categorical_color_range is TRUE, then this column is used to create categories; (default: NA).}
 
 \item{font_family}{the typeface that will be applied by the web browser.
 The web browser will only be able to apply a font if it is available on the system which it operates.
@@ -194,7 +194,7 @@ catmaply(
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
-  categorical_colorbar=TRUE,
+  categorical_color_range=TRUE,
   categorical_col = occ_category,
   hover_template = paste(
     '<b>Trip</b>:', trip_seq,

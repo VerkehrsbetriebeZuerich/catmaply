@@ -24,8 +24,8 @@
 #' @param hover_template template to be used to create the hover label; (default:missing).
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector a function that is able to create one; (default: viridis::plasma).
-#' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
-#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: NA).
+#' @param categorical_color_range if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
+#' @param categorical_col if categorical_color_range is TRUE, then this column is used to create categories; (default: NA).
 #' @param font_family the typeface that will be applied by the web browser.
 #' The web browser will only be able to apply a font if it is available on the system which it operates.
 #' Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
@@ -108,7 +108,7 @@
 #'   y = stop_name,
 #'   y_order = stop_seq,
 #'   z = occupancy,
-#'   categorical_colorbar=TRUE,
+#'   categorical_color_range=TRUE,
 #'   categorical_col = occ_category,
 #'   hover_template = paste(
 #'     '<b>Trip</b>:', trip_seq,
@@ -139,7 +139,7 @@ catmaply <- function(
   hover_template,
   hover_hide=FALSE,
   color_palette=viridis::plasma,
-  categorical_colorbar=FALSE,
+  categorical_color_range=FALSE,
   categorical_col=NA,
   font_family = c("Open Sans", "verdana", "arial", "sans-serif"),
   font_size = 12,
@@ -175,9 +175,9 @@ catmaply <- function(
   if (!is.data.frame(df))
     stop("Parameter 'df' must be of type data.frame/tibble.")
 
-  # check if categorical_colorbar is logical
-  if (!is.logical(categorical_colorbar))
-    stop("Parameter 'categorical_colorbar' must be logical")
+  # check if categorical_color_range is logical
+  if (!is.logical(categorical_color_range))
+    stop("Parameter 'categorical_color_range' must be logical")
 
   # only annotate graph, if text column is provided
   annotated <- !missing(text)
@@ -188,7 +188,7 @@ catmaply <- function(
   y <- as.character(substitute(y))
   y_order <- ifelse(missing(y_order), y, as.character(substitute(y_order)))
   z <- as.character(substitute(z))
-  categorical_col <- ifelse(!categorical_colorbar, z, as.character(substitute(categorical_col)))
+  categorical_col <- ifelse(!categorical_color_range, z, as.character(substitute(categorical_col)))
   legend_col <- ifelse(missing(legend_col), categorical_col, as.character(substitute(legend_col)))
   text <- ifelse(!annotated, z, as.character(substitute(text)))
 
@@ -245,9 +245,6 @@ catmaply <- function(
     warning(paste("Parameter 'x_range' needs to larger than 2.", "Changing parameter from", x_range, "to 2."))
     x_range <- 2
   }
-
-  if (categorical_colorbar && !legend)
-    warning("Parameter 'categorical_colorbar' and 'categorical_col' will be ignored if parameter 'legend' is FALSE")
 
   if (
     !is.logical(slider) ||
@@ -330,7 +327,7 @@ catmaply <- function(
   legend_items <- cat_leg_comb[[legend_col]][ordering]
 
   # get color palette
-  pal_len <- length(cat_col) * ifelse(categorical_colorbar, 2, 1)
+  pal_len <- length(cat_col) * ifelse(categorical_color_range, 2, 1)
   if (is.function(color_palette)) {
     color_palette <- color_palette(pal_len)
   } else if (is.vector(color_palette) && !is.list(color_palette)) {
@@ -385,7 +382,7 @@ catmaply <- function(
         text_size=text_size,
         text_font_family=text_font_family,
         color_palette=color_palette,
-        categorical_colorbar=categorical_colorbar,
+        categorical_color_range=categorical_color_range,
         category_items=category_items,
         legend_items=legend_items,
         legend=legend
@@ -397,7 +394,7 @@ catmaply <- function(
         add_catmaply_traces(
           df=df,
           hover_hide=hover_hide,
-          categorical_colorbar=categorical_colorbar,
+          categorical_color_range=categorical_color_range,
           category_items = category_items,
           legend_items=legend_items,
           color_palette=color_palette
@@ -407,7 +404,7 @@ catmaply <- function(
         add_catmaply_single(
           df=df,
           hover_hide=hover_hide,
-          categorical_colorbar=categorical_colorbar,
+          categorical_color_range=categorical_color_range,
           legend_items=legend_items,
           color_palette=color_palette,
           legend=legend

@@ -9,7 +9,7 @@ add_catmaply_single(
   df,
   hover_hide,
   color_palette,
-  categorical_colorbar,
+  categorical_color_range,
   legend_items,
   legend,
   visible = 1,

@@ -9,7 +9,7 @@ add_catmaply_traces(
   df,
   hover_hide,
   color_palette,
-  categorical_colorbar,
+  categorical_color_range,
   category_items,
   legend_items
 )
@@ -23,13 +23,13 @@ add_catmaply_traces(
 
 \item{color_palette}{a color palette vector.}
 
-\item{categorical_colorbar}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
+\item{categorical_color_range}{if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).}
 
 \item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
 
-\item{categorical_col}{if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).}
+\item{categorical_col}{if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).}
 }
 \value{
 plot_ly object
