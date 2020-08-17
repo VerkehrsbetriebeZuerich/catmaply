@@ -6,8 +6,8 @@
 #' @param df data.frame or tibble holding the data.
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector.
-#' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
-#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
+#' @param categorical_color_range if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
+#' @param categorical_col if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).
 #' @param category_items distinct/unique items of ordered category items
 #' @param legend_items distinct/unique items of ordered legend items
 #'
@@ -20,7 +20,7 @@ add_catmaply_traces <- function(
   df,
   hover_hide,
   color_palette,
-  categorical_colorbar,
+  categorical_color_range,
   category_items,
   legend_items
 ) {
@@ -32,7 +32,7 @@ add_catmaply_traces <- function(
         z = ifelse(.data$category == category_items[i], .data$z, NA),
       )
 
-    if (categorical_colorbar) {
+    if (categorical_color_range) {
       index <- ((i - 1) * 2) + 1
       colorscale <- array(
         data=c(0, 1, color_palette[index], color_palette[index + 1]),
@@ -104,7 +104,7 @@ add_catmaply_single <- function(
   df,
   hover_hide,
   color_palette,
-  categorical_colorbar,
+  categorical_color_range,
   legend_items,
   legend,
   visible=1,
@@ -251,8 +251,8 @@ add_catmaply_single <- function(
 #' @param slider_tick_visible boolean indicating if the tickvalues should be displayed below the slider. (default: TRUE).
 #' @param hover_hide boolean indicating if the hover label should be hidden or not; (default: FALSE).
 #' @param color_palette a color palette vector.
-#' @param categorical_colorbar if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
-#' @param categorical_col if categorical_colorbar is TRUE, then this column is used to create categories; (default: FALSE).
+#' @param categorical_color_range if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
+#' @param categorical_col if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).
 #' @param category_items distinct/unique items of ordered category items
 #' @param legend_items distinct/unique items of ordered legend items
 #'
@@ -274,7 +274,7 @@ add_catmaply_slider <- function(
   slider_tick_visible,
   hover_hide,
   color_palette,
-  categorical_colorbar,
+  categorical_color_range,
   category_items,
   legend_items,
   legend
@@ -338,7 +338,7 @@ add_catmaply_slider <- function(
     # get the indexes of the legend items relevant to the current trace
     legend_idx <- which(legend_items %in% unique(tmp[['legend']]))
     # get the indexes of the color palette; remember to handle categorical colorbar
-    if (!categorical_colorbar) {
+    if (!categorical_color_range) {
       color_palette_idx <- legend_idx
     } else {
       color_palette_idx <- c(sapply(legend_idx, function(i) c(2 * (i - 1) + 1, 2 * (i - 1) + 2)))
@@ -350,7 +350,7 @@ add_catmaply_slider <- function(
         df=tmp,
         hover_hide=hover_hide,
         color_palette=color_palette[color_palette_idx],
-        categorical_colorbar=categorical_colorbar,
+        categorical_color_range=categorical_color_range,
         legend_items=legend_items[legend_idx],
         legend=legend,
         visible=i==visible_index,
