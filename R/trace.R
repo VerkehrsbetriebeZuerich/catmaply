@@ -52,7 +52,7 @@ add_catmaply_traces <- function(
           type = "heatmap",
           name = legend_items[i],
           data = temp,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           text = ~label,
@@ -69,7 +69,7 @@ add_catmaply_traces <- function(
           type = "heatmap",
           name = legend_items[i],
           data = temp,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           hoverinfo= "skip",
@@ -127,7 +127,7 @@ add_catmaply_single <- function(
           type = "heatmap",
           name = "",
           data = df,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           text = ~label,
@@ -149,7 +149,7 @@ add_catmaply_single <- function(
           type = "heatmap",
           name = "",
           data = df,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           text = ~label,
@@ -175,7 +175,7 @@ add_catmaply_single <- function(
           type = "heatmap",
           name = "",
           data = df,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           text = ~label,
@@ -190,7 +190,7 @@ add_catmaply_single <- function(
           type = "heatmap",
           name = "",
           data = df,
-          x = ~x,
+          x = ~x_order,
           y = ~y,
           z = ~z,
           text = ~label,
@@ -202,7 +202,7 @@ add_catmaply_single <- function(
     }
 
   }
-  #browser()
+  #
 
   return(fig)
 }
@@ -306,7 +306,7 @@ add_catmaply_slider <- function(
     slider_range <- slider_steps[["slider_range"]]
     slider_shift <- slider_steps[["slider_shift"]]
 
-    iterations <- ceiling((length(x_range) - (slider_start - 1) - slider_range) / slider_shift)
+    iterations <- ceiling((length(x_range) - (slider_start - 1) - slider_range) / slider_shift) + 1
 
     slider_steps <- vector(mode = "list", length = length(iterations))
 
