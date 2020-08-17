@@ -265,6 +265,27 @@ test_that("error handling - plot.R", {
       legend_col = "bla"
     )
   )
+  # check x_ordering and x matches
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      x_order='vehicle',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category"
+    )
+  )
+  # check x_ordering and x matches
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      y = "stop_name",
+      y_order='vehicle',
+      z = "occ_category"
+    )
+  )
   # wrong color palette data type
   expect_error(
     catmaply(
