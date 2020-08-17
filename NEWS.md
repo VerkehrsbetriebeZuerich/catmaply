@@ -1,6 +1,6 @@
 # catmaply (development version)
 
-## catmaply 0.9.0 (24 July 2020)
+## catmaply 0.9.0 (17 Aug 2020)
 * Simple categorical heatmap
 * Color ranges per category
 * Axis formatting
