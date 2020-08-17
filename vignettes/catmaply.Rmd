@@ -176,9 +176,9 @@ catmaply(
 
 ### Color ranges per category
 
-How about illustrating differences in one category? You can illustrate values that are particularly low (high) within one category by specifying one colorbar per category. 
+How about illustrating differences in one category? You can illustrate values that are particularly low (high) within one category by specifying one color range per category. 
 
-To show one colorbar per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
+To show one color range per category, we have to put a continuous number in the fields and categorize it with a categorical column, so in our example:
 
 - `occupancy` in the fields
 - `occ_category` is the categorization over these fields.
