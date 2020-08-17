@@ -439,7 +439,7 @@ catmaply_annotations <- function(
     annotations <- lapply(
       1:NROW(df),
       function(i) {
-        list(x = df$x[i],
+        list(x = df$x_order[i],
              y=df$y[i],
              text=as.character(df$text[i]),
              showarrow=FALSE,
