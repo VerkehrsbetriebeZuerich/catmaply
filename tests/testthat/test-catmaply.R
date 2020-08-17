@@ -276,13 +276,33 @@ test_that("error handling - plot.R", {
       z = "occ_category"
     )
   )
-  # check x_ordering and x matches
+  expect_error(
+    catmaply(
+      df,
+      x='vehicle',
+      x_order='trip_seq',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category"
+    )
+  )
+  # check y_ordering and y matches
   expect_error(
     catmaply(
       df,
       x='trip_seq',
       y = "stop_name",
       y_order='vehicle',
+      z = "occ_category"
+    )
+  )
+  # check y_ordering and y matches
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      y = "vehicle",
+      y_order='stop_name',
       z = "occ_category"
     )
   )

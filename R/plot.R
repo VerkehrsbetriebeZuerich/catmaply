@@ -310,16 +310,18 @@ catmaply <- function(
 
   # check x and x order
   xo <- unique(stats::na.omit(df[[x_order]]))
-  xo_x_comb <- unique(stats::na.omit(df[, c(x_order, x)]))
+  xu <- unique(stats::na.omit(df[[x]]))
+  xo_xu_comb <- unique(stats::na.omit(df[, c(x_order, x)]))
 
-  if (length(xo) != NROW(xo_x_comb))
+  if (!(length(xo) == NROW(xo_xu_comb) && length(xo) == length(xu)))
     stop("x_order and x have to match, you cannot have more/less than 1 order value per x.")
 
   # check x and x order
   yo <- unique(stats::na.omit(df[[y_order]]))
-  yo_y_comb <- unique(stats::na.omit(df[, c(y_order, y)]))
+  yu <- unique(stats::na.omit(df[[y]]))
+  yo_yu_comb <- unique(stats::na.omit(df[, c(y_order, y)]))
 
-  if (length(yo) != NROW(yo_y_comb))
+  if (!(length(yo) == NROW(yo_yu_comb) && length(yo) == length(yu)))
     stop("y_order and y have to match, you cannot have more/less than 1 order value per y.")
 
   # order cat column correctly to resolve issue #12
