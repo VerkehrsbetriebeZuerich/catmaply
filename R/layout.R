@@ -133,12 +133,12 @@ catmaply_layout <- function(
       showlegend=legend,
       xaxis = list(
         title="",
-        tickmode='linear',
         fixedrange=FALSE,
         range=x_range,
         tickangle = x_tickangle,
-        categoryorder="array",
-        categoryarray=unique(df[[x]][order(as.numeric(df[[x_order]]))]),
+        tickmode="array",
+        tickvals=unique(df[[x_order]][order(df[[x_order]])]),
+        ticktext=unique(df[[x]][order(df[[x_order]])]),
         side = x_side,
         rangeslider = list(visible=rangeslider)
       ),

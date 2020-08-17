@@ -298,14 +298,31 @@ catmaply <- function(
   # check if x axis is POSXxt
   if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt"))){
     x_is_time <- TRUE
+    x_order <- x # if x is date, then, in any case, overwrite ordering with given by x itself.
   }
 
-  # check categories and color palette
+  # check categories and color palette count -> one category item per legend
   cat_col <- unique(stats::na.omit(df[[categorical_col]]))
   cat_leg_comb <- unique(stats::na.omit(df[, c(categorical_col, legend_col)]))
 
   if (length(cat_col) != NROW(cat_leg_comb))
     stop("You need to define excactly one legend entry per category.")
+
+  # check x and x order
+  xo <- unique(stats::na.omit(df[[x_order]]))
+  xu <- unique(stats::na.omit(df[[x]]))
+  xo_xu_comb <- unique(stats::na.omit(df[, c(x_order, x)]))
+
+  if (!(length(xo) == NROW(xo_xu_comb) && length(xo) == length(xu)))
+    stop("x_order and x have to match, you cannot have more/less than 1 order value per x.")
+
+  # check x and x order
+  yo <- unique(stats::na.omit(df[[y_order]]))
+  yu <- unique(stats::na.omit(df[[y]]))
+  yo_yu_comb <- unique(stats::na.omit(df[, c(y_order, y)]))
+
+  if (!(length(yo) == NROW(yo_yu_comb) && length(yo) == length(yu)))
+    stop("y_order and y have to match, you cannot have more/less than 1 order value per y.")
 
   # order cat column correctly to resolve issue #12
   ordering <- order(cat_col)
@@ -334,6 +351,7 @@ catmaply <- function(
       y = !!rlang::sym(y),
       z = !!rlang::sym(z),
       text = !!rlang::sym(text),
+      y_order = !!rlang::sym(y_order),
       x_order = !!rlang::sym(x_order),
       category = !!rlang::sym(categorical_col),
       legend = !!rlang::sym(legend_col),

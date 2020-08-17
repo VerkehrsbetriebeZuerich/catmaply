@@ -183,14 +183,20 @@ To show one colorbar per category, we have to put a continuous number in the fie
 - `occupancy` in the fields
 - `occ_category` is the categorization over these fields.
 
-To change the color palette you can either submit a color palette vector or a function that is able to return one.
-
-> Note: that the color palette function needs to take n as first argument, whereas n defines the number of colors to be produced.
+Also, lets add a more expressive x_label to the plot, essentially concatenating columns `trip`, `vehicle` and `circulation_name`.
 
 ```{r fig.height=8, out.width='100%', warning = FALSE}
+df <- df%>%
+  mutate(x_label = paste(
+    formatC(trip_seq, width=3, flag="0"), 
+    vehicle, 
+    formatC(circulation_name, width=2, flag = "0"),
+    sep="-")
+  )
+
 catmaply(
     df,
-    x = trip_seq,
+    x = x_label,
     x_order = trip_seq,
     y = stop_name,
     y_order = stop_seq,
@@ -207,7 +213,7 @@ This works also for non-interactive legends.
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x = trip_seq,
+    x = x_label,
     x_order = trip_seq,
     y = stop_name,
     y_order = stop_seq,
@@ -227,15 +233,15 @@ Now, lets mess around with axis formatting; let's change
 - `font_color` to the "purplish" color used in the logo (#6D65AB)
 - `font_size` to 10 pt.
 - `font_family` to "verdana"
-- `x_tickangle` to 15 and, just for fun, 
+- `x_tickangle` to 80 and, just for fun, 
 - `y_tickangle` to -10
 
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
     df,
-    x='trip_seq',
+    x='x_label',
     x_order = 'trip_seq',
-    x_tickangle = 15,
+    x_tickangle = 80,
     y = "stop_name",
     y_order = "stop_seq",
     y_tickangle = -10,
@@ -247,7 +253,7 @@ catmaply(
     font_color = '#6D65AB',
     font_family = "verdana",
     legend_col = occ_cat_name
-  )
+    )
 ```
 
 ### Hover
@@ -256,9 +262,9 @@ What about a custom hover label? Catmaply allows to define custom hover template
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
-  x_tickangle = 15,
+  x_tickangle = 80,
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
@@ -283,9 +289,9 @@ Legend and fancy hover template is too much info; you want simplicity and, thus,
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
-  x_tickangle = 15,
+  x_tickangle = 80,
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
@@ -309,9 +315,9 @@ Minimalist or visual person that does not like hover nor legend...?
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
-  x_tickangle = 15,
+  x_tickangle = 80,
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
@@ -329,9 +335,9 @@ Ok, no hover but legend it is... (for completeness).
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
-  x_tickangle = 15,
+  x_tickangle = 80,
   y = stop_name,
   y_order = stop_seq,
   z = occupancy,
@@ -423,7 +429,7 @@ You can switch to a slider as easy as follows:
 
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
@@ -449,7 +455,7 @@ To add a prefix for the current value (the one above the slider); set the `slide
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
@@ -476,7 +482,7 @@ Also, you can show/hide various elements of the slider, more specifically the st
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
@@ -514,7 +520,7 @@ For example, if want to create a slider that starts at trip 5 with a window of s
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
@@ -552,7 +558,7 @@ A simple example is shown below:
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
@@ -592,7 +598,7 @@ Adding annotations to the previous slider example can be achieved as follows:
 ```{r fig.height=8, out.width='100%', warning = FALSE}
 catmaply(
   df,
-  x=trip_seq,
+  x=x_label,
   x_order = trip_seq,
   y = stop_name,
   y_order = stop_seq,
