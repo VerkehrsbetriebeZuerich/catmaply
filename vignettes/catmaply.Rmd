@@ -40,17 +40,17 @@ A heatmap is a graphical representation of data that uses a system of color-codi
 
 This package is originally being developed for Verkehrsbetriebe Zürich (VBZ), the public transport operator in the Swiss city of Zurich, to illustrate the utilization of different routes and vehicles during different times of the day. Therefore, it groups utilization data (e.g. persons per m^2) into different categories (e.g. low, medium, high utilization) and illustrates it for certain stops over time in a heatmap.
 
-This package can easily be integrated into a shiny dashboard which supports additional interactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a separate github repository named [catmaply_shiny](https://github.com/yvesmauron/catmaply_shiny).
+This package can easily be integrated into a shiny dashboard which supports additional interactions with other plots (e.g. boxplot, histogram, forecast) by using plotly events. A mini-demo app is provided in a separate github repository named [catmaply_shiny](https://github.com/VerkehrsbetriebeZuerich/catmaply_shiny).
 
 This work is based on the plotly.js engine. 
 
 ### Please submit feature requests
 
-This package is still under active development. If you have features you would like to have added, please submit your suggestions (and bug-reports) at: <https://github.com/yvesmauron/catmaply/issues>
+This package is still under active development. If you have features you would like to have added, please submit your suggestions (and bug-reports) at: <https://github.com/VerkehrsbetriebeZuerich/catmaply/issues>
 
 ### News
 
-You can see the most recent changes of the package in [NEWS.md](https://github.com/yvesmauron/catmaply/blob/master/NEWS.md).
+You can see the most recent changes of the package in [NEWS.md](https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/NEWS.md).
 
 ## Installation
 
@@ -69,7 +69,7 @@ To install the latest ("cutting-edge") GitHub version run:
 # if (!require('devtools'))
   # install.packages('devtools')
 # finally install the package
-# devtools::install_github('yvesmauron/catmaply')
+# devtools::install_github('VerkehrsbetriebeZuerich/catmaply')
 ```
 
 To get the latest version on CRAN, perform:

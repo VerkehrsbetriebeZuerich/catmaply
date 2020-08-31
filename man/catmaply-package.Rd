@@ -19,8 +19,8 @@ Methods and plotting functions for displaying categorical data on an
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/yvesmauron/catmaply}
-  \item Report bugs at \url{https://github.com/yvesmauron/catmaply/issues}
+  \item \url{https://github.com/VerkehrsbetriebeZuerich/catmaply}
+  \item Report bugs at \url{https://github.com/VerkehrsbetriebeZuerich/catmaply/issues}
 }
 
 }
