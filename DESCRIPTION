@@ -29,7 +29,8 @@ Imports:
 Suggests:
     testthat,
     viridis,
-    knitr
+    knitr,
+    rmarkdown
 VignetteBuilder:
     knitr
 RoxygenNote: 7.1.0
