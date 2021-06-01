@@ -1,6 +1,6 @@
 Package: catmaply
 Title: Heatmap for Categorical Data using 'plotly'
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: c(
       person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut", "cre")),
       person("Aron", "Weller", role="ctb"),

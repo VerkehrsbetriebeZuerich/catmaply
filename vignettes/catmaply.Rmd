@@ -8,6 +8,10 @@ output:
     fig_height: 9
     self_contained: yes
     toc: true
+    pandoc_args: [
+      "+RTS", "-K64m",
+      "-RTS"
+    ]
 ---
 <!--
 vignette: >
