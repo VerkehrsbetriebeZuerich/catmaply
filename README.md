@@ -2,6 +2,8 @@ catmaply  <img src="man/figures/logo.png" align="right" height="192 px"/>
 ======================
 
 [![R build status](https://github.com/VerkehrsbetriebeZuerich/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/VerkehrsbetriebeZuerich/catmaply/actions) [![codecov](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/branch/master/graph/badge.svg)](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply) [![](https://img.shields.io/badge/lifecycle-development-blue.svg)](https://www.tidyverse.org/lifecycle/#development)
+[![](https://www.r-pkg.org/badges/version/catmaply?color=blue)](https://cran.r-project.org/package=catmaply)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=green)](https://cran.r-project.org/package=catmaply)
 
 
 ## Introduction
@@ -47,6 +49,12 @@ if (!require('devtools'))
 
 # Finally install the package
 devtools::install_github('VerkehrsbetriebeZuerich/catmaply')
+```
+
+To install the latest available version on cran, run:
+
+```R
+install.packages('catmaply')
 ```
 
 And then you may load the package using:
