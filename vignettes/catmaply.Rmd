@@ -9,7 +9,7 @@ output:
     self_contained: yes
     toc: true
     pandoc_args: [
-      "+RTS", "-K64m",
+      "+RTS", "-K128m",
       "-RTS"
     ]
 ---
