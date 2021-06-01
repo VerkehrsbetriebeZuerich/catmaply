@@ -12,6 +12,7 @@ output:
       "+RTS", "-K128m",
       "-RTS"
     ]
+    df_print: paged
 ---
 <!--
 vignette: >
