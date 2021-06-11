@@ -56,6 +56,16 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
+      # https://github.community/t/error-the-paging-file-is-too-small-for-this-operation-to-complete/17141/9
+      - name: configure Pagefile
+        if: runner.os == 'Windows'
+        uses: al-cheb/configure-pagefile-action@v1.2
+        with:
+          minimum-size: 8
+          maximum-size: 8
+          disk-root: "D:"
+
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         env:
