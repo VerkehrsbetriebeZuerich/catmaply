@@ -1,9 +1,11 @@
 on:
   push:
     branches:
+      - main
       - master
   pull_request:
     branches:
+      - main
       - master
 
 name: R-CMD-check
@@ -41,6 +43,14 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: configure Pagefile
+        if: runner.os == 'Windows'
+        uses: al-cheb/configure-pagefile-action@v1.2
+      - name:
+        if: runner.os == 'Windows'
+        run: |
+              (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
 
       - name: Query dependencies
         run: |
