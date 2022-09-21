@@ -1,7 +1,7 @@
 catmaply  <img src="man/figures/logo.png" align="right" height="192 px"/>
 ======================
 
-[![R build status](https://github.com/VerkehrsbetriebeZuerich/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/VerkehrsbetriebeZuerich/catmaply/actions/) [![codecov](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/branch/master/graph/badge.svg)](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/) [![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://cran.r-project.org/package=catmaplyhttps://github.com/VerkehrsbetriebeZuerich/catmaply/issues/)
+[![R build status](https://github.com/VerkehrsbetriebeZuerich/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/VerkehrsbetriebeZuerich/catmaply/actions/) [![codecov](https://app.codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/branch/master/graph/badge.svg)](https://app.codecov.io/gh/VerkehrsbetriebeZuerich/catmaply) [![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://cran.r-project.org/package=catmaplyhttps://github.com/VerkehrsbetriebeZuerich/catmaply/issues/)
 [![](https://www.r-pkg.org/badges/version/catmaply?color=blue)](https://cran.r-project.org/package=catmaply/)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=green)](https://cran.r-project.org/package=catmaply/)
 
