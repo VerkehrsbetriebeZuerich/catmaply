@@ -46,3 +46,6 @@ img/
 .Rproj.user
 doc
 Meta
+docs
+/doc/
+/Meta/

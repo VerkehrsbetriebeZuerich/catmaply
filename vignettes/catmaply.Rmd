@@ -1,15 +1,19 @@
 ---
 title: "catmaply"
-date: "`r Sys.Date()`"
 author: "Yves Mauron"
-output: 
+date: "`r Sys.Date()`"
+output:
   html_document:
     fig_width: 10
     fig_height: 9
     self_contained: yes
-    toc: true
-    pandoc_args: ["+RTS", "-K128m", "-RTS"]
-    # df_print: paged
+    toc: yes
+    pandoc_args:
+    - +RTS
+    - "-K128m"
+    - "-RTS"
+  pdf_document:
+    toc: yes
 ---
 
 <!--
