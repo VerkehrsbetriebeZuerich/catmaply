@@ -1,0 +1,22 @@
+#' Sample files provided by VBZ
+#'
+#' Sample data of three distinct routes.
+#'
+#' @format list with data.frame elements
+#' \describe{
+#'   \item{trip_seq}{Sequence order of trips.}
+#'   \item{stop_seq}{Sequence order of stops.}
+#'   \item{stop_name}{Name of the stop.}
+#'   \item{trip_id}{Id of trip}
+#'   \item{circulation_name}{Name of circulation.}
+#'   \item{line_name}{Name of line.}
+#'   \item{vehicle}{Type of vehicle.}
+#'   \item{occupancy}{Occupancy.}
+#'   \item{occ_category}{Category of occupancy.}
+#'   \item{departure_time}{Time of departure.}
+#'   \item{number_of_measurements}{Number of measurements.}
+#'   \item{occ_cat_name}{Occupancy category name}
+#'   \item{direction}{Direction.}
+#' }
+#' @source vbz
+'vbz'
