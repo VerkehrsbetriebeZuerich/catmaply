@@ -168,7 +168,7 @@ The code shown above leads to the following output
 
 ### Further examples
 
-More step-by-step examples and further descriptions can be found [here](https://cran.r-project.org/web/packages/catmaply/vignettes/catmaply.html).
+More step-by-step examples and further descriptions can be found [here](https://cran.r-project.org/package=catmaply/vignettes/catmaply.html).
 
 
 ## Code of conduct
