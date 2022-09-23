@@ -3,6 +3,14 @@
 [![R build status](https://github.com/VerkehrsbetriebeZuerich/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/VerkehrsbetriebeZuerich/catmaply/actions/) [![codecov](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/branch/master/graph/badge.svg)](https://app.codecov.io/gh/VerkehrsbetriebeZuerich/catmaply) [![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://cran.r-project.org/package=catmaply)
 [![](https://www.r-pkg.org/badges/version/catmaply?color=blue)](https://cran.r-project.org/package=catmaply/)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=green)](https://cran.r-project.org/package=catmaply/)
+[<img alt="VBZ" width="80px" src="img/vbz_oc_c_s20_p_RGB.png" />](https://www.stadt-zuerich.ch/vbz)
+
+## Contents
+- [Introduction](#Introduction)
+- [Installation](#Installation)
+- [Examples](#Examples)
+- [Code of Conduct](#Code-of-Conduct)
+
 
 
 ## Introduction
@@ -23,9 +31,6 @@ This package is still under active development. If you have features you would l
 
 You can see the most recent changes of the package in [NEWS.md](https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/NEWS.md).
 
-### Code of conduct
-
-Please note that this project is released with a [Contributor Code of Conduct](https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## Installation
 
@@ -61,3 +66,114 @@ And then you may load the package using:
 ```R
 library("catmaply")
 ```
+
+## Examples
+
+To get an impression what catmaply does take a look at the following examples.
+
+### Simple plot with default options
+
+```R
+# simple plot
+library(catmaply)
+
+# example data within catmaply
+data("vbz")
+df <- vbz[[3]]
+
+catmaply(
+  df,
+  x = trip_seq,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occ_category
+)
+```
+The code shown above leads to the following output
+
+![](img/simple_example_catmaply.gif)
+
+### More complex plot
+
+catmaply brings many costumizing options for you to get the plot in the shape you want.
+Also the layout options from Plotly can be used to style the plot.
+
+```R
+# a bit more complex plot,
+# using some costumizing options and
+# layout options from plotly
+
+library(catmaply)
+library(plotly)
+library(dplyr)
+
+# example data within catmaply
+data("vbz")
+df <- vbz[[3]]
+
+
+catmaply(
+  df,
+  x = trip_id,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  categorical_color_range = TRUE,
+  categorical_col = occ_category,
+  hover_template = paste(
+    "<b>Time</b>:", departure_time,
+    "<br><b>Stop</b>:", stop_name,
+    "<br><b>Occupancy</b>:", occupancy,
+    "<br><b>Occupancy Category</b>:", occ_cat_name,
+    "<br><b>No Of Measurements</b>:", number_of_measurements,
+    "<extra></extra>"
+  ),
+  legend_col = occ_cat_name
+) %>%
+  layout(
+    title = list(text = ""),
+    # adjust hight of plot due to number of stops/observations
+    height = 500 + 10 * max(df$stop_seq),
+    # flip axis and use spikes
+    yaxis = list(
+      autorange = "reversed",
+      showspikes = TRUE,
+      spikedash = "solid",
+      spikethickness = 0.5,
+      spikecolor = "gray"
+    ),
+    # use spikes
+    xaxis = list(
+      showspikes = TRUE,
+      spikedash = "solid",
+      spikethickness = 0.5,
+      spikecolor = "gray",
+      rangeslider = list(thickness = 0.1)
+    ),
+    # horizontal and adjusted legend
+    legend = list(
+      yanchor = "top",
+      y = -0.25,
+      orientation = "h",
+      font = list(size = 9)
+    )
+  )
+```
+
+The code shown above leads to the following output
+
+![](img/complex_example_catmaply.PNG)
+
+### Further examples
+
+More step-by-step examples and further descriptions can be found [here](https://cran.r-project.org/web/packages/catmaply/vignettes/catmaply.html).
+
+
+## Code of conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.  
+
+
+
