@@ -89,6 +89,16 @@
 </div>
 
 <div class="section level2">
+<h2 id="contents">Contents<a class="anchor" aria-label="anchor" href="#contents"></a>
+</h2>
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#Installation">Installation</a></li>
+<li><a href="#Examples">Examples</a></li>
+<li><a href="#Code-of-Conduct">Code of Conduct</a></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>A heatmap is a graphical representation of data that uses a system of color-coding to represent different values. Heatmaps are used in various forms of analytics, however, this R package specifically focuses on providing an efficient way for creating interactive heatmaps for categorical data or continuous data that can be grouped into categories.</p>
@@ -104,11 +114,6 @@
 <h3 id="news">News<a class="anchor" aria-label="anchor" href="#news"></a>
 </h3>
 <p>You can see the most recent changes of the package in <a href="https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/NEWS.md" class="external-link">NEWS.md</a>.</p>
-</div>
-<div class="section level3">
-<h3 id="code-of-conduct">Code of conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
-</h3>
-<p>Please note that this project is released with a <a href="https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 </div>
 <div class="section level2">
@@ -138,6 +143,111 @@
 <p>And then you may load the package using:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/VerkehrsbetriebeZuerich/catmaply" class="external-link">"catmaply"</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>To get an impression what catmaply does take a look at the following examples.</p>
+<div class="section level3">
+<h3 id="simple-plot-with-default-options">Simple plot with default options<a class="anchor" aria-label="anchor" href="#simple-plot-with-default-options"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># simple plot</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/VerkehrsbetriebeZuerich/catmaply" class="external-link">catmaply</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># example data within catmaply</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vbz"</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">vbz</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/catmaply.html">catmaply</a></span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  x <span class="op">=</span> <span class="va">trip_seq</span>,</span>
+<span>  x_order <span class="op">=</span> <span class="va">trip_seq</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">stop_name</span>,</span>
+<span>  y_order <span class="op">=</span> <span class="va">stop_seq</span>,</span>
+<span>  z <span class="op">=</span> <span class="va">occ_category</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The code shown above leads to the following output</p>
+<p><img src="reference/figures/simple_example_catmaply.gif"></p>
+</div>
+<div class="section level3">
+<h3 id="more-complex-plot">More complex plot<a class="anchor" aria-label="anchor" href="#more-complex-plot"></a>
+</h3>
+<p>catmaply brings many costumizing options for you to get the plot in the shape you want. Also the layout options from Plotly can be used to style the plot.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># a bit more complex plot,</span></span>
+<span><span class="co"># using some costumizing options and</span></span>
+<span><span class="co"># layout options from plotly</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/VerkehrsbetriebeZuerich/catmaply" class="external-link">catmaply</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://plotly-r.com" class="external-link">plotly</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># example data within catmaply</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vbz"</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">vbz</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="reference/catmaply.html">catmaply</a></span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  x <span class="op">=</span> <span class="va">trip_id</span>,</span>
+<span>  x_order <span class="op">=</span> <span class="va">trip_seq</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">stop_name</span>,</span>
+<span>  y_order <span class="op">=</span> <span class="va">stop_seq</span>,</span>
+<span>  z <span class="op">=</span> <span class="va">occupancy</span>,</span>
+<span>  categorical_color_range <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  categorical_col <span class="op">=</span> <span class="va">occ_category</span>,</span>
+<span>  hover_template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>    <span class="st">"&lt;b&gt;Time&lt;/b&gt;:"</span>, <span class="va">departure_time</span>,</span>
+<span>    <span class="st">"&lt;br&gt;&lt;b&gt;Stop&lt;/b&gt;:"</span>, <span class="va">stop_name</span>,</span>
+<span>    <span class="st">"&lt;br&gt;&lt;b&gt;Occupancy&lt;/b&gt;:"</span>, <span class="va">occupancy</span>,</span>
+<span>    <span class="st">"&lt;br&gt;&lt;b&gt;Occupancy Category&lt;/b&gt;:"</span>, <span class="va">occ_cat_name</span>,</span>
+<span>    <span class="st">"&lt;br&gt;&lt;b&gt;No Of Measurements&lt;/b&gt;:"</span>, <span class="va">number_of_measurements</span>,</span>
+<span>    <span class="st">"&lt;extra&gt;&lt;/extra&gt;"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  legend_col <span class="op">=</span> <span class="va">occ_cat_name</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">layout</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
+<span>    <span class="co"># adjust hight of plot due to number of stops/observations</span></span>
+<span>    height <span class="op">=</span> <span class="fl">500</span> <span class="op">+</span> <span class="fl">10</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">stop_seq</span><span class="op">)</span>,</span>
+<span>    <span class="co"># flip axis and use spikes</span></span>
+<span>    yaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      autorange <span class="op">=</span> <span class="st">"reversed"</span>,</span>
+<span>      showspikes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>      spikedash <span class="op">=</span> <span class="st">"solid"</span>,</span>
+<span>      spikethickness <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>      spikecolor <span class="op">=</span> <span class="st">"gray"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># use spikes</span></span>
+<span>    xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      showspikes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>      spikedash <span class="op">=</span> <span class="st">"solid"</span>,</span>
+<span>      spikethickness <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>      spikecolor <span class="op">=</span> <span class="st">"gray"</span>,</span>
+<span>      rangeslider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>thickness <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># horizontal and adjusted legend</span></span>
+<span>    legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      yanchor <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>      y <span class="op">=</span> <span class="op">-</span><span class="fl">0.25</span>,</span>
+<span>      orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span>      font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>The code shown above leads to the following output</p>
+<p><img src="reference/figures/complex_example_catmaply.PNG"></p>
+</div>
+<div class="section level3">
+<h3 id="further-examples">Further examples<a class="anchor" aria-label="anchor" href="#further-examples"></a>
+</h3>
+<p>More step-by-step examples and further descriptions can be found <a href="https://cran.r-project.org/package=catmaply/vignettes/catmaply.html" class="external-link">here</a>.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that this project is released with a <a href="https://github.com/VerkehrsbetriebeZuerich/catmaply/blob/master/CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -181,6 +291,7 @@
 <li><a href="https://cran.r-project.org/package=catmaply" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-green.svg"></a></li>
 <li><a href="https://cran.r-project.org/package=catmaply/" class="external-link"><img src="https://www.r-pkg.org/badges/version/catmaply?color=blue"></a></li>
 <li><a href="https://cran.r-project.org/package=catmaply/" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=green"></a></li>
+<li><a href="https://www.stadt-zuerich.ch/vbz" class="external-link"><img alt="VBZ" width="80px" src="reference/figures/vbz_oc_c_s20_p_RGB.png"></a></li>
 </ul>
 </div>
 
