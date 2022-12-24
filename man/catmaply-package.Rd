@@ -14,6 +14,7 @@ Methods and plotting functions for displaying categorical data on an interactive
 Useful links:
 \itemize{
   \item \url{https://github.com/VerkehrsbetriebeZuerich/catmaply}
+  \item \url{https://verkehrsbetriebezuerich.github.io/catmaply/}
   \item Report bugs at \url{https://github.com/VerkehrsbetriebeZuerich/catmaply/issues}
 }
 
