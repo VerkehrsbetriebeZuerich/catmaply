@@ -317,7 +317,7 @@ catmaply <- function(
       tick_stops <- c(
         "%H:%M:%S.%L ms", "%H:%M:%S s", "%H:%M m", "%H:%M h", "%e. %b d", "%e. %b w", "%b '%y M",  "%Y Y"
       )
-      for(i in seq.int(length.out = length(current))){
+      for(i in seq.int(length.out = length(tickformatstops))){
         tickformatstops[[i]][["value"]] <- tick_stops[i]
       }
     }
