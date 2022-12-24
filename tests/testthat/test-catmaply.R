@@ -745,6 +745,26 @@ test_that("test catmaply", {
     legend = FALSE
   )
   expect_true(is(fig, "plotly"))
+
+  # time axis with date type input..
+  dummy_dataset <- tibble(
+    date = seq(as.Date("2017-01-01", tz='UTC'), as.Date("2017-02-01", tz='UTC'), by = 1),
+    numeric_fill = sample(1000:2000, size = 32),
+    categoric_fill = sample(1:5, size = 32,replace=T),
+    numeric_x = sample(c(1:8), size = 32,replace = T),
+    categoric_y = sample(LETTERS[1:5],32, replace = T),
+
+  )
+
+  fig <- catmaply(
+    dataset ,
+    x=date,
+    y=categoric_y,
+    z= categoric_fill,
+    rangeslider = FALSE
+  )
+  expect_true(is(fig, "plotly"))
+
 })
 
 
