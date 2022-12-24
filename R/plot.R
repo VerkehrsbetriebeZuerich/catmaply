@@ -37,7 +37,7 @@
 #' @param legend_interactive whether the legend should be interactive or not; i.e. remove traces on click; (default: TRUE).
 #' @param tickformatstops used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or
 #' more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
-#' (default: \cr
+#' (default: if class "POSIXct" or "POSIXt", then \cr
 #' list( \cr
 #' list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
 #'   list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"), \cr
@@ -48,7 +48,19 @@
 #'   list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"), \cr
 #'   list(dtickrange = list("M12", NULL), value = "\%H:\%M h") \cr
 #'   ) \cr
-#' ).
+#' ) \cr
+#' else if class is Date:
+#' list( \cr
+#' list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
+#'   list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"), \cr
+#'   list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), \cr
+#'   list(dtickrange = list(3600000, 86400000), value = "\%H:\%M h"), \cr
+#'   list(dtickrange = list(86400000, 604800000), value = "\%e. \%b d"), \cr
+#'   list(dtickrange = list(604800000, "M1"), value = "\%e. \%b w"), \cr
+#'   list(dtickrange = list("M1", "M12"), value = "\%b '\%y M"), \cr
+#'   list(dtickrange = list("M12", NULL), value = "\%Y Y") \cr
+#'   ) \cr
+#' ) \cr
 #' @param rangeslider boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).
 #' @param slider boolean value indicating whether to use slider or not; if specified, \code{rangeslider} will not be displayed; (default: FALSE).
 #' @param slider_steps list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
@@ -147,16 +159,7 @@ catmaply <- function(
   legend=TRUE,
   legend_col,
   legend_interactive=TRUE,
-  tickformatstops=list(
-    list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
-    list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
-    list(dtickrange = list(60000, 3600000), value = "%H:%M m"),
-    list(dtickrange = list(3600000, 86400000), value = "%H:%M h"),
-    list(dtickrange = list(86400000, 604800000), value = "%H:%M h"),
-    list(dtickrange = list(604800000, "M1"), value = "%H:%M h"),
-    list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
-    list(dtickrange = list("M12", NULL), value = "%H:%M h")
-  ),
+  tickformatstops=NULL,
   rangeslider=TRUE,
   slider=FALSE,
   slider_steps=list(
@@ -293,9 +296,31 @@ catmaply <- function(
 
   x_is_time <- FALSE
   # check if x axis is POSXxt
-  if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt"))){
+  if ( any(class(df[[x]]) %in% c("POSIXct", "POSIXt", "Date"))){
     x_is_time <- TRUE
     x_order <- x # if x is date, then, in any case, overwrite ordering with given by x itself.
+  }
+
+  # check if x axis is Date
+  if ( is.null(tickformatstops) ) {
+    tickformatstops <- list(
+      list(dtickrange = list(NULL, 1000), value = "%H:%M:%S.%L ms"),
+      list(dtickrange = list(1000, 60000), value = "%H:%M:%S s"),
+      list(dtickrange = list(60000, 3600000), value = "%H:%M m"),
+      list(dtickrange = list(3600000, 86400000), value = "%H:%M h"),
+      list(dtickrange = list(86400000, 604800000), value = "%H:%M h"),
+      list(dtickrange = list(604800000, "M1"), value = "%H:%M h"),
+      list(dtickrange = list("M1", "M12"), value = "%H:%M h"),
+      list(dtickrange = list("M12", NULL), value = "%H:%M h")
+    )
+    if ( any("Date" %in% class(df[[x]])) ) {
+      tick_stops <- c(
+        "%H:%M:%S.%L ms", "%H:%M:%S s", "%H:%M m", "%H:%M h", "%e. %b d", "%e. %b w", "%b '%y M",  "%Y Y"
+      )
+      for(i in seq.int(length.out = length(current))){
+        tickformatstops[[i]][["value"]] <- tick_stops[i]
+      }
+    }
   }
 
   # check categories and color palette count -> one category item per legend
