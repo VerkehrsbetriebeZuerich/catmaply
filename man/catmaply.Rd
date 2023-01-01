@@ -31,13 +31,7 @@ catmaply(
   legend = TRUE,
   legend_col,
   legend_interactive = TRUE,
-  tickformatstops = list(list(dtickrange = list(NULL, 1000), value =
-    "\%H:\%M:\%S.\%L ms"), list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"),
-    list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), list(dtickrange =
-    list(3600000, 86400000), value = "\%H:\%M h"), list(dtickrange = list(86400000,
-    604800000), value = "\%H:\%M h"), list(dtickrange = list(604800000, "M1"), value =
-    "\%H:\%M h"), list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"),
-    list(dtickrange = list("M12", NULL), value = "\%H:\%M h")),
+  tickformatstops = NULL,
   rangeslider = TRUE,
   slider = FALSE,
   slider_steps = list(slider_start = 1, slider_range = 15, slider_shift = 5,
@@ -109,10 +103,11 @@ Provide multiple font families, separated by commas, to indicate the preference 
 \item{legend_interactive}{whether the legend should be interactive or not; i.e. remove traces on click; (default: TRUE).}
 
 \item{tickformatstops}{used only if x axis is of type c("POSIXct", "POSIXt"). List of named list where each named list has one or
-more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours;
-(default: \cr
+more of the keys listed here: https://plotly.com/r/reference/#heatmap-colorbar-tickformatstops. Default is optimized for summarized data of level day 24 hours; \cr
+if default value (NULL) is set, tickformatstops is set as follows:
+for column class "POSIXct" or "POSIXt" \cr
 list( \cr
-list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
+  list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
   list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"), \cr
   list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), \cr
   list(dtickrange = list(3600000, 86400000), value = "\%H:\%M h"), \cr
@@ -121,7 +116,20 @@ list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
   list(dtickrange = list("M1", "M12"), value = "\%H:\%M h"), \cr
   list(dtickrange = list("M12", NULL), value = "\%H:\%M h") \cr
   ) \cr
-).}
+) \cr
+for class equals Date:
+list( \cr
+list(dtickrange = list(NULL, 1000), value = "\%H:\%M:\%S.\%L ms"), \cr
+  list(dtickrange = list(1000, 60000), value = "\%H:\%M:\%S s"), \cr
+  list(dtickrange = list(60000, 3600000), value = "\%H:\%M m"), \cr
+  list(dtickrange = list(3600000, 86400000), value = "\%H:\%M h"), \cr
+  list(dtickrange = list(86400000, 604800000), value = "\%e. \%b d"), \cr
+  list(dtickrange = list(604800000, "M1"), value = "\%e. \%b w"), \cr
+  list(dtickrange = list("M1", "M12"), value = "\%b '\%y M"), \cr
+  list(dtickrange = list("M12", NULL), value = "\%Y Y") \cr
+  ) \cr
+) \cr
+(default: NULL)}
 
 \item{rangeslider}{boolean value indicating whether the rangeslider should be displayed or not; (default: TRUE).}
 
