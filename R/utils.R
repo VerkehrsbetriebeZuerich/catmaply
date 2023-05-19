@@ -1,65 +1,95 @@
 #' Generates the parameters necessary for discrete coloring and colorbar
 #'
-#' @param categories categories, for coloring should done
+#' @param df catmaply tibble
 #' @param col_palette the color palette
-#' @param range_min min of z range; (default: 1)
-#' @param range_min max of z range; (default: length(categories))
 #'
 #' @return list(colorscale, tickvals, ticktext)
 #'
 #' @importFrom utils tail
 #'
 #' @keywords internal
-discrete_coloring <- function(categories, col_palette, range_min, range_max) {
-
-  if (is.factor(categories))
-    categories <- as.character(categories)
-
-  if (!is.vector(categories) || is.list(categories))
-    stop("Parameter 'categories' must be a vector.")
+discrete_coloring <- function(df, color_palette) {
 
   if (!is.vector(col_palette) || is.list(col_palette))
     stop("Parameter 'col_palette' must be a vector.")
 
   discrete_colorbar <- FALSE
-  if ((length(categories) * 2) == length(col_palette)) {
+  if ((length(unique(df$category)) * 2) == length(col_palette)) {
     discrete_colorbar <- TRUE
-  } else if (length(categories) != length(col_palette)) {
+  } else if (length(categories) == length(col_palette)) {
+    exp_col_palette <- color_palette
+    for (col in col_palette) exp_col_palette <- c(exp_col_palette, col, col)
+    color_palette <- exp_col_palette
+  } else {
     stop("Parameter 'col_palette' must have the same or twice the length of category parameter.")
   }
 
-  bvals <- c(0, seq.int(length.out = length(categories)))
+  # calculate bounds of colorbar
+  bounds <- df %>%
+    dplyr::group_by(category) %>%
+    dplyr::summarise(
+      cat_bound_min = min(z),
+      cat_bound_max = max(z),
+      cat_tickval = mean(c(min(z), max(z)))
+    ) %>%
+    tidyr::pivot_longer(
+      cols = starts_with("cat_"),
+      names_to = "var_name",
+      values_to = "var_value",
+    ) %>%
+    dplyr::mutate(
+      normalized_value = (var_value - min(var_value))/ (max(var_value) - min(var_value))
+    ) %>%
+    dplyr::arrange(-desc(category), -desc(var_value))
 
-  bvals <- bvals[order(bvals)]
-  nvals <- (bvals - min(bvals)) / (max(bvals) - min(bvals))
+  # calculate bounds of categories
+  dcolorscale <- bounds %>%
+    dplyr::filter(substr(var_name, 1, 9) == "cat_bound") %>%
+    dplyr::mutate(color = color_palette) %>%
+    dplyr::select(normalized_value, color) %>%
+    as.matrix()
+  colnames(dcolorscale) <- NULL
 
-  dcolorscale <- array(NA, dim = c((length(nvals) * 2) -2, 2))
+  # fill gaps between categories with empty/white space
+  n_row = NROW(dcolorscale)
+  filled_dcolorscale = matrix(nrow=1, ncol = 2)
+  filled_dcolorscale[1,] <- dcolorscale[1,]
 
-  for (i in seq.int(length.out = length(nvals) -1 )) {
-    index <- ((i - 1) * 2) + 1
-    dcolorscale[index,] <- c(nvals[i], ifelse(discrete_colorbar, col_palette[index], col_palette[i]))
-    dcolorscale[index + 1,] <- c(nvals[i + 1], ifelse(discrete_colorbar, col_palette[index + 1], col_palette[i]))
+  artificial_offset = 0
+  for(i in seq.int(2, n_row)){
+    categroy_gap <- ifelse(i%%2 == 0 && i != n_row, as.double(dcolorscale[i+1,1]) - as.double(dcolorscale[i,1]), 0)
+    if( i %% 2 != 0 || i == n_row || categroy_gap == 0) {
+      temp_mat = matrix(nrow=1, ncol = 2)
+      temp_mat[1,] = c(as.double(dcolorscale[i,1])-artificial_offset, dcolorscale[i,2])
+      filled_dcolorscale <- rbind(filled_dcolorscale, temp_mat)
+      artificial_offset <- 0
+    } else {
+      artificial_offset = ifelse(categroy_gap > .000002, .000001, categroy_gap / 3)
+      temp_mat = matrix(nrow=3, ncol = 2)
+      temp_mat[1,] = c(as.double(dcolorscale[i,1])+artificial_offset, dcolorscale[i,2])
+      temp_mat[2,] = c(as.double(dcolorscale[i,1])+artificial_offset, "#FFFFFFFF")
+      temp_mat[3,] = c(as.double(dcolorscale[i+1,1])-artificial_offset, "#FFFFFFFF")
+      filled_dcolorscale <- rbind(filled_dcolorscale, temp_mat)
+    }
   }
 
-  # calculate tick values for legend (lowest point to max point)
-  # works only with even spacing until now
-  ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
-  range_min <- ifelse(discrete_colorbar, range_min, 1)
-  range_max <- ifelse(discrete_colorbar, range_max, max(bvals))
-  # calc percentage of ticks * range (max - min) + min
-  tick_vals <- (
-    ticks[ticks %% 2 != 0] / max(ticks)
-  ) * (
-    range_max - range_min
-  ) + range_min
+  # get tick values
+  tick_vals <- bounds %>%
+    dplyr::filter(var_name == "cat_tickval") %>%
+    .$var_value
 
-  tick_text <- categories
+  # get tick text
+  tick_text <- df %>%
+    dplyr::select(category, legend) %>%
+    dplyr::distinct() %>%
+    dplyr::arrange(-desc(category)) %>%
+    .$legend
 
   return(
     list(
-      colorscale=dcolorscale,
+      colorscale=new_mat,
       tickvals=tick_vals,
-      ticktext=tick_text
+      ticktext=as.character(tick_text)
     )
   )
 }
