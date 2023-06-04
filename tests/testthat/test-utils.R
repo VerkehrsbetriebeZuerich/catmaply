@@ -4,10 +4,18 @@ context("utils")
 
 test_that("Test discrete_coloring", {
 
-  categories <- paste("Category", seq.int(5))
-  col_palette <- viridis::magma(length(categories))
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    x_order=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,7,11,6,4,2)),
+    category=as.integer(c(1,2,3,4,4,3,2,1)),
+    legend=as.character(as.integer(c(1,2,3,4,4,3,2,1)))
+  )
 
-  dc <- discrete_coloring(categories = categories, col_palette =  col_palette)
+  color_palette = viridis::inferno(4)
+
+  dc <- discrete_coloring(df, color_palette)
 
   expect_true(is(dc, "list"))
 
@@ -15,35 +23,52 @@ test_that("Test discrete_coloring", {
 
   expect_true(all(names(dc) %in% c("colorscale", "tickvals", "ticktext")))
 
-  expect_true(dim(dc$colorscale)[1] == length(categories) * 2)
+  expect_true(
+    dim(dc$colorscale)[1] ==
+      (length(unique(df$category)) * 2) +
+      ((length(unique(df$category)) - 1) * 2))
 
   expect_true(dim(dc$colorscale)[2] == 2)
 
-  expect_true(length(dc$tickvals) == length(categories) && length(dc$ticktext) == length(categories))
+  expect_true(length(dc$tickvals) == 4 && length(dc$ticktext) == 4)
 
-  expect_true(all(categories == dc$ticktext))
+  expect_true(all(c(1,2,3,4) == dc$ticktext))
 
-  expect_error(discrete_coloring(categories[1:3], col_palette))
+  expect_error(discrete_coloring(select(df, x, y), color_palette))
 
-  expect_error(discrete_coloring(categories, col_palette[1:4]))
+  expect_error(discrete_coloring(df, viridis::inferno(2)))
 
   # factor
-  categories <- as.factor(paste("Category", seq.int(5)))
-  col_palette <- viridis::magma(length(categories))
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    x_order=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,7,11,6,4,2)),
+    category=as.factor(as.integer(c(1,2,3,4,4,3,2,1))),
+    legend=as.character(as.integer(c(1,2,3,4,4,3,2,1)))
+  )
 
-  dc <- discrete_coloring(categories = categories, col_palette =  col_palette)
+  dc <- discrete_coloring(df, viridis::inferno(8))
   expect_true(is(dc, "list"))
 })
 
 
 test_that("Test discrete_coloring with custom color ranges", {
 
-  df <- vbz[[3]]
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    x_order=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,7,11,6,4,2)),
+    category=as.integer(c(1,2,3,4,4,3,2,1)),
+    legend=as.character(as.integer(c(1,2,3,4,4,3,2,1)))
+  )
 
-  categories <- paste("Category", seq.int(5))
-  col_palette <- viridis::magma(length(categories) * 2)
+  color_palette = viridis::inferno(8)
+  categories = unique(df$category)
+  len_category = length(unique(df$category))
 
-  dc <- discrete_coloring(categories = categories, col_palette =  col_palette, range_max = max(stats::na.omit(df$occupancy)), range_min = min(stats::na.omit(df$occupancy)))
+  dc <- discrete_coloring(df, color_palette)
 
   expect_true(is(dc, "list"))
 
@@ -51,11 +76,14 @@ test_that("Test discrete_coloring with custom color ranges", {
 
   expect_true(all(names(dc) %in% c("colorscale", "tickvals", "ticktext")))
 
-  expect_true(dim(dc$colorscale)[1] == length(categories) * 2)
+  expect_true(
+    dim(dc$colorscale)[1] ==
+      (len_category * 2) + ((len_category - 1) * 2)
+  )
 
   expect_true(dim(dc$colorscale)[2] == 2)
 
-  expect_true(length(dc$tickvals) == length(categories) && length(dc$ticktext) == length(categories))
+  expect_true(length(dc$tickvals) == len_category && length(dc$ticktext) == len_category)
 
   expect_true(all(categories == dc$ticktext))
 
@@ -67,25 +95,27 @@ test_that("Test discrete_coloring with custom color ranges", {
 
 test_that("Test discrete_coloring input error handling", {
 
-  df <- vbz[[3]]
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    x_order=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,7,11,6,4,2)),
+    category=as.integer(c(1,2,3,4,4,3,2,1)),
+    legend=as.character(as.integer(c(1,2,3,4,4,3,2,1)))
+  )
 
-  categories <- paste("Category", seq.int(5))
-  col_palette <- viridis::magma(length(categories) * 2)
+  color_palette = viridis::inferno(8)
 
   expect_error(
     discrete_coloring(
-      categories = as.list(categories),
-      col_palette =  col_palette,
-      range_max = max(stats::na.omit(df$Besetzung)),
-      range_min = min(stats::na.omit(df$Besetzung))
+      df = c("one", "two", "Three"),
+      color_palette = color_palette,
     )
   )
   expect_error(
     discrete_coloring(
-      categories = categories,
-      col_palette =  as.list(col_palette),
-      range_max = max(stats::na.omit(df$Besetzung)),
-      range_min = min(stats::na.omit(df$Besetzung))
+      df = df,
+      color_palette = as.list(color_palette)
     )
   )
 

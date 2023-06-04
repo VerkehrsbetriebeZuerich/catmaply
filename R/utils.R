@@ -10,18 +10,30 @@
 #' @keywords internal
 discrete_coloring <- function(df, color_palette) {
 
-  if (!is.vector(col_palette) || is.list(col_palette))
-    stop("Parameter 'col_palette' must be a vector.")
+  if (!is.data.frame(df))
+    stop("Parameter 'df' must be a data.frame or tibble.")
+
+  if (!all(c("x", "y", "z", "category", "legend") %in% colnames(df)))
+    stop(
+      "DataFrame/Tibble 'df' must have at least the following columns: "+
+      "x", "y", "z", "category"
+    )
+
+  if (!is.vector(color_palette) || is.list(color_palette))
+    stop("Parameter 'color_palette' must be a vector.")
 
   discrete_colorbar <- FALSE
-  if ((length(unique(df$category)) * 2) == length(col_palette)) {
+  if ((length(unique(df$category)) * 2) == length(color_palette)) {
     discrete_colorbar <- TRUE
-  } else if (length(categories) == length(col_palette)) {
-    exp_col_palette <- color_palette
-    for (col in col_palette) exp_col_palette <- c(exp_col_palette, col, col)
+  } else if (length(unique(df$category)) == length(color_palette)) {
+    exp_col_palette <- c()
+    for (col in color_palette) exp_col_palette <- c(exp_col_palette, col, col)
     color_palette <- exp_col_palette
   } else {
-    stop("Parameter 'col_palette' must have the same or twice the length of category parameter.")
+    stop(
+      "Parameter 'color_palette' must have the same or twice " +
+      "the length of vcategory parameter."
+    )
   }
 
   # calculate bounds of colorbar
@@ -40,7 +52,7 @@ discrete_coloring <- function(df, color_palette) {
     dplyr::mutate(
       normalized_value = (var_value - min(var_value))/ (max(var_value) - min(var_value))
     ) %>%
-    dplyr::arrange(-desc(category), -desc(var_value))
+    dplyr::arrange(-dplyr::desc(category), -dplyr::desc(var_value))
 
   # calculate bounds of categories
   dcolorscale <- bounds %>%
@@ -57,7 +69,10 @@ discrete_coloring <- function(df, color_palette) {
 
   artificial_offset = 0
   for(i in seq.int(2, n_row)){
-    categroy_gap <- ifelse(i%%2 == 0 && i != n_row, as.double(dcolorscale[i+1,1]) - as.double(dcolorscale[i,1]), 0)
+    categroy_gap <- ifelse(
+      i%%2 == 0 && i != n_row,
+      as.double(dcolorscale[i+1,1]) - as.double(dcolorscale[i,1]),
+      0)
     if( i %% 2 != 0 || i == n_row || categroy_gap == 0) {
       temp_mat = matrix(nrow=1, ncol = 2)
       temp_mat[1,] = c(as.double(dcolorscale[i,1])-artificial_offset, dcolorscale[i,2])
@@ -82,12 +97,12 @@ discrete_coloring <- function(df, color_palette) {
   tick_text <- df %>%
     dplyr::select(category, legend) %>%
     dplyr::distinct() %>%
-    dplyr::arrange(-desc(category)) %>%
+    dplyr::arrange(-dplyr::desc(category)) %>%
     .$legend
 
   return(
     list(
-      colorscale=new_mat,
+      colorscale=filled_dcolorscale,
       tickvals=tick_vals,
       ticktext=as.character(tick_text)
     )

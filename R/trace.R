@@ -113,10 +113,8 @@ add_catmaply_single <- function(
 ) {
 
   discrete_col <- discrete_coloring(
-    categories=legend_items,
-    col_palette=color_palette,
-    range_min = min(stats::na.omit(df$z)),
-    range_max = max(stats::na.omit(df$z))
+    df = df,
+    color_palette = color_palette
   )
 
   if (legend) { # legend
