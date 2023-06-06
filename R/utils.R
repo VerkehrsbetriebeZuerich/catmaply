@@ -38,27 +38,29 @@ discrete_coloring <- function(df, color_palette) {
 
   # calculate bounds of colorbar
   bounds <- df %>%
-    dplyr::group_by(category) %>%
+    dplyr::group_by(.data$category) %>%
     dplyr::summarise(
-      cat_bound_min = min(z),
-      cat_bound_max = max(z),
-      cat_tickval = mean(c(min(z), max(z)))
+      cat_bound_min = min(.data$z),
+      cat_bound_max = max(.data$z),
+      cat_tickval = mean(c(min(.data$z), max(.data$z)))
     ) %>%
     tidyr::pivot_longer(
-      cols = starts_with("cat_"),
+      cols = dplyr::starts_with("cat_"),
       names_to = "var_name",
       values_to = "var_value",
     ) %>%
     dplyr::mutate(
-      normalized_value = (var_value - min(var_value))/ (max(var_value) - min(var_value))
+      normalized_value =
+        (.data$var_value - min(.data$var_value)) /
+        (max(.data$var_value) - min(.data$var_value))
     ) %>%
-    dplyr::arrange(-dplyr::desc(category), -dplyr::desc(var_value))
+    dplyr::arrange(-dplyr::desc(.data$category), -dplyr::desc(.data$var_value))
 
   # calculate bounds of categories
   dcolorscale <- bounds %>%
-    dplyr::filter(substr(var_name, 1, 9) == "cat_bound") %>%
+    dplyr::filter(substr(.data$var_name, 1, 9) == "cat_bound") %>%
     dplyr::mutate(color = color_palette) %>%
-    dplyr::select(normalized_value, color) %>%
+    dplyr::select(.data$normalized_value, .data$color) %>%
     as.matrix()
   colnames(dcolorscale) <- NULL
 
@@ -90,15 +92,15 @@ discrete_coloring <- function(df, color_palette) {
 
   # get tick values
   tick_vals <- bounds %>%
-    dplyr::filter(var_name == "cat_tickval") %>%
-    .$var_value
+    dplyr::filter(.data$var_name == "cat_tickval")
+  tick_vals <-tick_vals$var_value
 
   # get tick text
   tick_text <- df %>%
-    dplyr::select(category, legend) %>%
+    dplyr::select(.data$category, .data$legend) %>%
     dplyr::distinct() %>%
-    dplyr::arrange(-dplyr::desc(category)) %>%
-    .$legend
+    dplyr::arrange(-dplyr::desc(.data$category))
+  tick_text <- tick_text$legend
 
   return(
     list(

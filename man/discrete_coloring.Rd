@@ -4,14 +4,12 @@
 \alias{discrete_coloring}
 \title{Generates the parameters necessary for discrete coloring and colorbar}
 \usage{
-discrete_coloring(categories, col_palette, range_min, range_max)
+discrete_coloring(df, color_palette)
 }
 \arguments{
-\item{categories}{categories, for coloring should done}
+\item{df}{catmaply tibble}
 
 \item{col_palette}{the color palette}
-
-\item{range_min}{max of z range; (default: length(categories))}
 }
 \value{
 list(colorscale, tickvals, ticktext)
