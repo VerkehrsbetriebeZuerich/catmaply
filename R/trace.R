@@ -114,7 +114,8 @@ add_catmaply_single <- function(
 
   discrete_col <- discrete_coloring(
     df = df,
-    color_palette = color_palette
+    color_palette = color_palette,
+    categorical_color_range = categorical_color_range
   )
 
   if (legend) { # legend

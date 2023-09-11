@@ -1,5 +1,6 @@
 # ---------------------------------------------
 # Testing plotting
+library(dplyr)
 context("utils")
 
 test_that("Test discrete_coloring", {
@@ -15,7 +16,7 @@ test_that("Test discrete_coloring", {
 
   color_palette = viridis::inferno(4)
 
-  dc <- discrete_coloring(df, color_palette)
+  dc <- discrete_coloring(df, color_palette, TRUE)
 
   expect_true(is(dc, "list"))
 
@@ -34,9 +35,9 @@ test_that("Test discrete_coloring", {
 
   expect_true(all(c(1,2,3,4) == dc$ticktext))
 
-  expect_error(discrete_coloring(select(df, x, y), color_palette))
+  expect_error(discrete_coloring(select(df, x, y), color_palette, TRUE))
 
-  expect_error(discrete_coloring(df, viridis::inferno(2)))
+  expect_error(discrete_coloring(df, viridis::inferno(2), TRUE))
 
   # factor
   df <- tibble(
@@ -48,7 +49,7 @@ test_that("Test discrete_coloring", {
     legend=as.character(as.integer(c(1,2,3,4,4,3,2,1)))
   )
 
-  dc <- discrete_coloring(df, viridis::inferno(8))
+  dc <- discrete_coloring(df, viridis::inferno(8), TRUE)
   expect_true(is(dc, "list"))
 })
 
@@ -68,7 +69,7 @@ test_that("Test discrete_coloring with custom color ranges", {
   categories = unique(df$category)
   len_category = length(unique(df$category))
 
-  dc <- discrete_coloring(df, color_palette)
+  dc <- discrete_coloring(df, color_palette, TRUE)
 
   expect_true(is(dc, "list"))
 
@@ -87,9 +88,9 @@ test_that("Test discrete_coloring with custom color ranges", {
 
   expect_true(all(categories == dc$ticktext))
 
-  expect_error(discrete_coloring(categories[1:3], col_palette))
+  expect_error(discrete_coloring(categories[1:3], col_palette, TRUE))
 
-  expect_error(discrete_coloring(categories, col_palette[1:4]))
+  expect_error(discrete_coloring(categories, col_palette[1:4], TRUE))
 
 })
 
@@ -110,14 +111,65 @@ test_that("Test discrete_coloring input error handling", {
     discrete_coloring(
       df = c("one", "two", "Three"),
       color_palette = color_palette,
+      categorical_color_range = FALSE
     )
   )
   expect_error(
     discrete_coloring(
       df = df,
-      color_palette = as.list(color_palette)
+      color_palette = as.list(color_palette),
+      categorical_color_range = FALSE
     )
   )
 
+})
+
+
+test_that("Test overlapping categories error", {
+
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,11,1.5,3.5,5.5,1.15)),
+    category=as.integer(c(1,3,5,11,1,3,5,11)),
+    legend=as.character(c(1,3,5,11,1,3,5,11))
+  )
+
+  color_palette = viridis::inferno(8)
+
+  expect_error(
+    discrete_coloring(
+      df = df,
+      color_palette = color_palette,
+      categorical_color_range = FALSE
+    )
+  )
+
+})
+
+test_that("Test narrow legend lines warning", {
+
+  df <- tibble(
+    x=as.integer(c(1,1,1,1,2,2,2,2)),
+    y=as.integer(c(1,2,3,4,1,2,3,4)),
+    z=as.integer(c(1,3,5,11,1.5,3.5,5.5,11)),
+    category=as.integer(c(1,3,5,11,1,3,5,11)),
+    legend=as.character(c(1,3,5,11,1,3,5,11))
+  )
+
+  color_palette = viridis::inferno(8)
+
+  expect_warning(
+    discrete_coloring(
+      df = df,
+      color_palette = color_palette,
+      categorical_color_range = TRUE
+    )
+  )
+  discrete_coloring(
+    df = df,
+    color_palette = color_palette,
+    categorical_color_range = FALSE
+  )
 
 })

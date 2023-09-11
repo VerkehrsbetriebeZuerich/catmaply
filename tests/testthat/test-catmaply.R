@@ -1,7 +1,8 @@
 context("catmaply")
 
 # get data
-df <- vbz[[1]]
+df <- vbz[[1]] %>% filter(vehicle == "PO")
+
 
 # -----------------------------------------------
 # plot.R - error handling
@@ -665,20 +666,29 @@ test_that("test catmaply", {
   expect_true(is(fig, "plotly"))
 
   # other color palette
-  fig <- catmaply(
-    df,
-    x = trip_seq,
-    y = stop_name,
-    y_order = stop_seq,
-    z = occupancy,
-    categorical_color_range=TRUE,
-    categorical_col = occ_category,
-    color_palette = viridis::inferno,
-    slider=TRUE,
-    rangeslider = FALSE,
-    legend_interactive = FALSE
+  fig <-
+  expect_true(
+    suppressWarnings(
+      {
+        is(
+          catmaply(
+          df,
+          x = trip_seq,
+          y = stop_name,
+          y_order = stop_seq,
+          z = occupancy,
+          categorical_color_range=TRUE,
+          categorical_col = occ_category,
+          color_palette = viridis::inferno,
+          slider=TRUE,
+          rangeslider = FALSE,
+          legend_interactive = FALSE
+        ),
+        "plotly"
+        )
+      }
+    )
   )
-  expect_true(is(fig, "plotly"))
 })
 
 
@@ -891,22 +901,26 @@ test_that("colorbar - plot.R", {
 
   # color palette with static legend
   expect_true(
-    is(
-      catmaply(
-        df,
-        x='trip_seq',
-        x_order = 'trip_seq',
-        x_tickangle = -10,
-        y = "stop_name",
-        y_order = "stop_seq",
-        z = "occupancy",
-        categorical_color_range = TRUE,
-        categorical_col = 'occ_category',
-        color_palette = viridis::inferno,
-        legend_interactive = FALSE,
-        legend = TRUE
-      ),
-      "plotly"
+    suppressWarnings(
+      {
+        is(
+          catmaply(
+            df,
+            x='trip_seq',
+            x_order = 'trip_seq',
+            x_tickangle = -10,
+            y = "stop_name",
+            y_order = "stop_seq",
+            z = "occupancy",
+            categorical_color_range = TRUE,
+            categorical_col = 'occ_category',
+            color_palette = viridis::inferno,
+            legend_interactive = FALSE,
+            legend = TRUE
+          ),
+          "plotly"
+        )
+      }
     )
   )
 
