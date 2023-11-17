@@ -137,7 +137,7 @@ test_that("Test overlapping categories error", {
 
   color_palette = viridis::inferno(8)
 
-  expect_warning(
+  expect_error(
     discrete_coloring(
       df = df,
       color_palette = color_palette,

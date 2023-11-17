@@ -1,7 +1,7 @@
 context("catmaply")
 
 # get data
-df <- vbz[[1]] %>% filter(vehicle == "PO")
+df <- vbz[[1]] %>% filter(.data$vehicle == "PO")
 
 
 # -----------------------------------------------
