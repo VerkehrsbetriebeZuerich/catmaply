@@ -4,10 +4,12 @@
 \alias{discrete_coloring}
 \title{Generates the parameters necessary for discrete coloring and colorbar}
 \usage{
-discrete_coloring(df, color_palette)
+discrete_coloring(df, color_palette, categorical_color_range)
 }
 \arguments{
 \item{df}{catmaply tibble}
+
+\item{categorical_color_range}{whether to use categorical color range or not.}
 
 \item{col_palette}{the color palette}
 }

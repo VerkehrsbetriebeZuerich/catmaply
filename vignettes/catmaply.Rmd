@@ -99,7 +99,9 @@ Catmaply provides data of VBZ to easily start experimenting with the package. Fo
 
 ```{r out.width='100%'}
 data("vbz")
-df <- na.omit(vbz[[1]])
+
+df <- na.omit(vbz[[1]]) %>% 
+  filter(.data$vehicle == "PO")
 
 str(df)
 ```

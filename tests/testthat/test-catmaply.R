@@ -1,13 +1,12 @@
 context("catmaply")
 
-# get data
-df <- vbz[[1]] %>% filter(.data$vehicle == "PO")
-
 
 # -----------------------------------------------
 # plot.R - error handling
 # -----------------------------------------------
 test_that("error handling - plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # wrong data type for df
   expect_error(
     catmaply(
@@ -348,6 +347,8 @@ test_that("error handling - plot.R", {
 # trace.R - error handling
 # -----------------------------------------------
 test_that("error handling - trace.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # ---------------------------------------------
   # not all steps defined
@@ -456,6 +457,8 @@ test_that("error handling - trace.R", {
 # catmaply - plotting options
 # -----------------------------------------------
 test_that("test catmaply", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # simple plot - colname with quotes
   fig <- catmaply(
@@ -696,6 +699,8 @@ test_that("test catmaply", {
 # catmaply time axis - plotting options
 # -----------------------------------------------
 test_that("test catmaply", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # preprocess
   library(dplyr)
   # create departure_date_time
@@ -782,6 +787,8 @@ test_that("test catmaply", {
 # plot.R - warnings
 # -----------------------------------------------
 test_that("warnings- plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # too small range, warning
   expect_warning(
     catmaply(
@@ -848,6 +855,8 @@ test_that("warnings- plot.R", {
 # plot.R - colorbar
 # -----------------------------------------------
 test_that("colorbar - plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # too small color palette
   expect_error(
