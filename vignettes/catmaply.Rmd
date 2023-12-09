@@ -178,6 +178,8 @@ catmaply(
     y = stop_name,
     y_order = stop_seq,
     z = occ_category,
+    categorical_col = occ_category,
+    categorical_color_range = TRUE,
     color_palette = viridis::magma,
     legend_interactive = FALSE,
     legend_col = occ_cat_name

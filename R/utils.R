@@ -3,13 +3,47 @@
 #' @param df catmaply tibble
 #' @param col_palette the color palette
 #' @param categorical_color_range whether to use categorical color range or not.
+#' @param legend_items distinct/unique items of ordered legend items
 #'
 #' @return list(colorscale, tickvals, ticktext)
 #'
 #' @importFrom utils tail
 #'
 #' @keywords internal
-discrete_coloring <- function(df, color_palette, categorical_color_range) {
+discrete_coloring <- function(df, color_palette, categorical_color_range, legend_items) {
+  discrete_col <- NULL
+
+  if ( categorical_color_range) {
+    discrete_col <- discrete_coloring_range(
+      df = df,
+      color_palette = color_palette,
+      categorical_color_range = categorical_color_range
+    )
+  } else {
+    discrete_col <- discrete_coloring_categorical(
+      categories=legend_items,
+      col_palette=color_palette,
+      range_min = min(stats::na.omit(df$z)),
+      range_max = max(stats::na.omit(df$z))
+    )
+  }
+  return (discrete_col)
+}
+
+
+
+#' Generates the parameters necessary for discrete coloring and colorbar
+#'
+#' @param df catmaply tibble
+#' @param col_palette the color palette
+#' @param categorical_color_range whether to use categorical color range or not.
+#'
+#' @return list(colorscale, tickvals, ticktext)
+#'
+#' @importFrom utils tail
+#'
+#' @keywords internal
+discrete_coloring_range <- function(df, color_palette, categorical_color_range) {
 
   if (!is.data.frame(df))
     stop("Parameter 'df' must be a data.frame or tibble.")
@@ -150,3 +184,71 @@ discrete_coloring <- function(df, color_palette, categorical_color_range) {
     )
   )
 }
+
+
+#' Generates the parameters necessary for discrete coloring and colorbar
+#'
+#' @param categories categories, for coloring should done
+#' @param col_palette the color palette
+#' @param range_min min of z range; (default: 1)
+#' @param range_min max of z range; (default: length(categories))
+#'
+#' @return list(colorscale, tickvals, ticktext)
+#'
+#' @importFrom utils tail
+#'
+#' @keywords internal
+discrete_coloring_categorical <- function(categories, col_palette, range_min, range_max) {
+
+  if (is.factor(categories))
+    categories <- as.character(categories)
+
+  if (!is.vector(categories) || is.list(categories))
+    stop("Parameter 'categories' must be a vector.")
+
+  if (!is.vector(col_palette) || is.list(col_palette))
+    stop("Parameter 'col_palette' must be a vector.")
+
+  discrete_colorbar <- FALSE
+  if ((length(categories) * 2) == length(col_palette)) {
+    discrete_colorbar <- TRUE
+  } else if (length(categories) != length(col_palette)) {
+    stop("Parameter 'col_palette' must have the same or twice the length of category parameter.")
+  }
+
+  bvals <- c(0, seq.int(length.out = length(categories)))
+
+  bvals <- bvals[order(bvals)]
+  nvals <- (bvals - min(bvals)) / (max(bvals) - min(bvals))
+
+  dcolorscale <- array(NA, dim = c((length(nvals) * 2) -2, 2))
+
+  for (i in seq.int(length.out = length(nvals) -1 )) {
+    index <- ((i - 1) * 2) + 1
+    dcolorscale[index,] <- c(nvals[i], ifelse(discrete_colorbar, col_palette[index], col_palette[i]))
+    dcolorscale[index + 1,] <- c(nvals[i + 1], ifelse(discrete_colorbar, col_palette[index + 1], col_palette[i]))
+  }
+
+  # calculate tick values for legend (lowest point to max point)
+  # works only with even spacing until now
+  ticks <- seq.int(from = 1, to = max(bvals) * 2, by = 1)
+  range_min <- ifelse(discrete_colorbar, range_min, 1)
+  range_max <- ifelse(discrete_colorbar, range_max, max(bvals))
+  # calc percentage of ticks * range (max - min) + min
+  tick_vals <- (
+    ticks[ticks %% 2 != 0] / max(ticks)
+  ) * (
+    range_max - range_min
+  ) + range_min
+
+  tick_text <- categories
+
+  return(
+    list(
+      colorscale=dcolorscale,
+      tickvals=tick_vals,
+      ticktext=tick_text
+    )
+  )
+}
+
