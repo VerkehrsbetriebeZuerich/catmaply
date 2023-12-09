@@ -41,6 +41,7 @@ discrete_coloring <- function(df, color_palette, categorical_color_range, legend
 #' @return list(colorscale, tickvals, ticktext)
 #'
 #' @importFrom utils tail
+#' @importFrom utils capture.output
 #'
 #' @keywords internal
 discrete_coloring_range <- function(df, color_palette, categorical_color_range) {

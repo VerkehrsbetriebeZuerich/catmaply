@@ -2,4 +2,5 @@
 
 export(catmaply)
 importFrom(magrittr,"%>%")
+importFrom(utils,capture.output)
 importFrom(utils,tail)
