@@ -113,10 +113,10 @@ add_catmaply_single <- function(
 ) {
 
   discrete_col <- discrete_coloring(
-    categories=legend_items,
-    col_palette=color_palette,
-    range_min = min(stats::na.omit(df$z)),
-    range_max = max(stats::na.omit(df$z))
+    df = df,
+    color_palette = color_palette,
+    categorical_color_range = categorical_color_range,
+    legend_items = legend_items
   )
 
   if (legend) { # legend
@@ -285,9 +285,11 @@ add_catmaply_slider <- function(
 ) {
 
   visible_index <- 1
+  auto_mode <- FALSE
 
   if (all(c("slider_start", "slider_range", "slider_shift", "slider_step_name") %in% names(slider_steps))){
 
+    auto_mode <- TRUE
     step_name_col <- slider_steps$slider_step_name[1]
 
     if (!(step_name_col %in% colnames(df)))
@@ -301,7 +303,7 @@ add_catmaply_slider <- function(
       stop("You need to define excactly one stepname entry per values on the x axis.")
 
     # get range to calculate number of steps and to get step names
-    x_range <- unique(df[['x_order']])
+    x_range <- unique(df[['x_rank']])
     x <- unique(df[[step_name_col]])[order(x_range)]
     x_range <- x_range[order(x_range)]
 
@@ -337,7 +339,11 @@ add_catmaply_slider <- function(
     if (lower_bound >= upper_bound)
       stop(paste("Trying to build slider, however, lower bound is higher or equal than upper bound for step:", slider_steps[[i]]$name))
 
-    tmp <- dplyr::filter(df, dplyr::between(df[["x_order"]], lower_bound, upper_bound))
+    if (auto_mode) {
+      tmp <- dplyr::filter(df, dplyr::between(df[["x_rank"]], lower_bound, upper_bound))
+    } else {
+      tmp <- dplyr::filter(df, dplyr::between(df[["x_order"]], lower_bound, upper_bound))
+    }
 
     # get the indexes of the legend items relevant to the current trace
     legend_idx <- which(legend_items %in% unique(tmp[['legend']]))

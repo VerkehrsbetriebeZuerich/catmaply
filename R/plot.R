@@ -377,6 +377,8 @@ catmaply <- function(
       text = !!rlang::sym(text),
       y_order = !!rlang::sym(y_order),
       x_order = !!rlang::sym(x_order),
+      y_rank = dplyr::dense_rank(!!rlang::sym(y_order)),
+      x_rank = dplyr::dense_rank(!!rlang::sym(x_order)),
       category = !!rlang::sym(categorical_col),
       legend = !!rlang::sym(legend_col),
       label =

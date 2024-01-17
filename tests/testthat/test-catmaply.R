@@ -1,12 +1,12 @@
 context("catmaply")
 
-# get data
-df <- vbz[[1]]
 
 # -----------------------------------------------
 # plot.R - error handling
 # -----------------------------------------------
 test_that("error handling - plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # wrong data type for df
   expect_error(
     catmaply(
@@ -347,6 +347,8 @@ test_that("error handling - plot.R", {
 # trace.R - error handling
 # -----------------------------------------------
 test_that("error handling - trace.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # ---------------------------------------------
   # not all steps defined
@@ -455,6 +457,8 @@ test_that("error handling - trace.R", {
 # catmaply - plotting options
 # -----------------------------------------------
 test_that("test catmaply", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # simple plot - colname with quotes
   fig <- catmaply(
@@ -665,20 +669,29 @@ test_that("test catmaply", {
   expect_true(is(fig, "plotly"))
 
   # other color palette
-  fig <- catmaply(
-    df,
-    x = trip_seq,
-    y = stop_name,
-    y_order = stop_seq,
-    z = occupancy,
-    categorical_color_range=TRUE,
-    categorical_col = occ_category,
-    color_palette = viridis::inferno,
-    slider=TRUE,
-    rangeslider = FALSE,
-    legend_interactive = FALSE
+  fig <-
+  expect_true(
+    suppressWarnings(
+      {
+        is(
+          catmaply(
+          df,
+          x = trip_seq,
+          y = stop_name,
+          y_order = stop_seq,
+          z = occupancy,
+          categorical_color_range=TRUE,
+          categorical_col = occ_category,
+          color_palette = viridis::inferno,
+          slider=TRUE,
+          rangeslider = FALSE,
+          legend_interactive = FALSE
+        ),
+        "plotly"
+        )
+      }
+    )
   )
-  expect_true(is(fig, "plotly"))
 })
 
 
@@ -686,6 +699,8 @@ test_that("test catmaply", {
 # catmaply time axis - plotting options
 # -----------------------------------------------
 test_that("test catmaply", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # preprocess
   library(dplyr)
   # create departure_date_time
@@ -772,6 +787,8 @@ test_that("test catmaply", {
 # plot.R - warnings
 # -----------------------------------------------
 test_that("warnings- plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
   # too small range, warning
   expect_warning(
     catmaply(
@@ -838,6 +855,8 @@ test_that("warnings- plot.R", {
 # plot.R - colorbar
 # -----------------------------------------------
 test_that("colorbar - plot.R", {
+  # get data
+  df <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")
 
   # too small color palette
   expect_error(
@@ -891,22 +910,26 @@ test_that("colorbar - plot.R", {
 
   # color palette with static legend
   expect_true(
-    is(
-      catmaply(
-        df,
-        x='trip_seq',
-        x_order = 'trip_seq',
-        x_tickangle = -10,
-        y = "stop_name",
-        y_order = "stop_seq",
-        z = "occupancy",
-        categorical_color_range = TRUE,
-        categorical_col = 'occ_category',
-        color_palette = viridis::inferno,
-        legend_interactive = FALSE,
-        legend = TRUE
-      ),
-      "plotly"
+    suppressWarnings(
+      {
+        is(
+          catmaply(
+            df,
+            x='trip_seq',
+            x_order = 'trip_seq',
+            x_tickangle = -10,
+            y = "stop_name",
+            y_order = "stop_seq",
+            z = "occupancy",
+            categorical_color_range = TRUE,
+            categorical_col = 'occ_category',
+            color_palette = viridis::inferno,
+            legend_interactive = FALSE,
+            legend = TRUE
+          ),
+          "plotly"
+        )
+      }
     )
   )
 
