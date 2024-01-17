@@ -30,10 +30,12 @@ Suggests:
     lubridate,
     tidyverse,
     knitr,
-    rmarkdown
+    rmarkdown,
+    spelling
 VignetteBuilder:
     knitr
 RoxygenNote: 7.2.1
 URL: https://github.com/VerkehrsbetriebeZuerich/catmaply,
     https://verkehrsbetriebezuerich.github.io/catmaply/
 BugReports: https://github.com/VerkehrsbetriebeZuerich/catmaply/issues
+Language: en-US
