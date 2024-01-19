@@ -94,7 +94,10 @@
 
 
 <dt>text_size</dt>
-<dd><p>font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).</p></dd>
+<dd><p>font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).
+The web browser will only be able to apply a font if it is available on the system which it operates.
+Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+(default: c("Open Sans", "verdana", "arial", "sans-serif")).</p></dd>
 
 
 <dt>slider_steps</dt>
@@ -158,17 +161,6 @@ list( <br>
 
 <dt>legend_items</dt>
 <dd><p>distinct/unique items of ordered legend items</p></dd>
-
-
-<dt>text_font_color</dt>
-<dd><p>the typeface that will be applied by the web browser for the text/annotation.
-The web browser will only be able to apply a font if it is available on the system which it operates.
-Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
-(default: c("Open Sans", "verdana", "arial", "sans-serif")).</p></dd>
-
-
-<dt>categorical_col</dt>
-<dd><p>if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).</p></dd>
 
 </dl></div>
     <div class="section level2">
