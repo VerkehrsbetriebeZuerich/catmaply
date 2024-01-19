@@ -30,8 +30,7 @@ Suggests:
     lubridate,
     tidyverse,
     knitr,
-    rmarkdown,
-    spelling
+    rmarkdown
 VignetteBuilder:
     knitr
 RoxygenNote: 7.2.1
