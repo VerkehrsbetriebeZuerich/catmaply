@@ -28,8 +28,6 @@ add_catmaply_traces(
 \item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
-
-\item{categorical_col}{if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).}
 }
 \value{
 plot_ly object

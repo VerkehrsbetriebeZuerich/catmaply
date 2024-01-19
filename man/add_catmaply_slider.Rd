@@ -33,7 +33,10 @@ add_catmaply_slider(
 
 \item{text_color}{font color to be used for text; (default: "#444").}
 
-\item{text_size}{font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).}
+\item{text_size}{font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).
+The web browser will only be able to apply a font if it is available on the system which it operates.
+Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
+(default: c("Open Sans", "verdana", "arial", "sans-serif")).}
 
 \item{slider_steps}{list holding the configuration of the steps to be created. There are two alternatives: \code{auto} and
 \code{custom}; whereas the \code{auto} mode creates the steps automatically and \code{custom} takes custom instructions on how to create the steps.
@@ -77,13 +80,6 @@ list( \cr
 \item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
-
-\item{text_font_color}{the typeface that will be applied by the web browser for the text/annotation.
-The web browser will only be able to apply a font if it is available on the system which it operates.
-Provide multiple font families, separated by commas, to indicate the preference in which to apply fonts if they aren't available on the system;
-(default: c("Open Sans", "verdana", "arial", "sans-serif")).}
-
-\item{categorical_col}{if categorical_color_range is TRUE, then this column is used to create categories; (default: FALSE).}
 }
 \value{
 plot_ly object
