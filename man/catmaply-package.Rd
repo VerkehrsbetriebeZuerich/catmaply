@@ -6,8 +6,6 @@
 \alias{_PACKAGE}
 \title{catmaply: Heatmap for Categorical Data using 'plotly'}
 \description{
-\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
-
 Methods and plotting functions for displaying categorical data on an interactive heatmap using 'plotly'. Provides functionality for strictly categorical heatmaps, heatmaps illustrating categorized continuous data and annotated heatmaps. Also, there are various options to interact with the x-axis to prevent overlapping axis labels, e.g. via simple sliders or range sliders. Besides the viewer pane, resulting plots can be saved as a standalone HTML file, embedded in 'R Markdown' documents or in a 'Shiny' app.
 }
 \seealso{
