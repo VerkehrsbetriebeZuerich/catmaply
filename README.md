@@ -2,7 +2,7 @@
 
 [![R build status](https://github.com/VerkehrsbetriebeZuerich/catmaply/workflows/R-CMD-check/badge.svg)](https://github.com/VerkehrsbetriebeZuerich/catmaply/actions/) [![codecov](https://codecov.io/gh/VerkehrsbetriebeZuerich/catmaply/branch/master/graph/badge.svg)](https://app.codecov.io/gh/VerkehrsbetriebeZuerich/catmaply) [![](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://cran.r-project.org/package=catmaply)
 [![](https://www.r-pkg.org/badges/version/catmaply?color=blue)](https://cran.r-project.org/package=catmaply/)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=green)](https://cran.r-project.org/package=catmaply/)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/catmaply?color=blue)](https://cran.r-project.org/package=catmaply/)
 [<img alt="VBZ" width="80px" src="man/figures/vbz_oc_c_s20_p_RGB.png" />](https://www.stadt-zuerich.ch/vbz)
 
 ## Contents
