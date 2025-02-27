@@ -61,9 +61,9 @@ discrete_coloring_range <- function(df, color_palette, categorical_color_range) 
     stop("Parameter 'color_palette' must be a vector.")
 
   discrete_colorbar <- FALSE
-  if ((length(unique(df$category)) * 2) == length(color_palette)) {
+  if ((length(unique(df$category[!is.na(df$category)])) * 2) == length(color_palette)) {
     discrete_colorbar <- TRUE
-  } else if (length(unique(df$category)) == length(color_palette)) {
+  } else if (length(unique(df$category[!is.na(df$category)])) == length(color_palette)) {
     exp_col_palette <- c()
     for (col in color_palette) exp_col_palette <- c(exp_col_palette, col, col)
     color_palette <- exp_col_palette
@@ -78,6 +78,7 @@ discrete_coloring_range <- function(df, color_palette, categorical_color_range) 
 
   # calculate bounds of colorbar
   bounds <- df %>%
+    dplyr::filter(!is.na(.data$category))%>%
     dplyr::group_by(.data$category) %>%
     dplyr::summarise(
       cat_bound_min = min(.data$z),
