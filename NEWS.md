@@ -1,5 +1,6 @@
 # catmaply 0.9.5 (28 Feb 2025)
 * #49 bugfix NA values are now handled correctly in the function for discrete color ranges
+* #42 new feature for padded heatmap with xgap and ygap
 
 
 # catmaply 0.9.4 (17 Jan 2024)
