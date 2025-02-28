@@ -1,9 +1,10 @@
 Package: catmaply
 Title: Heatmap for Categorical Data using 'plotly'
-Version: 0.9.4
+Version: 0.9.5
 Authors@R: c(
       person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut", "cre")),
-      person(given="Trivadis AG", role="cph")
+      person(given="Trivadis AG", role="cph"),
+      person("Christoph", "Baur", role=c("aut"))
     )
 Maintainer: Yves Mauron <ypmauron@gmail.com>
 Description: Methods and plotting functions for displaying categorical data on an 
@@ -33,7 +34,7 @@ Suggests:
     rmarkdown
 VignetteBuilder:
     knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 URL: https://github.com/VerkehrsbetriebeZuerich/catmaply,
     https://verkehrsbetriebezuerich.github.io/catmaply/
 BugReports: https://github.com/VerkehrsbetriebeZuerich/catmaply/issues
