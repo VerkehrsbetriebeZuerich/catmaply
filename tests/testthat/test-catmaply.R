@@ -95,6 +95,30 @@ test_that("error handling - plot.R", {
       z = "occ_category"
     )
   )
+  # check xgap value
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      x_order = 'trip_seq',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category",
+      xgap = -1
+    )
+  )
+  # check ygap value
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      x_order = 'trip_seq',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category",
+      ygap = -1
+    )
+  )
   # worng font size
   expect_error(
     catmaply(

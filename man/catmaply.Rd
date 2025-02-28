@@ -16,6 +16,8 @@ catmaply(
   y_side = "left",
   y_tickangle = 0,
   z,
+  xgap = 0,
+  ygap = 0,
   text,
   text_color = "#444",
   text_size = 12,
@@ -65,6 +67,10 @@ catmaply(
 \item{y_tickangle}{the angle of the axis label on the x axis. options: range -180 until 180; (default:0).}
 
 \item{z}{column name holding the values for the fields.}
+
+\item{xgap}{Sets the horizontal gap (in pixels) between bricks; (default: 0)}
+
+\item{ygap}{Sets the vertical gap (in pixels) between bricks; (default: 0)}
 
 \item{text}{optional column name holding the values that should be displayed in the fields. NA values will not be displayed.}
 
