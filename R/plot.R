@@ -227,16 +227,16 @@ catmaply <- function(
     stop("Parameter 'x_tickangle' and 'y_tickangle' show be in range -180 to 180.")
 
   if (xgap < 0)
-    stop("Parameter 'xgap' needs to be bigger than or equal to zero.")
+    stop("Parameter 'xgap' needs to be numeric and greater than or equal to zero.")
 
   if (ygap < 0)
-    stop("Parameter 'ygap' needs to be bigger than or equal to zero.")
+    stop("Parameter 'ygap' needs to be numeric and greater than or equal to zero.")
 
   if (font_size < 1)
-    stop("Parameter 'font_size' needs to be bigger than or equal to one.")
+    stop("Parameter 'font_size' needs to be greater than or equal to one.")
 
   if (text_size < 1)
-    stop("Parameter 'text_size' needs to be bigger than or equal to one.")
+    stop("Parameter 'text_size' needs to be greater than or equal to one.")
 
   if (!is.logical(legend))
     stop("Parameter 'legend' needs to be logical/boolean.")
