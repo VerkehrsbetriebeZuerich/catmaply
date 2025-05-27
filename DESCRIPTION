@@ -2,11 +2,10 @@ Package: catmaply
 Title: Heatmap for Categorical Data using 'plotly'
 Version: 0.9.5
 Authors@R: c(
-      person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut", "cre")),
-      person(given="Verkehrsbetriebe Zürich", role="cph"),
+      person(given="Verkehrsbetriebe Zürich", email="github@vbz.ch", role=c("cre","cph")),
+      person("Yves", "Mauron", email="ypmauron@gmail.com", role=c("aut")),
       person("Christoph", "Baur", email="github@vbz.ch", role=c("aut"))
     )
-Maintainer: Verkehrsbetriebe Zürich <github@vbz.ch>
 Description: Methods and plotting functions for displaying categorical data on an 
              interactive heatmap using 'plotly'. Provides functionality for strictly 
              categorical heatmaps, heatmaps illustrating categorized continuous data 

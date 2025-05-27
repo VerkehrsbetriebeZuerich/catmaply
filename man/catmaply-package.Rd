@@ -19,16 +19,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Yves Mauron \email{ypmauron@gmail.com}
+\strong{Maintainer}: Verkehrsbetriebe Zürich \email{github@vbz.ch} [copyright holder]
 
 Authors:
 \itemize{
-  \item Christoph Baur
-}
-
-Other contributors:
-\itemize{
-  \item Trivadis AG [copyright holder]
+  \item Yves Mauron \email{ypmauron@gmail.com}
+  \item Christoph Baur \email{github@vbz.ch}
 }
 
 }
