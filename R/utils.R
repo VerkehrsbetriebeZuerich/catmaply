@@ -1,7 +1,7 @@
 #' Generates the parameters necessary for discrete coloring and colorbar
 #'
 #' @param df catmaply tibble
-#' @param col_palette the color palette
+#' @param color_palette the color palette
 #' @param categorical_color_range whether to use categorical color range or not.
 #' @param legend_items distinct/unique items of ordered legend items
 #'
@@ -35,7 +35,7 @@ discrete_coloring <- function(df, color_palette, categorical_color_range, legend
 #' Generates the parameters necessary for discrete coloring and colorbar
 #'
 #' @param df catmaply tibble
-#' @param col_palette the color palette
+#' @param color_palette the color palette
 #' @param categorical_color_range whether to use categorical color range or not.
 #'
 #' @return list(colorscale, tickvals, ticktext)

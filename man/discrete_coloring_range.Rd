@@ -9,9 +9,9 @@ discrete_coloring_range(df, color_palette, categorical_color_range)
 \arguments{
 \item{df}{catmaply tibble}
 
-\item{categorical_color_range}{whether to use categorical color range or not.}
+\item{color_palette}{the color palette}
 
-\item{col_palette}{the color palette}
+\item{categorical_color_range}{whether to use categorical color range or not.}
 }
 \value{
 list(colorscale, tickvals, ticktext)

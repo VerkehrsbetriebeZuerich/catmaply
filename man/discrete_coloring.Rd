@@ -9,11 +9,11 @@ discrete_coloring(df, color_palette, categorical_color_range, legend_items)
 \arguments{
 \item{df}{catmaply tibble}
 
+\item{color_palette}{the color palette}
+
 \item{categorical_color_range}{whether to use categorical color range or not.}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
-
-\item{col_palette}{the color palette}
 }
 \value{
 list(colorscale, tickvals, ticktext)
