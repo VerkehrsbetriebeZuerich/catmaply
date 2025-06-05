@@ -14,6 +14,8 @@
 #' @param y_side on which side the axis labels on the y axis should appear. options: c("left", "right"); (default:"left").
 #' @param y_tickangle the angle of the axis label on the x axis. options: range -180 until 180; (default:0).
 #' @param z column name holding the values for the fields.
+#' @param xgap Sets the horizontal gap (in pixels) between bricks; (default: 0)
+#' @param ygap Sets the vertical gap (in pixels) between bricks; (default: 0)
 #' @param text optional column name holding the values that should be displayed in the fields. NA values will not be displayed.
 #' @param text_color font color to be used for text; (default: "#444").
 #' @param text_size font size to be used for text/annotation. Needs to be a number greater than or equal to 1; (default: 12).
@@ -146,6 +148,8 @@ catmaply <- function(
   y_side="left",
   y_tickangle=0,
   z,
+  xgap=0,
+  ygap=0,
   text,
   text_color="#444",
   text_size=12,
@@ -222,11 +226,17 @@ catmaply <- function(
   if (abs(x_tickangle) > 180 || abs(y_tickangle) > 180)
     stop("Parameter 'x_tickangle' and 'y_tickangle' show be in range -180 to 180.")
 
+  if (xgap < 0)
+    stop("Parameter 'xgap' needs to be numeric and greater than or equal to zero.")
+
+  if (ygap < 0)
+    stop("Parameter 'ygap' needs to be numeric and greater than or equal to zero.")
+
   if (font_size < 1)
-    stop("Parameter 'font_size' needs to be bigger than or equal to one.")
+    stop("Parameter 'font_size' needs to be greater than or equal to one.")
 
   if (text_size < 1)
-    stop("Parameter 'text_size' needs to be bigger than or equal to one.")
+    stop("Parameter 'text_size' needs to be greater than or equal to one.")
 
   if (!is.logical(legend))
     stop("Parameter 'legend' needs to be logical/boolean.")
@@ -414,7 +424,9 @@ catmaply <- function(
         categorical_color_range=categorical_color_range,
         category_items=category_items,
         legend_items=legend_items,
-        legend=legend
+        legend=legend,
+        xgap = xgap,
+        ygap = ygap
       )
 
   } else { # no slider
@@ -426,7 +438,9 @@ catmaply <- function(
           categorical_color_range=categorical_color_range,
           category_items = category_items,
           legend_items=legend_items,
-          color_palette=color_palette
+          color_palette=color_palette,
+          xgap = xgap,
+          ygap = ygap
         )
     } else {
       fig <- fig %>%
@@ -436,7 +450,9 @@ catmaply <- function(
           categorical_color_range=categorical_color_range,
           legend_items=legend_items,
           color_palette=color_palette,
-          legend=legend
+          legend=legend,
+          xgap = xgap,
+          ygap = ygap
         )
     }
 

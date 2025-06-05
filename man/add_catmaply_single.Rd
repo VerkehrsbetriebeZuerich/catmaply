@@ -13,7 +13,9 @@ add_catmaply_single(
   legend_items,
   legend,
   visible = 1,
-  colorbar_y = NA
+  colorbar_y = NA,
+  xgap,
+  ygap
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ add_catmaply_single(
 \item{legend}{boolean indicating if legend should be displayed or not; (default: TRUE).}
 
 \item{colorbar_y}{y position of colorbar; (default: NA).}
+
+\item{xgap}{Sets the horizontal gap (in pixels) between bricks.}
+
+\item{ygap}{Sets the vertical gap (in pixels) between bricks.}
 }
 \value{
 plot_ly object

@@ -642,6 +642,41 @@ catmaply(
 
 > Note: annotations can also be used with rangeslider or no slider at all. However, lots of annotations might have a negative influence on the performance. Only text values that are not NA are used for annotations.
 
+### Gaps between bricks
+
+Like ploty-traces with type='heatmap' catmaply does also support gaps between the bricks.
+
+- `xgap` Sets the horizontal gap (in pixels) between bricks.
+- `ygap` Sets the vertical gap (in pixels) between bricks.
+
+
+```{r fig.height=8, out.width='100%', warning = FALSE}
+catmaply(
+  df,
+  x=x_label,
+  x_order = trip_seq,
+  y = stop_name,
+  y_order = stop_seq,
+  z = occupancy,
+  xgap = 2,
+  ygap = 1,
+  categorical_color_range = TRUE,
+  categorical_col = occ_category,
+  color_palette = viridis::plasma,
+  hover_template = paste(
+    '<br><b>Trip</b>:', trip_seq,
+    '<br><b>Stop Name</b>:', stop_name,
+    '<br><b>Occupancy category</b>:', occ_cat_name,
+    '<br><b>Occupancy</b>:', round(occupancy, 2),
+    '<extra></extra>'
+  ),
+  rangeslider = FALSE, # to prevent warning
+  legend_interactive = FALSE, # to prevent warning
+  slider = FALSE
+)
+```
+
+
 ## Credits
 This package only exists thanks to the amazing work done by many people in the open source community. Beyond the many people working on the pipeline of R, thanks should go to the plotly team, and especially to Carson Sievert and others working on the R package of plotly. Also, a special thanks to VBZ for providing advice on the functionality of the package as well as providing the vbz dataset; also, I would like to thank VBZ for investing time to test the package and for using it in your awesome shiny VBZ dashboard.
 

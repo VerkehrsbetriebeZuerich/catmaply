@@ -9,6 +9,8 @@
 #' @param categorical_color_range if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
 #' @param category_items distinct/unique items of ordered category items
 #' @param legend_items distinct/unique items of ordered legend items
+#' @param xgap Sets the horizontal gap (in pixels) between bricks.
+#' @param ygap Sets the vertical gap (in pixels) between bricks.
 #'
 #' @return plot_ly object
 #'
@@ -21,7 +23,9 @@ add_catmaply_traces <- function(
   color_palette,
   categorical_color_range,
   category_items,
-  legend_items
+  legend_items,
+  xgap,
+  ygap
 ) {
 
   for (i in seq.int(length.out = length(category_items))) {
@@ -54,6 +58,8 @@ add_catmaply_traces <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           text = ~label,
           hovertemplate = '%{text}',
           hoverongaps=FALSE,
@@ -72,6 +78,8 @@ add_catmaply_traces <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           hoverinfo= "skip",
           colorscale=colorscale,
           showlegend=TRUE,
@@ -95,6 +103,8 @@ add_catmaply_traces <- function(
 #' @param legend_items distinct/unique items of ordered legend items
 #' @param legend boolean indicating if legend should be displayed or not; (default: TRUE).
 #' @param colorbar_y y position of colorbar; (default: NA).
+#' @param xgap Sets the horizontal gap (in pixels) between bricks.
+#' @param ygap Sets the vertical gap (in pixels) between bricks.
 #'
 #' @return plot_ly object
 #'
@@ -108,7 +118,9 @@ add_catmaply_single <- function(
   legend_items,
   legend,
   visible=1,
-  colorbar_y=NA
+  colorbar_y=NA,
+  xgap,
+  ygap
 ) {
 
   discrete_col <- discrete_coloring(
@@ -130,6 +142,8 @@ add_catmaply_single <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           text = ~label,
           hovertemplate = '%{text}',
           hoverongaps=FALSE,
@@ -153,6 +167,8 @@ add_catmaply_single <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           text = ~label,
           hoverinfo= "skip",
           hoverongaps=FALSE,
@@ -180,6 +196,8 @@ add_catmaply_single <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           text = ~label,
           hovertemplate = '%{text}',
           hoverongaps=FALSE,
@@ -196,6 +214,8 @@ add_catmaply_single <- function(
           x = ~x_order,
           y = ~y,
           z = ~z,
+          xgap = xgap,
+          ygap = ygap,
           text = ~label,
           hoverinfo= "skip",
           colorscale=discrete_col$colorscale,
@@ -256,6 +276,8 @@ add_catmaply_single <- function(
 #' @param categorical_color_range if the resulting heatmap holds categorical field values or continuous values that belong to a category; (default: FALSE).
 #' @param category_items distinct/unique items of ordered category items
 #' @param legend_items distinct/unique items of ordered legend items
+#' @param xgap Sets the horizontal gap (in pixels) between bricks.
+#' @param ygap Sets the vertical gap (in pixels) between bricks.
 #'
 #' @return plot_ly object
 #'
@@ -278,7 +300,9 @@ add_catmaply_slider <- function(
   categorical_color_range,
   category_items,
   legend_items,
-  legend
+  legend,
+  xgap,
+  ygap
 ) {
 
   visible_index <- 1
@@ -361,7 +385,9 @@ add_catmaply_slider <- function(
         legend_items=legend_items[legend_idx],
         legend=legend,
         visible=i==visible_index,
-        colorbar_y=1
+        colorbar_y=1,
+        xgap = xgap,
+        ygap = ygap
       )
 
 

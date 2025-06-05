@@ -95,6 +95,30 @@ test_that("error handling - plot.R", {
       z = "occ_category"
     )
   )
+  # check xgap value
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      x_order = 'trip_seq',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category",
+      xgap = -1
+    )
+  )
+  # check ygap value
+  expect_error(
+    catmaply(
+      df,
+      x='trip_seq',
+      x_order = 'trip_seq',
+      y = "stop_name",
+      y_order = "stop_seq",
+      z = "occ_category",
+      ygap = -1
+    )
+  )
   # worng font size
   expect_error(
     catmaply(
@@ -932,6 +956,38 @@ test_that("colorbar - plot.R", {
       }
     )
   )
+
+  # color palette with static legend and NAs in occ_category, occ_cat_name and occupancy
+  df_na <- vbz[[1]] %>% dplyr::filter(.data$vehicle == "PO")%>%
+    dplyr::mutate(
+      occ_category = ifelse(occupancy<10, NA, occ_category),
+      occ_cat_name= ifelse(occupancy<10, NA, occ_cat_name),
+      occupancy = ifelse(occupancy<10, NA, occupancy))
+
+  expect_true(
+    suppressWarnings(
+      {
+        is(
+          catmaply(
+            df_na,
+            x='trip_seq',
+            x_order = 'trip_seq',
+            x_tickangle = -10,
+            y = "stop_name",
+            y_order = "stop_seq",
+            z = "occupancy",
+            categorical_color_range = TRUE,
+            categorical_col = 'occ_category',
+            color_palette = viridis::inferno,
+            legend_interactive = FALSE,
+            legend = TRUE
+          ),
+          "plotly"
+        )
+      }
+    )
+  )
+
 
 
 })

@@ -21,7 +21,9 @@ add_catmaply_slider(
   categorical_color_range,
   category_items,
   legend_items,
-  legend
+  legend,
+  xgap,
+  ygap
 )
 }
 \arguments{
@@ -80,6 +82,10 @@ list( \cr
 \item{category_items}{distinct/unique items of ordered category items}
 
 \item{legend_items}{distinct/unique items of ordered legend items}
+
+\item{xgap}{Sets the horizontal gap (in pixels) between bricks.}
+
+\item{ygap}{Sets the vertical gap (in pixels) between bricks.}
 }
 \value{
 plot_ly object
